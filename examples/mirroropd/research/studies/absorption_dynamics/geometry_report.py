@@ -109,7 +109,7 @@ def write_report(data, destination, figures):
         "",
         "[返回设置、总表与分析](README.md)。所有图均有同名 PDF 和审计文件；精确数据在相邻 data 目录。",
         "",
-        "[打开交互式 HTML 对比](explorer.html)：选择多个 pair 叠加轨迹，筛选 rank、层与模块，或比较共同色标热图。"
+        "交互式 HTML 对比页面 `explorer.html`：选择多个 pair 叠加轨迹，筛选 rank、层与模块，或比较共同色标热图。"
         "用法与复算见 [HTML 使用说明](README.md#交互式-html-对比)。",
         "",
         "主角分位曲线使用 33 点插值；ECDF 在每 5 度位置精确统计。部分层预览标明覆盖，跨 pair 总览只用完整组。",

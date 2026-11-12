@@ -1,0 +1,2580 @@
+[
+  {
+    "job_id": 100,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "b5e89be96985f66c808b574aa699c249ffedd1901c7bd2a0f69c0184733a4b6a",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.03362523905531121
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.0044928936860485925
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.00017892301577268396
+      }
+    ]
+  },
+  {
+    "job_id": 100,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "b5e89be96985f66c808b574aa699c249ffedd1901c7bd2a0f69c0184733a4b6a",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "26a0d5dbc92ec5df9b57bf83721a48752e0e3bba087b193f58c43ace6cf1fd7e",
+          "signature": "0d3c26c96de87ad4f2eb00f6ff34334c3d21cc0083c7bc56c73c04207a7efca5"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.03362523905531121
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.0044928936860485925
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.00017892301577268396
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.010083320260658554
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.001381517502717517
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.00018939333479968284
+      }
+    ]
+  },
+  {
+    "job_id": 101,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "8028edc6670f55f91a57164bbf51a39090de6bf9006ab077643916778dd66553",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-gt",
+          "teacher": "gt",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.034860049428467516
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.004752720098057073
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.00015172450319678074
+      }
+    ]
+  },
+  {
+    "job_id": 101,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "8028edc6670f55f91a57164bbf51a39090de6bf9006ab077643916778dd66553",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-gt",
+          "teacher": "gt",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "2bc0d767228fa3c47407d063a34c82f2b7d3e631dc4d770fe15cf1e2e3a2ebd0",
+          "signature": "150fca29d950fd73cf6669882c8694d7ce9841fe414a9f4be9418c1fd3dcd4c9"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.034860049428467516
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.004752720098057073
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.00015172450319678074
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.01153074918381868
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.0017237074346170616
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.00021676194366695
+      }
+    ]
+  },
+  {
+    "job_id": 102,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-arithmetic-full",
+          "teacher": "arithmetic-full",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.23086484346635877
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.13831882961056785
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.02978311986578172
+      }
+    ]
+  },
+  {
+    "job_id": 102,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-arithmetic-full",
+          "teacher": "arithmetic-full",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "bffa3487c88201eb959b1398a98a51adc1f87fcd797a0939a10960a744f6c7e8",
+          "signature": "266e9d34fb356c70fdd6ae0eaa059d133e79a09308ab6a2dd3933571bceb8137"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.23086484346635877
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.13831882961056785
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.02978311986578172
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.044790145936316965
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.027440812467090986
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.014765058738841104
+      }
+    ]
+  },
+  {
+    "job_id": 102,
+    "protocol": {
+      "inputs": {
+        "student": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+        "teacher": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+        "bank": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "L3-arithmetic-full",
+          "teacher": "arithmetic-full",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "c3a93760d15eec7bb2174bdc46aa206cd416265036e544408c27164de4a03427",
+          "signature": "266e9d34fb356c70fdd6ae0eaa059d133e79a09308ab6a2dd3933571bceb8137"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "e45a1a1917e5c7273ba07a6bec55772a4987ccc0c1b86ed6af6aa854476e6566"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.23086484346635877
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.13831882961056785
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.02978311986578172
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.044790145936316965
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.027440812467090986
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.014765058738841104
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.020793536924687918
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.014648080512649268
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.008869826153986508
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.012330017112500136
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.009430110203708219
+      }
+    ]
+  },
+  {
+    "job_id": 103,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "T-E3",
+          "teacher": "e3",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "f4d7b0e1c762c8c4ac01db4df604d35e2d1c2248fd312fcf8503fe7d1cb9fa00"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.030527105552079912
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.00922352877108356
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0002265777703221849
+      }
+    ]
+  },
+  {
+    "job_id": 103,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "T-E3",
+          "teacher": "e3",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "a17b2b37778b75e85283dd907f18726553f48bdd379bf6bd758d4cb6c5b04634",
+          "signature": "a0ebf6dd710c4378f23b36ded9902e56a6b47aaccab6ca52de1a9d5900b1a376"
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "f4d7b0e1c762c8c4ac01db4df604d35e2d1c2248fd312fcf8503fe7d1cb9fa00"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.030527105552079912
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.00922352877108356
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0002265777703221849
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.016608878864241065
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.0019574018008054776
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.00019004674543787595
+      }
+    ]
+  },
+  {
+    "job_id": 103,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "T-E3",
+          "teacher": "e3",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "43a10e8e91e49d19a251798aa4ed97579551fc881fbe1c9a2aea2d3bb0f1b4e4",
+          "signature": "a0ebf6dd710c4378f23b36ded9902e56a6b47aaccab6ca52de1a9d5900b1a376"
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "f4d7b0e1c762c8c4ac01db4df604d35e2d1c2248fd312fcf8503fe7d1cb9fa00"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.030527105552079912
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.00922352877108356
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0002265777703221849
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.016608878864241065
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.0019574018008054776
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.00019004674543787595
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.006449225528176993
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.000772520846877798
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.00021459415306893575
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.006019297073271533
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.0006311136030934201
+      }
+    ]
+  },
+  {
+    "job_id": 104,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.21338147629880017
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.14821952026516091
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0034887133364634782
+      }
+    ]
+  },
+  {
+    "job_id": 104,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "39e344ab34aa88a7625986ad92b6ab85eab0816cf8ffb59ab9ffea6e44642398",
+          "signature": "fbafe6cc4922044ef4231efa11313ce4378224a066af5540be918a6a7da46b29"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.21338147629880017
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.14821952026516091
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0034887133364634782
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.00910856618075616
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.004164485071846182
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.0015542597384156933
+      }
+    ]
+  },
+  {
+    "job_id": 104,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-sft-gsm8k",
+          "teacher": "sft-gsm8k",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "e1584be8e2a7adf858dd5ace6f2e26d67a47b0f55fca23d037cc4a48529d5835",
+          "signature": "fbafe6cc4922044ef4231efa11313ce4378224a066af5540be918a6a7da46b29"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.21338147629880017
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.14821952026516091
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0034887133364634782
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.00910856618075616
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.004164485071846182
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.0015542597384156933
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.0028122022269216123
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.0017316296551066115
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.0007219122172081471
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.0014125704013852464
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.0008960337497290554
+      }
+    ]
+  },
+  {
+    "job_id": 105,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "7b2393422d2b9d4ddb0d56eb169e437918aa66349f2e2f30e382d2a833a4c253",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.3731071775508122
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.2581378708606449
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04097221066399893
+      }
+    ]
+  },
+  {
+    "job_id": 105,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "7b2393422d2b9d4ddb0d56eb169e437918aa66349f2e2f30e382d2a833a4c253",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "c84065d07484c6c13131dd6ef07f50ac2b4a20ad6ad8ee46e6f7541d1125dadd",
+          "signature": "b7839e74cc9909b0de8b1b6dfde6f9b56fee9042c85de41078e5941b26c0d3f6"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.3731071775508122
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.2581378708606449
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04097221066399893
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.07335780772750701
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.04121650884651239
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.023523386233738085
+      }
+    ]
+  },
+  {
+    "job_id": 105,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "7b2393422d2b9d4ddb0d56eb169e437918aa66349f2e2f30e382d2a833a4c253",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-coreward-i",
+          "teacher": "coreward-i",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "24fc0728fcb7a0753d9f75890f367c8086c90000762676c6a076a879fa807251",
+          "signature": "b7839e74cc9909b0de8b1b6dfde6f9b56fee9042c85de41078e5941b26c0d3f6"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.3731071775508122
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.2581378708606449
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04097221066399893
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.07335780772750701
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.04121650884651239
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.023523386233738085
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.03508528331000883
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.02422773376158161
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.015580629183655853
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.02225404543824445
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.016512611975833966
+      }
+    ]
+  },
+  {
+    "job_id": 106,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "ab82069da5d9e5b754749a172d95b1b43ddd8e96820a265ce1c2529904f51f4c",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-coreward-ii",
+          "teacher": "coreward-ii",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.3548226275127106
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.24594412626660114
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.038529097157913826
+      }
+    ]
+  },
+  {
+    "job_id": 106,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "ab82069da5d9e5b754749a172d95b1b43ddd8e96820a265ce1c2529904f51f4c",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-coreward-ii",
+          "teacher": "coreward-ii",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "8eabca25cc791688db732ea7516c3f9739b30429e086d296f15eee3e3b790434",
+          "signature": "ab761acacd29ba32c279b93d20eababa7b94a2b8e01cdc064845196f99ec06a7"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.3548226275127106
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.24594412626660114
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.038529097157913826
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.06907133125424642
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.03899513649756307
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.021807865213669404
+      }
+    ]
+  },
+  {
+    "job_id": 106,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "ab82069da5d9e5b754749a172d95b1b43ddd8e96820a265ce1c2529904f51f4c",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-coreward-ii",
+          "teacher": "coreward-ii",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "bba4ca623d424db2c4059a81cadda519694102930a5ea79d4b54f7808a4f1e0d",
+          "signature": "ab761acacd29ba32c279b93d20eababa7b94a2b8e01cdc064845196f99ec06a7"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.3548226275127106
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.24594412626660114
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.038529097157913826
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.06907133125424642
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.03899513649756307
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.021807865213669404
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.03258683415221635
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.023006715691241478
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.014629515246376268
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.021053101121051517
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.015872822764173476
+      }
+    ]
+  },
+  {
+    "job_id": 107,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "6a0e027a7449519815b9b825428e3419c32ab6ec3b0871ba347ae365c3a175e6",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-base-gt-math",
+          "teacher": "base-gt-math",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.384992745564172
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.2692887626399443
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04328690975140525
+      }
+    ]
+  },
+  {
+    "job_id": 107,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "6a0e027a7449519815b9b825428e3419c32ab6ec3b0871ba347ae365c3a175e6",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-base-gt-math",
+          "teacher": "base-gt-math",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "78f294617a639de3f91278a52bc3bc115aae90b4f54429ddbe92b2ec7dbb8a33",
+          "signature": "de3d9a5216ef6b2d5d6717c04c22de215c4af707ed66005b87a361f46fd8a5a4"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.384992745564172
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.2692887626399443
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04328690975140525
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.0767208716467006
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.04279961387764522
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.02408031820511338
+      }
+    ]
+  },
+  {
+    "job_id": 107,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "6a0e027a7449519815b9b825428e3419c32ab6ec3b0871ba347ae365c3a175e6",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-C-base-gt-math",
+          "teacher": "base-gt-math",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "23857e3709ec6b62ffbf4d74d3cd2f8f39f08c2d92e9d85aaeffa6c3d1c5dce7",
+          "signature": "de3d9a5216ef6b2d5d6717c04c22de215c4af707ed66005b87a361f46fd8a5a4"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.384992745564172
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.2692887626399443
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04328690975140525
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.0767208716467006
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.04279961387764522
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.02408031820511338
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.03566722118234683
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.02476563835347442
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.016194953556952565
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.022596685165987673
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.01692637139015515
+      }
+    ]
+  },
+  {
+    "job_id": 108,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-SFT",
+          "teacher": "sft-deepmath",
+          "updates": 320,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.07828715624176648
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.049950880395707706
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.019949723545722966
+      }
+    ]
+  },
+  {
+    "job_id": 108,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-SFT",
+          "teacher": "sft-deepmath",
+          "updates": 640,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 320,
+          "weight_identity": "f139135c175a0e39af8755bcdce47bb924c10dbf0208f33a022167ab0e6c50e8",
+          "signature": "5adbb2d097e47f17f1878d5113aecb734e0fca0a6fd65ec34491af1587a2b12f"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.07828715624176648
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.049950880395707706
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.019949723545722966
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.036118189692231774
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.019333294560597597
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.010787777305273489
+      }
+    ]
+  },
+  {
+    "job_id": 108,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+        "bank": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "NT-SFT",
+          "teacher": "sft-deepmath",
+          "updates": 1280,
+          "evaluate_at": []
+        },
+        "fixed_pool_batches": 20,
+        "resume_origin": {
+          "step": 640,
+          "weight_identity": "ef3a585c34a17819bf9113dbf6c36fc788fa2147bb01f7bcfcbfff1059af4b4a",
+          "signature": "5adbb2d097e47f17f1878d5113aecb734e0fca0a6fd65ec34491af1587a2b12f"
+        },
+        "execution": {
+          "microbatch": 1,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "49d4604b9c1cb94dca1c28a1fb22fd483782b45ae708127caff643b593d7853b"
+      },
+      "execution": {
+        "microbatch": 1,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final/readout weights; rolling Adam state"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.07828715624176648
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.049950880395707706
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.019949723545722966
+      },
+      {
+        "step": 321,
+        "group": "A",
+        "loss": 0.036118189692231774
+      },
+      {
+        "step": 336,
+        "group": "A",
+        "loss": 0.019333294560597597
+      },
+      {
+        "step": 640,
+        "group": "T",
+        "loss": 0.010787777305273489
+      },
+      {
+        "step": 641,
+        "group": "A",
+        "loss": 0.016820083698188763
+      },
+      {
+        "step": 656,
+        "group": "A",
+        "loss": 0.011466385632828618
+      },
+      {
+        "step": 960,
+        "group": "T",
+        "loss": 0.007056854700811362
+      },
+      {
+        "step": 961,
+        "group": "A",
+        "loss": 0.010824498136878706
+      },
+      {
+        "step": 976,
+        "group": "A",
+        "loss": 0.007870996862574487
+      }
+    ]
+  },
+  {
+    "job_id": 109,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "Q3-e3",
+          "teacher": "e3",
+          "updates": 320,
+          "evaluate_at": [
+            64,
+            320
+          ]
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "8757c55932d199d6a4a9fea05b9c013f0c2836bcf2375a949b41386b9d507ec4"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final weights; transient readout weights; no Adam"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.030527105552079912
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.009382010297537723
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.0002251270232356031
+      }
+    ]
+  },
+  {
+    "job_id": 110,
+    "protocol": {
+      "inputs": {
+        "student": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+        "teacher": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+        "bank": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5",
+        "training": {
+          "batch_size": 16,
+          "reuse": 16,
+          "horizon": 1024,
+          "learning_rate": 1e-06,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "epsilon": 1e-08,
+          "weight_decay": 0.01,
+          "clip": 1.0,
+          "seed": 42,
+          "bank_seed": 52000000,
+          "score_interval": 16
+        },
+        "arm": {
+          "name": "Q3-sft-deepmath",
+          "teacher": "sft-deepmath",
+          "updates": 320,
+          "evaluate_at": [
+            64,
+            320
+          ]
+        },
+        "execution": {
+          "microbatch": 4,
+          "token_chunk": 512,
+          "activation_checkpointing": false,
+          "evaluation_concurrency": 16,
+          "gpu_memory_fraction": 0.88,
+          "parameter_dtype": "float32",
+          "backbone_dtype": "bfloat16",
+          "head_dtype": "float32",
+          "tf32": false
+        },
+        "numerical_profile": "8757c55932d199d6a4a9fea05b9c013f0c2836bcf2375a949b41386b9d507ec4"
+      },
+      "execution": {
+        "microbatch": 4,
+        "token_chunk": 512,
+        "activation_checkpointing": false,
+        "evaluation_concurrency": 16,
+        "gpu_memory_fraction": 0.88,
+        "parameter_dtype": "float32",
+        "backbone_dtype": "bfloat16",
+        "head_dtype": "float32",
+        "tf32": false
+      },
+      "parameter_dtype": "float32",
+      "optimizer_dtype": "float32",
+      "rollout_source": "fixed S0",
+      "save_policy": "final weights; transient readout weights; no Adam"
+    },
+    "boundary_updates": [
+      {
+        "step": 1,
+        "group": "A",
+        "loss": 0.5066824704025555
+      },
+      {
+        "step": 16,
+        "group": "A",
+        "loss": 0.41311843258310804
+      },
+      {
+        "step": 320,
+        "group": "T",
+        "loss": 0.04571577158786222
+      }
+    ]
+  }
+]

@@ -1,0 +1,305 @@
+{
+  "protocol": "DAPO Math, seed42, 40 outer, 640 optimizer updates, fixed initial and teacher prefix banks, Math128/Code64/IF64; question token-mean and domain-equal all",
+  "outer0_and_outer40_parquet": {
+    "E94/outer0": {
+      "path": "E94-outer-000.parquet",
+      "sha256": "0f3a21b002a0e221d4e7753d878268a2edea852c56b152c6b5a0c9aaed45dc37"
+    },
+    "E94/outer40": {
+      "path": "E94-outer-040.parquet",
+      "sha256": "b842e15ecfe7124a1f7b842b84ea33d8598ec1090f5e6c177faf66311f08f4bc"
+    },
+    "E95/outer0": {
+      "path": "E95-outer-000.parquet",
+      "sha256": "fcc612362967166d12a1cbd91a11c69029db6b8c8e30d2709fe43f97ef343cde"
+    },
+    "E95/outer40": {
+      "path": "E95-outer-040.parquet",
+      "sha256": "0bd9600e2753f6bb8c4c29007f9a9506eb08361d9b574fcd1b774eb0eabeb249"
+    },
+    "E96/outer0": {
+      "path": "E96-outer-000.parquet",
+      "sha256": "a27763a6ced52c39468603d98e396011e24373fdc5b14b8f0101da93afcdaa6d"
+    },
+    "E96/outer40": {
+      "path": "E96-outer-040.parquet",
+      "sha256": "5d87057baa546f4e286066066fb4988eb60ff6a6dfc31e9f4e6a4b603e57c299"
+    },
+    "E97/outer0": {
+      "path": "E97-outer-000.parquet",
+      "sha256": "2a8dc86f2d12067491c5fdc0b3cf44c7e0a5d565798ddc79547fb3778c952dac"
+    },
+    "E97/outer40": {
+      "path": "E97-outer-040.parquet",
+      "sha256": "e2668759f2362d7408fe008fd3c7edf8a09d78cce5eb4497e1cd24e0b4377182"
+    },
+    "E98/outer0": {
+      "path": "E98-outer-000.parquet",
+      "sha256": "26b12d6015130ca697c9d4a8e1d56e625127b9ce11b6ecbcfbcdc644b35b5565"
+    },
+    "E98/outer40": {
+      "path": "E98-outer-040.parquet",
+      "sha256": "82b3d2fc985e88a4306a7e19934745188b582290ba7382d70f76dfca4f4ca6f8"
+    },
+    "E100/outer0": {
+      "path": "E100-outer-000.parquet",
+      "sha256": "07b1043be8824cf3b86c0b1e652a21cd0998f167b5c8f39db0aeb2359c3bb118"
+    },
+    "E100/outer40": {
+      "path": "E100-outer-040.parquet",
+      "sha256": "f21072219fcd6e781a654eee94e2610837036327a99f3b13dfc4e1f149791486"
+    },
+    "E99/outer0": {
+      "path": "E99-outer-000.parquet",
+      "sha256": "3db13af6c678bb90041309e02844fc28a4d6fa599440d5df55ffec349fbf5b54"
+    },
+    "E99/outer40": {
+      "path": "E99-outer-040.parquet",
+      "sha256": "1b8888a0ada82f56a0b671d6318b76290fc4e31023d6e5bfa17ed0cabaedbb6c"
+    },
+    "E101/outer0": {
+      "path": "E101-outer-000.parquet",
+      "sha256": "8793693fe66d640630ec67f2fb2ae28208ef2f300df52d9c13b9fbcaff5227da"
+    },
+    "E101/outer40": {
+      "path": "E101-outer-040.parquet",
+      "sha256": "f99462c5ec26b789c31f214afbe26a5ae43bab246f65eb929b44c7c9b76e2f6a"
+    },
+    "E102/outer0": {
+      "path": "E102-outer-000.parquet",
+      "sha256": "f7e96ac97f4eca2fae9b6c6fa8bbd1d0178ac8b866398bcfb81cfb1cb3875c53"
+    },
+    "E102/outer40": {
+      "path": "E102-outer-040.parquet",
+      "sha256": "807e75197578d2784c2bb8fcb159f44c9bf0ed0bfe8ba52f993376c054be50ed"
+    }
+  },
+  "pairs": {
+    "E94": {
+      "teacher": "DeepScaleR-1.5B",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.03155939053039864,
+          "outer40_all": 0.0004845363809354585,
+          "remaining_percent": 1.535316027312832,
+          "outer40_domains": {
+            "math": 0.0002570674989346252,
+            "code": 0.00031705149733624114,
+            "if": 0.000879490146535509
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.02929388617398884,
+          "outer40_all": 0.00046541988595941776,
+          "remaining_percent": 1.5887952974046915,
+          "outer40_domains": {
+            "math": 0.0002211126747372657,
+            "code": 0.0002913253571965384,
+            "if": 0.0008838216259444492
+          }
+        }
+      }
+    },
+    "E95": {
+      "teacher": "JustRL-DeepSeek-1.5B",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.14049758300191476,
+          "outer40_all": 0.03614712497042063,
+          "remaining_percent": 25.727933675505295,
+          "outer40_domains": {
+            "math": 0.0021107476967815184,
+            "code": 0.005379090054952867,
+            "if": 0.10095153715952751
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.18818793825632596,
+          "outer40_all": 0.0833731097477608,
+          "remaining_percent": 44.30311024195421,
+          "outer40_domains": {
+            "math": 0.0018512004509273435,
+            "code": 0.004566126512974333,
+            "if": 0.24370200227938071
+          }
+        }
+      }
+    },
+    "E96": {
+      "teacher": "MiniMath-R1-1.5B",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.10697747800483891,
+          "outer40_all": 0.02698247984803796,
+          "remaining_percent": 25.22257988435422,
+          "outer40_domains": {
+            "math": 0.006377841237605002,
+            "code": 0.010933958902341282,
+            "if": 0.0636356394041676
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.14365221891805777,
+          "outer40_all": 0.030233522592853074,
+          "remaining_percent": 21.046331773057336,
+          "outer40_domains": {
+            "math": 0.008201563091975842,
+            "code": 0.011332871633476429,
+            "if": 0.07116613305310696
+          }
+        }
+      }
+    },
+    "E97": {
+      "teacher": "Nemotron Research Reasoning v1 1.5B",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.28223050321046766,
+          "outer40_all": 0.06227982367157009,
+          "remaining_percent": 22.06700656488791,
+          "outer40_domains": {
+            "math": 0.0035604600255836416,
+            "code": 0.037996444596873846,
+            "if": 0.1452825663922528
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.2201424575817732,
+          "outer40_all": 0.05234757974581113,
+          "remaining_percent": 23.778956735942828,
+          "outer40_domains": {
+            "math": 0.0017839443880931496,
+            "code": 0.056658977598688716,
+            "if": 0.09859981725065153
+          }
+        }
+      }
+    },
+    "E98": {
+      "teacher": "Nemotron Research Reasoning BroRL 1.5B",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.3429099423060868,
+          "outer40_all": 0.09109484796298915,
+          "remaining_percent": 26.565239651662377,
+          "outer40_domains": {
+            "math": 0.004788248680572158,
+            "code": 0.05096929492304468,
+            "if": 0.2175270002853506
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.31946087823975317,
+          "outer40_all": 0.1215392623827979,
+          "remaining_percent": 38.04511621344243,
+          "outer40_domains": {
+            "math": 0.004688448125702301,
+            "code": 0.06755522853372689,
+            "if": 0.2923741104889645
+          }
+        }
+      }
+    },
+    "E100": {
+      "teacher": "CMU-AIRe/e3-1.7B",
+      "student": "Qwen3-1.7B",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.04170177136980699,
+          "outer40_all": 0.0009580982108693192,
+          "remaining_percent": 2.297500032727635,
+          "outer40_domains": {
+            "math": 0.000337135787687841,
+            "code": 0.0007543606614329227,
+            "if": 0.001782798183487194
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.03636520206199754,
+          "outer40_all": 0.0008633182711130812,
+          "remaining_percent": 2.374023027951956,
+          "outer40_domains": {
+            "math": 0.0003431421710877928,
+            "code": 0.0006981848784093857,
+            "if": 0.0015486277638420648
+          }
+        }
+      }
+    },
+    "E99": {
+      "teacher": "Qwen3-1.7B-GRPO-KL-math-reasoning",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.024022215429235643,
+          "outer40_all": 0.0006293413066204527,
+          "remaining_percent": 2.619830416867082,
+          "outer40_domains": {
+            "math": 0.00033152481653780935,
+            "code": 0.0005512564259397602,
+            "if": 0.0010052426773837885
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.0284874951859824,
+          "outer40_all": 0.0006746720177109198,
+          "remaining_percent": 2.368309369799911,
+          "outer40_domains": {
+            "math": 0.0003422722505797607,
+            "code": 0.0006107403289590886,
+            "if": 0.00107100347359391
+          }
+        }
+      }
+    },
+    "E101": {
+      "teacher": "Qwen3-1.7B-Math",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.20897013460460478,
+          "outer40_all": 0.017931148589922903,
+          "remaining_percent": 8.580723089378619,
+          "outer40_domains": {
+            "math": 0.01709867171853256,
+            "code": 0.011985544103849121,
+            "if": 0.024709229947387033
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.576422122497263,
+          "outer40_all": 0.04212125078556671,
+          "remaining_percent": 7.307361938692197,
+          "outer40_domains": {
+            "math": 0.009104181899176621,
+            "code": 0.03187081832858628,
+            "if": 0.08538875212893722
+          }
+        }
+      }
+    },
+    "E102": {
+      "teacher": "Qwen3-4B-Instruct-2507",
+      "metrics": {
+        "public_initial": {
+          "initial_all": 0.9334455282615772,
+          "outer40_all": 0.8467527255967826,
+          "remaining_percent": 90.71260185623805,
+          "outer40_domains": {
+            "math": 0.25277259920317025,
+            "code": 0.8967654954999804,
+            "if": 1.3907200820871972
+          }
+        },
+        "public_teacher": {
+          "initial_all": 0.9471785616185986,
+          "outer40_all": 0.9903289386691976,
+          "remaining_percent": 104.55567501199151,
+          "outer40_domains": {
+            "math": 0.27447353924684037,
+            "code": 1.3564940782511035,
+            "if": 1.340019198509649
+          }
+        }
+      }
+    }
+  }
+}

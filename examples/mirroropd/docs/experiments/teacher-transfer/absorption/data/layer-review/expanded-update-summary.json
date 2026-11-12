@@ -1,0 +1,2802 @@
+[
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6752367425529936,
+    "adjusted": 0.6726795515494739
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7218734346174421,
+    "adjusted": 0.7129016099276823
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6928255878562114,
+    "adjusted": 0.6723472937132922
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6986679899514777,
+    "adjusted": 0.6556205599445459
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7161775003229094,
+    "adjusted": 0.6215700004305459
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7049391836911045,
+    "adjusted": 0.7026158701768612
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.73173280809584,
+    "adjusted": 0.7230790277118347
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7394510251550632,
+    "adjusted": 0.7220810934987341
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7373613471686566,
+    "adjusted": 0.6998415396213219
+  },
+  {
+    "job_id": 7,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7446566746243699,
+    "adjusted": 0.6595422328324932
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7553423471403506,
+    "adjusted": 0.7514588923330547
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7171496771000676,
+    "adjusted": 0.6982929889067389
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7146196066770789,
+    "adjusted": 0.6738509790595186
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7377685089771431,
+    "adjusted": 0.6503580119695241
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.8057779335152315,
+    "adjusted": 0.611555867030463
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7015456581350089,
+    "adjusted": 0.6991956239470956
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.712365861757895,
+    "adjusted": 0.7030873411694399
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7213605444903013,
+    "adjusted": 0.7027845807896547
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7214805560722573,
+    "adjusted": 0.6816920640825798
+  },
+  {
+    "job_id": 7,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7347022752545258,
+    "adjusted": 0.6462697003393678
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.6706176616462409,
+    "adjusted": 0.6653893705612607
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.6580266097370708,
+    "adjusted": 0.6352283837195423
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.6718248759407974,
+    "adjusted": 0.6249427153609113
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7039816793666399,
+    "adjusted": 0.6053089058221865
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7843097735981523,
+    "adjusted": 0.5686195471963047
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7816313938145522,
+    "adjusted": 0.7799119559705723
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7270153943262139,
+    "adjusted": 0.7182094393044788
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7173534081203878,
+    "adjusted": 0.6985103019950804
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.6952022673460545,
+    "adjusted": 0.6516597341097765
+  },
+  {
+    "job_id": 7,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7192245755436132,
+    "adjusted": 0.6256327673914843
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6431137364357858,
+    "adjusted": 0.6403036083762251
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6525802781193422,
+    "adjusted": 0.6413731903167403
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6580091659039136,
+    "adjusted": 0.6352097769641745
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6728215937833386,
+    "adjusted": 0.6260818214666727
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6971698402190467,
+    "adjusted": 0.5962264536253956
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7880219582283177,
+    "adjusted": 0.7863528397891706
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7658955266422234,
+    "adjusted": 0.7583437694371338
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7689030684538901,
+    "adjusted": 0.7534966063508162
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7480317373245076,
+    "adjusted": 0.7120362712280086
+  },
+  {
+    "job_id": 7,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.7697110441925743,
+    "adjusted": 0.6929480589234324
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6997346076488864,
+    "adjusted": 0.6989506249012334
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6797887323920168,
+    "adjusted": 0.6764180874698275
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6558283984329423,
+    "adjusted": 0.6485055983996006
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.642643064572666,
+    "adjusted": 0.627105806510608
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6360953733359566,
+    "adjusted": 0.6030131345483162
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.872673570323949,
+    "adjusted": 0.8716710000115392
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8656833318256237,
+    "adjusted": 0.8613505360780632
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8419174558523568,
+    "adjusted": 0.8313786195758472
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8291750346263529,
+    "adjusted": 0.8047714681444033
+  },
+  {
+    "job_id": 7,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8186618425912212,
+    "adjusted": 0.7582157901216283
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6990406556050285,
+    "adjusted": 0.6982548609721434
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6714761109933832,
+    "adjusted": 0.6680179647933135
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6510665524321272,
+    "adjusted": 0.6436424365264277
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6390642530716965,
+    "adjusted": 0.6233713945095963
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6369157573945362,
+    "adjusted": 0.6039080989758576
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8275968846436581,
+    "adjusted": 0.8262393797983326
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8198360848599813,
+    "adjusted": 0.8140243456619162
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.8043665785568248,
+    "adjusted": 0.7913243504606131
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7944331372391173,
+    "adjusted": 0.7650664425589913
+  },
+  {
+    "job_id": 7,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7932903386176441,
+    "adjusted": 0.7243871181568587
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7116452797309624,
+    "adjusted": 0.7093747701225448
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7002207166298724,
+    "adjusted": 0.6905504171663199
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6976305992213708,
+    "adjusted": 0.6774726391694622
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7078953481947698,
+    "adjusted": 0.6661661122225941
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7333313700834188,
+    "adjusted": 0.6444418267778916
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.790974010758625,
+    "adjusted": 0.7904282509955927
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.723488085992726,
+    "adjusted": 0.7205774342663336
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6860024428993339,
+    "adjusted": 0.6793216438120856
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6604236643001369,
+    "adjusted": 0.6456594757914472
+  },
+  {
+    "job_id": 7,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6502954795019223,
+    "adjusted": 0.6185041594566425
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.514244018559995,
+    "adjusted": 0.510419168312436
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5053533660277826,
+    "adjusted": 0.48939702299642074
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5124606960144829,
+    "adjusted": 0.4799580757487817
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5470684775902332,
+    "adjusted": 0.482363974388838
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5997811773391206,
+    "adjusted": 0.4663749031188275
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5209169858024977,
+    "adjusted": 0.5171446786040922
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5468656605515202,
+    "adjusted": 0.5322484237951176
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5492043751060189,
+    "adjusted": 0.5191513334464202
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5669925913961518,
+    "adjusted": 0.5051343901670305
+  },
+  {
+    "job_id": 8,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.59783981575139,
+    "adjusted": 0.46378642100185336
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5895912683473576,
+    "adjusted": 0.5830768440354109
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5316837193114716,
+    "adjusted": 0.5004626339322364
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5441167926758157,
+    "adjusted": 0.4789906202009322
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5951244265268554,
+    "adjusted": 0.4601659020358072
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.7129602329379924,
+    "adjusted": 0.42592046587598476
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5228528071924068,
+    "adjusted": 0.5190957426821108
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5399507755973397,
+    "adjusted": 0.5251104780359636
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5366822904599621,
+    "adjusted": 0.5057944431572929
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.535690258022498,
+    "adjusted": 0.4693602948828549
+  },
+  {
+    "job_id": 8,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5732650818228753,
+    "adjusted": 0.43102010909716704
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.4125602223609932,
+    "adjusted": 0.4032357814460884
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.43703543852075444,
+    "adjusted": 0.39950446775547144
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.48037715981585394,
+    "adjusted": 0.4061453255038331
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5535539800326142,
+    "adjusted": 0.4047386400434857
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.687210735958468,
+    "adjusted": 0.374421471916936
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.6492750714561828,
+    "adjusted": 0.6465134578456015
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5881998738608596,
+    "adjusted": 0.574915998824113
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5570490217594914,
+    "adjusted": 0.5275189565434575
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5426910023211489,
+    "adjusted": 0.4773611455098844
+  },
+  {
+    "job_id": 8,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 28,
+    "raw": 0.5783120072090118,
+    "adjusted": 0.4377493429453491
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.43131109215064417,
+    "adjusted": 0.4268332267345075
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.41520913901951656,
+    "adjusted": 0.39634491769756547
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.44464196909062303,
+    "adjusted": 0.40761810036333124
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.47671630038808177,
+    "adjusted": 0.40196148615780775
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.5402866287033177,
+    "adjusted": 0.3870488382710902
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6643109535418621,
+    "adjusted": 0.661667732703609
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.641100380079562,
+    "adjusted": 0.6295229729853544
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6322912185537846,
+    "adjusted": 0.6077772997907035
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6266056101180869,
+    "adjusted": 0.5732635544206708
+  },
+  {
+    "job_id": 8,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 5,
+    "raw": 0.6442766203484203,
+    "adjusted": 0.5257021604645603
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.41609993985944527,
+    "adjusted": 0.41457539662148035
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.3600583263287882,
+    "adjusted": 0.3533220981848807
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.35688864071825227,
+    "adjusted": 0.34320542030800233
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.3658380714460954,
+    "adjusted": 0.33826581368288217
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.3914097863103916,
+    "adjusted": 0.3360834032476999
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7699800140585804,
+    "adjusted": 0.7681688330669156
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7095064819979819,
+    "adjusted": 0.7001357233527555
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7002393787553575,
+    "adjusted": 0.680255337339048
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6960151946177051,
+    "adjusted": 0.6525887938488059
+  },
+  {
+    "job_id": 8,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.7014932947181898,
+    "adjusted": 0.601991059624253
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.42373564991222673,
+    "adjusted": 0.4222310432540341
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.38744237195203396,
+    "adjusted": 0.3809943969199501
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.37948326787944264,
+    "adjusted": 0.36628078421730315
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.3917720900537378,
+    "adjusted": 0.3653273983169438
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.4142246596671637,
+    "adjusted": 0.3609723560005423
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6827459342662463,
+    "adjusted": 0.6802478707565317
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6674296089078002,
+    "adjusted": 0.6567015317757938
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6551138241352792,
+    "adjusted": 0.6321214124109644
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6603727177782677,
+    "adjusted": 0.6118545346037345
+  },
+  {
+    "job_id": 8,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6767366238837544,
+    "adjusted": 0.5689821651783392
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.44442883627866825,
+    "adjusted": 0.4400542601863743
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.4350275803073693,
+    "adjusted": 0.4168026635430909
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.47411983991539597,
+    "adjusted": 0.43906116257642236
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.5193731332927665,
+    "adjusted": 0.4507121523345902
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.5807098757587651,
+    "adjusted": 0.4409465010116868
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.6466189821439621,
+    "adjusted": 0.6456963163009959
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.5442154022827799,
+    "adjusted": 0.5394176696752302
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.5002279942824012,
+    "adjusted": 0.4895945473522395
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.46868952779377465,
+    "adjusted": 0.4455890724804605
+  },
+  {
+    "job_id": 8,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step64",
+    "layers": 1,
+    "raw": 0.46055668693566226,
+    "adjusted": 0.4115163857479952
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.3694463717087222,
+    "adjusted": 0.3628089650951298
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.39494599183531004,
+    "adjusted": 0.3686392958281496
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.4028408916580823,
+    "adjusted": 0.34855369999063524
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.43316850168805676,
+    "adjusted": 0.31980220202566817
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.5225676815762326,
+    "adjusted": 0.28385152236434885
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.36135931788903936,
+    "adjusted": 0.35463678439313445
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.37172454133945687,
+    "adjusted": 0.344408217049868
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.3966086295825697,
+    "adjusted": 0.3417548686355306
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.4211077252280224,
+    "adjusted": 0.30532927027362694
+  },
+  {
+    "job_id": 2,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.507929671749735,
+    "adjusted": 0.26189450762460253
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.5591937734456327,
+    "adjusted": 0.5298066916753414
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.5788178066800174,
+    "adjusted": 0.43842374224002323
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.7014506178181534,
+    "adjusted": 0.40290123563630686
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 28,
+    "raw": 1.0,
+    "adjusted": null
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 28,
+    "raw": 1.0,
+    "adjusted": null
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.3512816523174086,
+    "adjusted": 0.34445303813127603
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.3059742868424668,
+    "adjusted": 0.2757992558356175
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.31568243004165797,
+    "adjusted": 0.2534717418636269
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.37677472415549085,
+    "adjusted": 0.252129668986589
+  },
+  {
+    "job_id": 2,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.37677472415549085,
+    "adjusted": 0.252129668986589
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.3852314397456095,
+    "adjusted": 0.34424686906198354
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.48284695971274194,
+    "adjusted": 0.3104626129503226
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.6420628927719645,
+    "adjusted": 0.2841257855439291
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 28,
+    "raw": 1.0,
+    "adjusted": null
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 28,
+    "raw": 1.0,
+    "adjusted": null
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.45807517612088566,
+    "adjusted": 0.45237070429057913
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.33763760435320567,
+    "adjusted": 0.30883923932508417
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.33009634499235535,
+    "adjusted": 0.2691960127189331
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.3786111789744081,
+    "adjusted": 0.2543334147692897
+  },
+  {
+    "job_id": 2,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 28,
+    "raw": 0.3786111789744081,
+    "adjusted": 0.2543334147692897
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.3114096253076133,
+    "adjusted": 0.30416130557400917
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.2830261154199355,
+    "adjusted": 0.2518533378294979
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.29890194106996715,
+    "adjusted": 0.23516575389450964
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.354709915175893,
+    "adjusted": 0.22565189821107162
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.479888302175008,
+    "adjusted": 0.219832453262512
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.5345847896698727,
+    "adjusted": 0.5296856821927134
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.5121940060618184,
+    "adjusted": 0.49098504980363655
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.4938888821315837,
+    "adjusted": 0.4478787805071823
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.5129740746493154,
+    "adjusted": 0.41556888957917854
+  },
+  {
+    "job_id": 2,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 5,
+    "raw": 0.5704248071931224,
+    "adjusted": 0.3556372107896836
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.2757557942198904,
+    "adjusted": 0.274460187411697
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.24562689312253166,
+    "adjusted": 0.24019974846873693
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.23139841492319546,
+    "adjusted": 0.22025926151628522
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.2244954658285771,
+    "adjusted": 0.2016865089411823
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.23464383922387982,
+    "adjusted": 0.18825861735866042
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5388778745796285,
+    "adjusted": 0.5340239574699405
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5483120253349676,
+    "adjusted": 0.5286734177408358
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5521917557760536,
+    "adjusted": 0.5114819153920586
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5694701579573973,
+    "adjusted": 0.4833641895488768
+  },
+  {
+    "job_id": 2,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.6131961333043408,
+    "adjusted": 0.4197941999565111
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.32249057147865856,
+    "adjusted": 0.3212785689231642
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.27772794028795167,
+    "adjusted": 0.27253173841951966
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.2565601102700634,
+    "adjusted": 0.24578561911455707
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.24612410477282765,
+    "adjusted": 0.22395128432496963
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.25236171245269146,
+    "adjusted": 0.2070503010861879
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.535887874152375,
+    "adjusted": 0.531002483353979
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5267682242311726,
+    "adjusted": 0.5061929296325279
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5265965461799097,
+    "adjusted": 0.4835598685599015
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5483003588732955,
+    "adjusted": 0.45796043064795466
+  },
+  {
+    "job_id": 2,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5985123846462701,
+    "adjusted": 0.39776857696940515
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.3932751214672783,
+    "adjusted": 0.38688854379851273
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.38786010171719515,
+    "adjusted": 0.3612453235309862
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.40977206497105223,
+    "adjusted": 0.3561149799684207
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.4550148922690912,
+    "adjusted": 0.34601787072290946
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.5459086991592929,
+    "adjusted": 0.3188630487389393
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.4799853897563362,
+    "adjusted": 0.4790551310618037
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.35845777116444555,
+    "adjusted": 0.3538423594462042
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.30752116803425444,
+    "adjusted": 0.2974852429333016
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.2733104392819074,
+    "adjusted": 0.2519372169078459
+  },
+  {
+    "job_id": 2,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step16",
+    "layers": 1,
+    "raw": 0.26765609989083183,
+    "adjusted": 0.2232716210963368
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7373987361314702,
+    "adjusted": 0.736221151988562
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7551995185814089,
+    "adjusted": 0.7507486007374344
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7420777497161262,
+    "adjusted": 0.7325250737796865
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7398528288074833,
+    "adjusted": 0.7198415079465205
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7366477707070069,
+    "adjusted": 0.6927557324915081
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7543327104170724,
+    "adjusted": 0.7532310633785839
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7591202157290247,
+    "adjusted": 0.7547405832877342
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7546842041922667,
+    "adjusted": 0.7455984339771654
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7483391088796816,
+    "adjusted": 0.7289805787935032
+  },
+  {
+    "job_id": 6,
+    "module": "q_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7459453567643984,
+    "adjusted": 0.7036029162251314
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.8245167488116878,
+    "adjusted": 0.8188559987733551
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.8130146706447652,
+    "adjusted": 0.7863024807368746
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.8205370311737142,
+    "adjusted": 0.7607160415649523
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.8579964836913379,
+    "adjusted": 0.7159929673826757
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 28,
+    "raw": 1.0,
+    "adjusted": null
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7405487395834405,
+    "adjusted": 0.7393852810165502
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7236839729942803,
+    "adjusted": 0.71866004523054
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7105927940089466,
+    "adjusted": 0.6998740086018705
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.713352716351012,
+    "adjusted": 0.6913029253010898
+  },
+  {
+    "job_id": 6,
+    "module": "k_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7676313783440971,
+    "adjusted": 0.7289032747347799
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7713228039158115,
+    "adjusted": 0.7639461201711604
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7518024641174959,
+    "adjusted": 0.7163456732771382
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7729652937779309,
+    "adjusted": 0.6972870583705746
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.8318541031191918,
+    "adjusted": 0.6637082062383837
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 28,
+    "raw": 1.0,
+    "adjusted": null
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.8048420121426597,
+    "adjusted": 0.8039668642150484
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7205139952563787,
+    "adjusted": 0.7154324315337675
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.6992042873861702,
+    "adjusted": 0.6880637054375098
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.7049930439229217,
+    "adjusted": 0.6823002011477619
+  },
+  {
+    "job_id": 6,
+    "module": "v_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 28,
+    "raw": 0.762047854187523,
+    "adjusted": 0.7223891632187769
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7292228368769322,
+    "adjusted": 0.7280085895086673
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7092066208898306,
+    "adjusted": 0.7039194685423729
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7023578552205032,
+    "adjusted": 0.6913340720805219
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.6970366668921946,
+    "adjusted": 0.6737317951146711
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7067147166285003,
+    "adjusted": 0.6578338360665835
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.807151467759053,
+    "adjusted": 0.8062866761346541
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7918337996645595,
+    "adjusted": 0.7880489596584606
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7772850793224594,
+    "adjusted": 0.7690363785566245
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.76640858330374,
+    "adjusted": 0.748440012788643
+  },
+  {
+    "job_id": 6,
+    "module": "o_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 5,
+    "raw": 0.7640737956375689,
+    "adjusted": 0.7247527615771638
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7580010874796538,
+    "adjusted": 0.7577965237328065
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7380011377004363,
+    "adjusted": 0.7371130059638276
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7194410839001948,
+    "adjusted": 0.717532519845094
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7027651613798713,
+    "adjusted": 0.6986934512617874
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.6878757139884835,
+    "adjusted": 0.679205594932608
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.846360815794407,
+    "adjusted": 0.8456718508428125
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.8316559500971794,
+    "adjusted": 0.8285951491898554
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.8187815892837937,
+    "adjusted": 0.8120697962943046
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.8120320993919269,
+    "adjusted": 0.7975730301143829
+  },
+  {
+    "job_id": 6,
+    "module": "gate_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.8100357147461021,
+    "adjusted": 0.7783750005371192
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7684252914823957,
+    "adjusted": 0.7682295394041898
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7265016807145076,
+    "adjusted": 0.7255745677677771
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.710321947102515,
+    "adjusted": 0.7083513481032123
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7005951786840175,
+    "adjusted": 0.6964937427755794
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.6877532593083845,
+    "adjusted": 0.6790797387336173
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.844147371428964,
+    "adjusted": 0.8434484807178831
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.808697272035478,
+    "adjusted": 0.8052190406179413
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7980505321872795,
+    "adjusted": 0.7905709222682898
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7983975641796641,
+    "adjusted": 0.7828896845011768
+  },
+  {
+    "job_id": 6,
+    "module": "up_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7993442506526082,
+    "adjusted": 0.7659016257613761
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 16,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7874157549911419,
+    "adjusted": 0.7864624624126269
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 64,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.766864500357107,
+    "adjusted": 0.7626256730908725
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 128,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7636712253527351,
+    "adjusted": 0.7549183077732068
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 256,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7689466515576133,
+    "adjusted": 0.7511733170620452
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "left",
+    "rank": 512,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.773400308541675,
+    "adjusted": 0.7356336932986208
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 16,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.8219381202389509,
+    "adjusted": 0.8217876030117648
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 64,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7568010031387398,
+    "adjusted": 0.755976599759549
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 128,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.731858653389709,
+    "adjusted": 0.7300345625964417
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 256,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.7159180313045511,
+    "adjusted": 0.7120264974868052
+  },
+  {
+    "job_id": 6,
+    "module": "down_proj",
+    "side": "right",
+    "rank": 512,
+    "label": "step32",
+    "layers": 1,
+    "raw": 0.6978848453561697,
+    "adjusted": 0.6894927577271744
+  }
+]

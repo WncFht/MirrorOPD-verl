@@ -2,6 +2,44 @@
 
 在固定 token bank 上重测 checkpoint 的全参数 PAC、跨 batch Gram、有限梯度空间覆盖，以及逐 prefix 的 live / frozen-request 响应。轨迹测量复用生产 `precompute_kl_rows` 与 `precompute_rows`，逐位置算子继续复用 `full_reverse_kl_result`；两者保留 teacher 原生词表的归一化；轨迹 PAC 与逐 prefix PAC 分别输出。
 
+## 长响应机制探测协议
+
+E99/E101 新测量使用同一包，配置中显式设置：
+
+```json
+{
+  "defaults": {
+    "cap": 7168,
+    "group_size": 8,
+    "checkpointing": true,
+    "reduction": "valid_tokens",
+    "source_policy": "independent"
+  }
+}
+```
+
+该片段合入下方完整 plan；模型、bank 与保存点仍由 plan 绑定。`reduction` 与 `source_policy` 编译进 task，因此改变协议会改变结果签名。旧 manifest 没有这些字段时按历史默认执行。新协议使用新输出目录，已有历史结果保留原位。
+
+| 参数            | 默认与选择                                        | 含义                                                                                                 |
+| --------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `reduction`     | 默认 `fixed_cap`；新实验选 `valid_tokens`         | 前者每题除 cap，后者除本题截断后的有效长度；随后按题/组平均                                          |
+| `source_policy` | 默认 `training_batches`；独立题目选 `independent` | 前者依据 `batch_index >= stage/16` 判断未来训练 batch；后者只作独立 source，不产生 future-train 结果 |
+| `cap`           | 历史默认 1024；新实验 7168                        | 截断响应长度上限，EOS 保留在有效响应中；支持单个或多个 EOS ID                                        |
+| `--bank`        | 单 bank 可省略；多 bank 必选                      | 轨迹探针一次只处理一个 bank，不同 bank 使用独立 `--out`                                              |
+| `--stages`      | 必须存在于 manifest 的非负保存点                  | 支持 640 及后续阶段，初始模型仍须唯一                                                                |
+
+执行关系为：`batch` 编译与身份核验 → `trajectory` 选择题目/保存点 → `requests` / `response` 调生产 KL/VJP → `pac` 与各 probe 生成小统计和组均值 → report 读取结果。`reductions.py` 只负责归约规则与历史结果兼容；`inputs.py` 统一 EOS、题目身份与 source 暴露协议。新增探针复用这些层，新增模型由配置接入。
+
+新面板把 source32 标为`split=train`，receiver96 标为`split=heldout`；每个 diagnostic group 为 B8。receiver 的前六组固定为 calibration，后六组为 test，记录顺序和题目清单一起冻结。训练侧 source 与 receiver 必须合并核对 prompt 不重复。`updates`与`adam`均可用`--source-indices 0 1 2 3`选择四个 source 组；负索引、越界与重复选择会在模型加载前报错。Adam 路径仍要求与 checkpoint 步数匹配的原生 optimizer state。
+
+归约策略贯通完整轨迹 PAC、live/frozen、分量响应、alignment、小步与 Adam 评分。逐 prefix 的单位置探针继续保持自己的指标定义。原始 hidden/head 缓存不依赖归约方式，可复用；测量结果依赖 task 全部字段，不能跨协议复用。
+
+响应输出记录每题 `token_count` 与 `denominator`。若每题分母为 d，随机符号梯度满足 E||g_sign||² = sum_t||g_t||²/d²；报告的 token 响应能量 U 需先按每题乘 d，再聚合。真正的 token 对角项直接聚合 E||g_sign||²；变长时不能用“平均 U / cap”替代。`aggregation_over_diagonal` 比较轨迹能量与该对角项；`R_agg` 使用 U 作分母，不能独自当作抵消程度。历史固定 H 数据无需长度字段；新有效长度结果缺字段会报错。
+
+保留已有执行优化：生产分块 full-vocab VJP、tied-head 两路导数、bundle 共享 forward、范数 hook、CPU 组均值和分块 FP64 Gram。默认不保存逐题全参数梯度。完整 Gram 的 CPU 内存仍随组数和参数量增长；长响应的新增耗时与峰值显存由 B8 pilot 实测，CPU 回归不能证明 GPU 加速。
+
+首轮实验及其条件补测见[机制探测与干预设计](../../../docs/experiments/teacher-transfer/checkpoint-dynamics/2026-11-13-机制探测与干预设计.md)。自然 checkpoint 窗口位移评分、早期 frame 内/外编辑尚待接入；本节描述的协议改造不代表这些实验已执行。历史 `report-trajectories` / `report-responses` 的主图仍面向 JustRL/Polaris，通用统计函数可供新 pair 使用，新 pair 出图需适配标签与配对身份。
+
 ## 批量使用
 
 一个配置描述模型路径、固定 bank 和 checkpoint 序列；新增模型或保存点不需要复制 runner。路径相对于配置文件所在目录解析。

@@ -1,0 +1,23 @@
+{
+  "models": 16,
+  "historical_h1024_models": 14,
+  "independent_questions_per_condition": 128,
+  "risk_points": 262,
+  "question_records": 33536,
+  "frame_trajectories": 6,
+  "max_risk_step": 320,
+  "max_frame_reference_step": 320,
+  "risk_reaggregation_max_error": 1.1102230246251565e-16,
+  "parameter_identity_max_error": 4.440892098500626e-16,
+  "figure_audits": {
+    "frame-first-pass-audit": [],
+    "frame-full-weight-audit": [],
+    "h1024-dynamics-audit": [],
+    "h1024-risk-audit": [],
+    "parameter-residuals-audit": [],
+    "spectrum-first-pass-audit": [],
+    "spectrum-models-audit": []
+  },
+  "visual_review": "All seven PNGs inspected; rho tick crowding corrected and rerendered.",
+  "new_gpu_forward": false
+}

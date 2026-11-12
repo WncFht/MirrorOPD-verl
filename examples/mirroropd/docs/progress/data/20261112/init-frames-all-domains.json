@@ -1,0 +1,770 @@
+[
+  {
+    "job_id": 0,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.07629651222839554,
+    "reverse": 0.07188786334229366,
+    "ratio": 0.9422169014370608
+  },
+  {
+    "job_id": 0,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.13890082099265255,
+    "reverse": 0.13344990781680002,
+    "ratio": 0.9607567965624849
+  },
+  {
+    "job_id": 0,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.03243889814246337,
+    "reverse": 0.02993086657511823,
+    "ratio": 0.9226844402565555
+  },
+  {
+    "job_id": 0,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.0749876027752362,
+    "reverse": 0.07059636658170237,
+    "ratio": 0.9414405044164983
+  },
+  {
+    "job_id": 0,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.14087204266131967,
+    "reverse": 0.1352789140057755,
+    "ratio": 0.9602963899019268
+  },
+  {
+    "job_id": 0,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.02833936404264083,
+    "reverse": 0.026074966443929353,
+    "ratio": 0.9200970919705767
+  },
+  {
+    "job_id": 1,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.027396224212619752,
+    "reverse": 0.025047928651881893,
+    "ratio": 0.9142839705751807
+  },
+  {
+    "job_id": 1,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.024174941617997124,
+    "reverse": 0.020955854970199726,
+    "ratio": 0.8668420094383625
+  },
+  {
+    "job_id": 1,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.017595146833423805,
+    "reverse": 0.015782964273249083,
+    "ratio": 0.8970066815962972
+  },
+  {
+    "job_id": 1,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.02774408972268384,
+    "reverse": 0.02528448233553542,
+    "ratio": 0.9113466179019231
+  },
+  {
+    "job_id": 1,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.027792735321982495,
+    "reverse": 0.023740877945945125,
+    "ratio": 0.8542116373542917
+  },
+  {
+    "job_id": 1,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.016762493764199245,
+    "reverse": 0.014958902259535478,
+    "ratio": 0.8924031513428022
+  },
+  {
+    "job_id": 2,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.08457653636627381,
+    "reverse": 0.07814130980237209,
+    "ratio": 0.9239123894122027
+  },
+  {
+    "job_id": 2,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.12360731352595451,
+    "reverse": 0.11388385735472824,
+    "ratio": 0.9213359153770089
+  },
+  {
+    "job_id": 2,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.08260690045058422,
+    "reverse": 0.0781571229649888,
+    "ratio": 0.9461331019403484
+  },
+  {
+    "job_id": 2,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.06935032447257808,
+    "reverse": 0.06339998391198476,
+    "ratio": 0.9141988072031855
+  },
+  {
+    "job_id": 2,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.1277990411720771,
+    "reverse": 0.11585212624142661,
+    "ratio": 0.9065179611593144
+  },
+  {
+    "job_id": 2,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.08192862357932,
+    "reverse": 0.07796304234065582,
+    "ratio": 0.9515971211840895
+  },
+  {
+    "job_id": 3,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.09503198256136387,
+    "reverse": 0.08925218587233914,
+    "ratio": 0.939180510253034
+  },
+  {
+    "job_id": 3,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.1008464128972739,
+    "reverse": 0.09157728550986054,
+    "ratio": 0.9080866922172506
+  },
+  {
+    "job_id": 3,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.15478605621107558,
+    "reverse": 0.1434440888051678,
+    "ratio": 0.9267248763645661
+  },
+  {
+    "job_id": 3,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.10766801442860066,
+    "reverse": 0.10242054329054556,
+    "ratio": 0.95126248806664
+  },
+  {
+    "job_id": 3,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.12512870777799082,
+    "reverse": 0.11415121467448597,
+    "ratio": 0.9122703870403455
+  },
+  {
+    "job_id": 3,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.174417133392597,
+    "reverse": 0.1629715609267901,
+    "ratio": 0.9343781643283635
+  },
+  {
+    "job_id": 4,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.1750639412198181,
+    "reverse": 0.16486229996090482,
+    "ratio": 0.9417261990800055
+  },
+  {
+    "job_id": 4,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.33109540829306366,
+    "reverse": 0.31612793606787604,
+    "ratio": 0.9547940809498046
+  },
+  {
+    "job_id": 4,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.29085467713681484,
+    "reverse": 0.27934265238681455,
+    "ratio": 0.9604200115902377
+  },
+  {
+    "job_id": 4,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.15266818332833404,
+    "reverse": 0.14298457993800787,
+    "ratio": 0.9365709136035224
+  },
+  {
+    "job_id": 4,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.33892899880106186,
+    "reverse": 0.32257789512496926,
+    "ratio": 0.9517565515670435
+  },
+  {
+    "job_id": 4,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.3049941780284078,
+    "reverse": 0.293718725384631,
+    "ratio": 0.9630305971193767
+  },
+  {
+    "job_id": 5,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.10324720627736153,
+    "reverse": 0.09491807858669063,
+    "ratio": 0.9193282996123335
+  },
+  {
+    "job_id": 5,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.2235254234905292,
+    "reverse": 0.21104467184797,
+    "ratio": 0.9441640622007902
+  },
+  {
+    "job_id": 5,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.20580704064638536,
+    "reverse": 0.19475315111534172,
+    "ratio": 0.9462900321761282
+  },
+  {
+    "job_id": 5,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.08779938167955974,
+    "reverse": 0.07844291467287973,
+    "ratio": 0.8934335660719321
+  },
+  {
+    "job_id": 5,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.21263558136016922,
+    "reverse": 0.198858939270898,
+    "ratio": 0.935210081016799
+  },
+  {
+    "job_id": 5,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.21221649372727985,
+    "reverse": 0.2006858344505814,
+    "ratio": 0.945665583884745
+  },
+  {
+    "job_id": 6,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.30635890491700113,
+    "reverse": 0.2914398982782599,
+    "ratio": 0.9513021936059501
+  },
+  {
+    "job_id": 6,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.22104354889499794,
+    "reverse": 0.21012478061200934,
+    "ratio": 0.9506035424350913
+  },
+  {
+    "job_id": 6,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.3074224617603834,
+    "reverse": 0.2948188837102261,
+    "ratio": 0.9590024164858161
+  },
+  {
+    "job_id": 6,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.36351570534746325,
+    "reverse": 0.3511969048087268,
+    "ratio": 0.9661120541491828
+  },
+  {
+    "job_id": 6,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.2599044105140819,
+    "reverse": 0.2460912645016235,
+    "ratio": 0.9468529757338996
+  },
+  {
+    "job_id": 6,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.34760492301608675,
+    "reverse": 0.33491630309615816,
+    "ratio": 0.9634970074363953
+  },
+  {
+    "job_id": 7,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.01790850623087741,
+    "reverse": 0.017146853872948776,
+    "ratio": 0.9574697996522228
+  },
+  {
+    "job_id": 7,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.028744755301149276,
+    "reverse": 0.028498506979293008,
+    "ratio": 0.9914332782006176
+  },
+  {
+    "job_id": 7,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.011066526745326898,
+    "reverse": 0.010640504637110736,
+    "ratio": 0.9615035396362224
+  },
+  {
+    "job_id": 7,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.01833145505360828,
+    "reverse": 0.018049759099565167,
+    "ratio": 0.9846331917886864
+  },
+  {
+    "job_id": 7,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.02830432827175407,
+    "reverse": 0.02920420747179744,
+    "ratio": 1.031792989093523
+  },
+  {
+    "job_id": 7,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.012170047704344903,
+    "reverse": 0.011983310852042996,
+    "ratio": 0.9846560295539976
+  },
+  {
+    "job_id": 8,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.4850697734942157,
+    "reverse": 0.48188455716290485,
+    "ratio": 0.993433488324028
+  },
+  {
+    "job_id": 8,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.5366300409210596,
+    "reverse": 0.5368072558939259,
+    "ratio": 1.0003302367727347
+  },
+  {
+    "job_id": 8,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.5167749779405802,
+    "reverse": 0.5124596770346088,
+    "ratio": 0.9916495552412996
+  },
+  {
+    "job_id": 8,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.7514961974629504,
+    "reverse": 0.7366810047971809,
+    "ratio": 0.9802857383499937
+  },
+  {
+    "job_id": 8,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.7888192986570752,
+    "reverse": 0.7794536112775863,
+    "ratio": 0.9881269545567235
+  },
+  {
+    "job_id": 8,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.5228796170104829,
+    "reverse": 0.5171398300979095,
+    "ratio": 0.9890227373073174
+  },
+  {
+    "job_id": 9,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.012253670889238889,
+    "reverse": 0.011913669773490943,
+    "ratio": 0.9722531216301449
+  },
+  {
+    "job_id": 9,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.02470649395877272,
+    "reverse": 0.024425756647968713,
+    "ratio": 0.9886371044279909
+  },
+  {
+    "job_id": 9,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.01456419766958725,
+    "reverse": 0.014469531073824394,
+    "ratio": 0.9935000473139322
+  },
+  {
+    "job_id": 9,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.013309982979050937,
+    "reverse": 0.01320539216865285,
+    "ratio": 0.9921419275619882
+  },
+  {
+    "job_id": 9,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.026560295748110672,
+    "reverse": 0.025511927627531628,
+    "ratio": 0.960528748229258
+  },
+  {
+    "job_id": 9,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.01648741951849098,
+    "reverse": 0.01610052135214615,
+    "ratio": 0.9765337343475178
+  },
+  {
+    "job_id": 10,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.522858160827119,
+    "reverse": 0.5103989829996082,
+    "ratio": 0.9761710177616786
+  },
+  {
+    "job_id": 10,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.2902372538133644,
+    "reverse": 0.28981689125076915,
+    "ratio": 0.9985516588340325
+  },
+  {
+    "job_id": 10,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.41002771214774164,
+    "reverse": 0.4079568372754898,
+    "ratio": 0.9949494270487121
+  },
+  {
+    "job_id": 10,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.6874851690949871,
+    "reverse": 0.6688892070745093,
+    "ratio": 0.9729507444575746
+  },
+  {
+    "job_id": 10,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.7012352217842343,
+    "reverse": 0.6869743521614297,
+    "ratio": 0.9796632154521289
+  },
+  {
+    "job_id": 10,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.40973483554372453,
+    "reverse": 0.4047511288947933,
+    "ratio": 0.9878367514387256
+  },
+  {
+    "job_id": 11,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.22526099683130713,
+    "reverse": 0.22139415748852267,
+    "ratio": 0.9828339597303645
+  },
+  {
+    "job_id": 11,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.03416277606980021,
+    "reverse": 0.033436575554266344,
+    "ratio": 0.9787429301983503
+  },
+  {
+    "job_id": 11,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.012976852789179271,
+    "reverse": 0.012756730398531875,
+    "ratio": 0.9830373054065201
+  },
+  {
+    "job_id": 11,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.20836111172244012,
+    "reverse": 0.20343928880965403,
+    "ratio": 0.9763783996346569
+  },
+  {
+    "job_id": 11,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.04423695488017121,
+    "reverse": 0.043479495829857315,
+    "ratio": 0.9828772334722022
+  },
+  {
+    "job_id": 11,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.014167513702525126,
+    "reverse": 0.014044422198075899,
+    "ratio": 0.9913117074009049
+  },
+  {
+    "job_id": 12,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.21847858153589053,
+    "reverse": 0.21618612896214998,
+    "ratio": 0.9895071976501094
+  },
+  {
+    "job_id": 12,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.032667135626464984,
+    "reverse": 0.03102833866512384,
+    "ratio": 0.9498334662677469
+  },
+  {
+    "job_id": 12,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.012710860250168076,
+    "reverse": 0.012520869474656299,
+    "ratio": 0.9850528782653192
+  },
+  {
+    "job_id": 12,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.2090650574560261,
+    "reverse": 0.20511575763784307,
+    "ratio": 0.9811097087852009
+  },
+  {
+    "job_id": 12,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.040834873247227024,
+    "reverse": 0.03905017741619856,
+    "ratio": 0.9562948115395544
+  },
+  {
+    "job_id": 12,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.01399248231294497,
+    "reverse": 0.013666956108795984,
+    "ratio": 0.9767356358315471
+  },
+  {
+    "job_id": 13,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.3625670262079355,
+    "reverse": 0.34740322553271324,
+    "ratio": 0.958176558872936
+  },
+  {
+    "job_id": 13,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.5003912472215237,
+    "reverse": 0.4970705757036473,
+    "ratio": 0.9933638497149685
+  },
+  {
+    "job_id": 13,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.6059080959901783,
+    "reverse": 0.6022019650323914,
+    "ratio": 0.9938833447146299
+  },
+  {
+    "job_id": 13,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.42464404481638535,
+    "reverse": 0.4041376738522671,
+    "ratio": 0.951709269882767
+  },
+  {
+    "job_id": 13,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.6863042340255703,
+    "reverse": 0.6745728722714505,
+    "ratio": 0.9829064703778547
+  },
+  {
+    "job_id": 13,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 1.1059333978594368,
+    "reverse": 1.0894698582031728,
+    "ratio": 0.9851134438220877
+  },
+  {
+    "job_id": 19,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.04453414461039698,
+    "reverse": 0.040841005170791644,
+    "ratio": 0.9170717328936159
+  },
+  {
+    "job_id": 19,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.03968079206087955,
+    "reverse": 0.03681087567169112,
+    "ratio": 0.9276749217912457
+  },
+  {
+    "job_id": 19,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.047742325695892054,
+    "reverse": 0.044885527125394856,
+    "ratio": 0.9401621406402703
+  },
+  {
+    "job_id": 19,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.04533603155761986,
+    "reverse": 0.041443806615689846,
+    "ratio": 0.9141472067976839
+  },
+  {
+    "job_id": 19,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.03955605615623173,
+    "reverse": 0.0368342922203021,
+    "ratio": 0.9311922319763206
+  },
+  {
+    "job_id": 19,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.047307914556372746,
+    "reverse": 0.04452668356227983,
+    "ratio": 0.9412100275361164
+  },
+  {
+    "job_id": 20,
+    "origin": "initial-student",
+    "domain": "math",
+    "initial": 0.18545877624795976,
+    "reverse": 0.1811279135209531,
+    "ratio": 0.9766478415601305
+  },
+  {
+    "job_id": 20,
+    "origin": "initial-student",
+    "domain": "code",
+    "initial": 0.2802226982491644,
+    "reverse": 0.27576128990068033,
+    "ratio": 0.9840790614880272
+  },
+  {
+    "job_id": 20,
+    "origin": "initial-student",
+    "domain": "if",
+    "initial": 0.44887831341823753,
+    "reverse": 0.44576535514052756,
+    "ratio": 0.9930650285731013
+  },
+  {
+    "job_id": 20,
+    "origin": "teacher",
+    "domain": "math",
+    "initial": 0.271757718317306,
+    "reverse": 0.26740950341465936,
+    "ratio": 0.9839996636357918
+  },
+  {
+    "job_id": 20,
+    "origin": "teacher",
+    "domain": "code",
+    "initial": 0.28429898250609176,
+    "reverse": 0.27880219720164295,
+    "ratio": 0.9806654766893828
+  },
+  {
+    "job_id": 20,
+    "origin": "teacher",
+    "domain": "if",
+    "initial": 0.5116861791167501,
+    "reverse": 0.5148887417029699,
+    "ratio": 1.006258841291645
+  }
+]

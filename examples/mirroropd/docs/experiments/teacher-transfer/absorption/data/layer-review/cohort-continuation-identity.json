@@ -1,0 +1,263 @@
+[
+  {
+    "label": "Llama coreward-i",
+    "step": 320,
+    "weight_identity": "26a0d5dbc92ec5df9b57bf83721a48752e0e3bba087b193f58c43ace6cf1fd7e",
+    "continuity": null,
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "b5e89be96985f66c808b574aa699c249ffedd1901c7bd2a0f69c0184733a4b6a",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Llama coreward-i",
+    "step": 640,
+    "weight_identity": "c45e865946d7aa080d3bfc1f3f818485fe9440a906a4c1d009704c01c4e7129c",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "b5e89be96985f66c808b574aa699c249ffedd1901c7bd2a0f69c0184733a4b6a",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Llama gt",
+    "step": 320,
+    "weight_identity": "2bc0d767228fa3c47407d063a34c82f2b7d3e631dc4d770fe15cf1e2e3a2ebd0",
+    "continuity": null,
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "8028edc6670f55f91a57164bbf51a39090de6bf9006ab077643916778dd66553",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Llama gt",
+    "step": 640,
+    "weight_identity": "98a455e3971db97677afa919abb9e35b0257cb872c97c428c0db1ed1f05bf76b",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "8028edc6670f55f91a57164bbf51a39090de6bf9006ab077643916778dd66553",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Llama arithmetic-full",
+    "step": 320,
+    "weight_identity": "bffa3487c88201eb959b1398a98a51adc1f87fcd797a0939a10960a744f6c7e8",
+    "continuity": null,
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Llama arithmetic-full",
+    "step": 640,
+    "weight_identity": "c3a93760d15eec7bb2174bdc46aa206cd416265036e544408c27164de4a03427",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Llama arithmetic-full",
+    "step": 1280,
+    "weight_identity": "ebc586f90ed4ed321b3d4b7b9a979f55c161c2e204fdc0644edbac96537a3a4b",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "89d1161201c4b92498a16cef08cf1e12bb2eba1e5c91bd4f4bf5dbc721f4bd36",
+    "teacher_identity": "da756f21666bd4a280beeaf0ad3777c2f0ecaa37900a1c1d0d0d6acc08dab8f8",
+    "bank_identity": "c6192928aafd099a97ea1ba2ca89dbc2cf600aa796b866ca6b7705c771d1625d"
+  },
+  {
+    "label": "Qwen e3 thinking",
+    "step": 320,
+    "weight_identity": "a17b2b37778b75e85283dd907f18726553f48bdd379bf6bd758d4cb6c5b04634",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  },
+  {
+    "label": "Qwen e3 thinking",
+    "step": 640,
+    "weight_identity": "43a10e8e91e49d19a251798aa4ed97579551fc881fbe1c9a2aea2d3bb0f1b4e4",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  },
+  {
+    "label": "Qwen e3 thinking",
+    "step": 1280,
+    "weight_identity": "b14ff7a031435157692d0804c581640be16256706725996ccbeab28758574cce",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  },
+  {
+    "label": "Qwen Samsung nonthinking",
+    "step": 320,
+    "weight_identity": "39e344ab34aa88a7625986ad92b6ab85eab0816cf8ffb59ab9ffea6e44642398",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen Samsung nonthinking",
+    "step": 640,
+    "weight_identity": "e1584be8e2a7adf858dd5ace6f2e26d67a47b0f55fca23d037cc4a48529d5835",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen Samsung nonthinking",
+    "step": 1280,
+    "weight_identity": "32d8c72066683a9ae9df296b96b72fcb6cdd07a70083ba7023fbf53935fe3359",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "4bc8ea8ae4cc1d39bf8660e8d14303158213d86361b11a4cea19bc634693fc0f",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen CoReward-I",
+    "step": 320,
+    "weight_identity": "c84065d07484c6c13131dd6ef07f50ac2b4a20ad6ad8ee46e6f7541d1125dadd",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "7b2393422d2b9d4ddb0d56eb169e437918aa66349f2e2f30e382d2a833a4c253",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen CoReward-I",
+    "step": 640,
+    "weight_identity": "24fc0728fcb7a0753d9f75890f367c8086c90000762676c6a076a879fa807251",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "7b2393422d2b9d4ddb0d56eb169e437918aa66349f2e2f30e382d2a833a4c253",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen CoReward-I",
+    "step": 1280,
+    "weight_identity": "8cabfd1aad47196466f578f2deaf25c08d6d0eb17ffe7fba083882aa1539d616",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "7b2393422d2b9d4ddb0d56eb169e437918aa66349f2e2f30e382d2a833a4c253",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen CoReward-II",
+    "step": 320,
+    "weight_identity": "8eabca25cc791688db732ea7516c3f9739b30429e086d296f15eee3e3b790434",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "ab82069da5d9e5b754749a172d95b1b43ddd8e96820a265ce1c2529904f51f4c",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen CoReward-II",
+    "step": 640,
+    "weight_identity": "bba4ca623d424db2c4059a81cadda519694102930a5ea79d4b54f7808a4f1e0d",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "ab82069da5d9e5b754749a172d95b1b43ddd8e96820a265ce1c2529904f51f4c",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen CoReward-II",
+    "step": 1280,
+    "weight_identity": "dca8ff6c2041369da951f8e321736bab1636cc28b5d7decd912f9f8eaa9d8239",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "ab82069da5d9e5b754749a172d95b1b43ddd8e96820a265ce1c2529904f51f4c",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen base-GT",
+    "step": 320,
+    "weight_identity": "78f294617a639de3f91278a52bc3bc115aae90b4f54429ddbe92b2ec7dbb8a33",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "6a0e027a7449519815b9b825428e3419c32ab6ec3b0871ba347ae365c3a175e6",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen base-GT",
+    "step": 640,
+    "weight_identity": "23857e3709ec6b62ffbf4d74d3cd2f8f39f08c2d92e9d85aaeffa6c3d1c5dce7",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "6a0e027a7449519815b9b825428e3419c32ab6ec3b0871ba347ae365c3a175e6",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen base-GT",
+    "step": 1280,
+    "weight_identity": "7fc281f371002df272274c8a769c27fc6cd24a818b10f47a118c490794546b1e",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "6a0e027a7449519815b9b825428e3419c32ab6ec3b0871ba347ae365c3a175e6",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen Thinking-Space nonthinking",
+    "step": 320,
+    "weight_identity": "f139135c175a0e39af8755bcdce47bb924c10dbf0208f33a022167ab0e6c50e8",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen Thinking-Space nonthinking",
+    "step": 640,
+    "weight_identity": "ef3a585c34a17819bf9113dbf6c36fc788fa2147bb01f7bcfcbfff1059af4b4a",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen Thinking-Space nonthinking",
+    "step": 1280,
+    "weight_identity": "124ece42afdf5879d54d3ce335caac494a5858f874d970f8de5587c503f6947e",
+    "continuity": "explicit resume weight_identity",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+    "bank_identity": "d0399fa6d4c1b583bbfd0366ccb4cdc506fc7e5d421173322a7ff2910d7ab1be"
+  },
+  {
+    "label": "Qwen e3 lineage",
+    "step": 64,
+    "weight_identity": "f1cf310faf819d33fb196d227ca05b7beba4463891e24a7dee17ba1ef8fed3d3",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  },
+  {
+    "label": "Qwen e3 lineage",
+    "step": 320,
+    "weight_identity": "7c6dea0c4658e7318e7be5d05920402539c75650d45fe156e1815458f6a49f6b",
+    "continuity": "same run inputs except step",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "bec7736b9be96be8e3a137c162910e752923fced198bb8e3dd6b4d16ad4ede54",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  },
+  {
+    "label": "Qwen DeepMath lineage",
+    "step": 64,
+    "weight_identity": "1254536b101ba377603fd8b6cc20d58775beba30568774ab1b406d01fcaa901a",
+    "continuity": null,
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  },
+  {
+    "label": "Qwen DeepMath lineage",
+    "step": 320,
+    "weight_identity": "f7c366d55f6f8f56fa566d92da741a39cb8736ca36198e31014ac40e3aa1e985",
+    "continuity": "same run inputs except step",
+    "student_identity": "a26ac671e9d86fa49cd3854276bb4e117f42bd9d00501b8a1788ce60d0460320",
+    "teacher_identity": "048f1530f0d1825accff626873fd2d1c2138192204f964f92f1908caf8a1c86a",
+    "bank_identity": "e7c2843384736614e0bdfb964a5f8e3436102cbf03b88b0969902b99230b8ce5"
+  }
+]

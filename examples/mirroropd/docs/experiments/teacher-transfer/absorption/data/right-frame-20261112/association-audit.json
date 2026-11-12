@@ -1,0 +1,1001 @@
+{
+  "protocol": "Right cumulative update subspace, first-pass64->320 only; no independent-seed inference from matrices",
+  "comparisons": [
+    {
+      "comparison": "GRPO_vs_Samsung",
+      "a": 7,
+      "b": 8,
+      "window": [
+        64,
+        320
+      ],
+      "right_overlap": [
+        {
+          "module": "k_proj",
+          "rank": 8,
+          "matrices": 28,
+          "a_overlap": 0.6962264449934168,
+          "b_overlap": 0.497424321743437,
+          "a_more_stable_matrices": 27,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 16,
+          "matrices": 28,
+          "a_overlap": 0.6991956239470956,
+          "b_overlap": 0.5190957426821108,
+          "a_more_stable_matrices": 26,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 32,
+          "matrices": 28,
+          "a_overlap": 0.7031269845377144,
+          "b_overlap": 0.5410775451664648,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 64,
+          "matrices": 28,
+          "a_overlap": 0.7030873411694399,
+          "b_overlap": 0.5251104780359636,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 128,
+          "matrices": 28,
+          "a_overlap": 0.7027845807896547,
+          "b_overlap": 0.5057944431572929,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 256,
+          "matrices": 28,
+          "a_overlap": 0.6816920640825798,
+          "b_overlap": 0.4693602948828549,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 512,
+          "matrices": 28,
+          "a_overlap": 0.6462697003393678,
+          "b_overlap": 0.43102010909716704,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 8,
+          "matrices": 28,
+          "a_overlap": 0.7952343271900983,
+          "b_overlap": 0.6583637747395801,
+          "a_more_stable_matrices": 24,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 16,
+          "matrices": 28,
+          "a_overlap": 0.7799119559705723,
+          "b_overlap": 0.6465134578456015,
+          "a_more_stable_matrices": 25,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 32,
+          "matrices": 28,
+          "a_overlap": 0.7550988798557616,
+          "b_overlap": 0.6188163963919817,
+          "a_more_stable_matrices": 27,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 64,
+          "matrices": 28,
+          "a_overlap": 0.7182094393044788,
+          "b_overlap": 0.574915998824113,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 128,
+          "matrices": 28,
+          "a_overlap": 0.6985103019950804,
+          "b_overlap": 0.5275189565434575,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 256,
+          "matrices": 28,
+          "a_overlap": 0.6516597341097765,
+          "b_overlap": 0.4773611455098844,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 512,
+          "matrices": 28,
+          "a_overlap": 0.6256327673914843,
+          "b_overlap": 0.4377493429453491,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 8,
+          "matrices": 5,
+          "a_overlap": 0.6960501532759005,
+          "b_overlap": 0.5279256949379084,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 16,
+          "matrices": 5,
+          "a_overlap": 0.7026158701768612,
+          "b_overlap": 0.5171446786040922,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 32,
+          "matrices": 5,
+          "a_overlap": 0.7022052900528286,
+          "b_overlap": 0.535934800101392,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 64,
+          "matrices": 5,
+          "a_overlap": 0.7230790277118347,
+          "b_overlap": 0.5322484237951176,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 128,
+          "matrices": 5,
+          "a_overlap": 0.7220810934987341,
+          "b_overlap": 0.5191513334464202,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 256,
+          "matrices": 5,
+          "a_overlap": 0.6998415396213219,
+          "b_overlap": 0.5051343901670305,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 512,
+          "matrices": 5,
+          "a_overlap": 0.6595422328324932,
+          "b_overlap": 0.46378642100185336,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 8,
+          "matrices": 5,
+          "a_overlap": 0.766570727537649,
+          "b_overlap": 0.7152592147095499,
+          "a_more_stable_matrices": 4,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 16,
+          "matrices": 5,
+          "a_overlap": 0.7863528397891706,
+          "b_overlap": 0.661667732703609,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 32,
+          "matrices": 5,
+          "a_overlap": 0.7582403366115753,
+          "b_overlap": 0.6520577421973345,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 64,
+          "matrices": 5,
+          "a_overlap": 0.7583437694371338,
+          "b_overlap": 0.6295229729853544,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 128,
+          "matrices": 5,
+          "a_overlap": 0.7534966063508162,
+          "b_overlap": 0.6077772997907035,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 256,
+          "matrices": 5,
+          "a_overlap": 0.7120362712280086,
+          "b_overlap": 0.5732635544206708,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 512,
+          "matrices": 5,
+          "a_overlap": 0.6929480589234324,
+          "b_overlap": 0.5257021604645603,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 8,
+          "matrices": 1,
+          "a_overlap": 0.9307484889455183,
+          "b_overlap": 0.6919172623109842,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 16,
+          "matrices": 1,
+          "a_overlap": 0.8716710000115392,
+          "b_overlap": 0.7681688330669156,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 32,
+          "matrices": 1,
+          "a_overlap": 0.8771652475957021,
+          "b_overlap": 0.741727867564525,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 64,
+          "matrices": 1,
+          "a_overlap": 0.8613505360780632,
+          "b_overlap": 0.7001357233527555,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 128,
+          "matrices": 1,
+          "a_overlap": 0.8313786195758472,
+          "b_overlap": 0.680255337339048,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 256,
+          "matrices": 1,
+          "a_overlap": 0.8047714681444033,
+          "b_overlap": 0.6525887938488059,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 512,
+          "matrices": 1,
+          "a_overlap": 0.7582157901216283,
+          "b_overlap": 0.601991059624253,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 8,
+          "matrices": 1,
+          "a_overlap": 0.8816311256980178,
+          "b_overlap": 0.6811343782044488,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 16,
+          "matrices": 1,
+          "a_overlap": 0.8262393797983326,
+          "b_overlap": 0.6802478707565317,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 32,
+          "matrices": 1,
+          "a_overlap": 0.8151631215389262,
+          "b_overlap": 0.6930818114138865,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 64,
+          "matrices": 1,
+          "a_overlap": 0.8140243456619162,
+          "b_overlap": 0.6567015317757938,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 128,
+          "matrices": 1,
+          "a_overlap": 0.7913243504606131,
+          "b_overlap": 0.6321214124109644,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 256,
+          "matrices": 1,
+          "a_overlap": 0.7650664425589913,
+          "b_overlap": 0.6118545346037345,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 512,
+          "matrices": 1,
+          "a_overlap": 0.7243871181568587,
+          "b_overlap": 0.5689821651783392,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 8,
+          "matrices": 1,
+          "a_overlap": 0.8276674319266867,
+          "b_overlap": 0.6937684757461869,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 16,
+          "matrices": 1,
+          "a_overlap": 0.7904282509955927,
+          "b_overlap": 0.6456963163009959,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 32,
+          "matrices": 1,
+          "a_overlap": 0.7403089450097723,
+          "b_overlap": 0.6063753569762919,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 64,
+          "matrices": 1,
+          "a_overlap": 0.7205774342663336,
+          "b_overlap": 0.5394176696752302,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 128,
+          "matrices": 1,
+          "a_overlap": 0.6793216438120856,
+          "b_overlap": 0.4895945473522395,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 256,
+          "matrices": 1,
+          "a_overlap": 0.6456594757914472,
+          "b_overlap": 0.4455890724804605,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 512,
+          "matrices": 1,
+          "a_overlap": 0.6185041594566425,
+          "b_overlap": 0.4115163857479952,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        }
+      ],
+      "endpoint_risk": {
+        "7": {
+          "initial": 0.019611468889815457,
+          "final": 0.0011094348371989294,
+          "remaining": 0.056570716014804796,
+          "n": 128,
+          "final_ci95": [
+            0.001034019257818402,
+            0.0011880939332753145
+          ],
+          "remaining_ci95": [
+            0.05167682096465964,
+            0.06198836796408061
+          ],
+          "step": 320,
+          "run_id": "q3-1.7--grpo-kl--7a02ee6c"
+        },
+        "8": {
+          "initial": 0.24881678492170212,
+          "final": 0.03458818728115094,
+          "remaining": 0.1390106671944788,
+          "n": 128,
+          "final_ci95": [
+            0.032053196582410785,
+            0.037471406740828626
+          ],
+          "remaining_ci95": [
+            0.12720918502083878,
+            0.15174266812176954
+          ],
+          "step": 320,
+          "run_id": "q3-1.7--sft-gsm8k--a19448d4"
+        }
+      }
+    },
+    {
+      "comparison": "e3_lineage_vs_ThinkingSpace",
+      "a": 109,
+      "b": 110,
+      "window": [
+        64,
+        320
+      ],
+      "right_overlap": [
+        {
+          "module": "k_proj",
+          "rank": 8,
+          "matrices": 28,
+          "a_overlap": 0.7040091597549518,
+          "b_overlap": 0.44199217516345857,
+          "a_more_stable_matrices": 27,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 16,
+          "matrices": 28,
+          "a_overlap": 0.7237272076234417,
+          "b_overlap": 0.4285950744234774,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 32,
+          "matrices": 28,
+          "a_overlap": 0.7228996897382216,
+          "b_overlap": 0.4515346507848651,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 64,
+          "matrices": 28,
+          "a_overlap": 0.7139940029881731,
+          "b_overlap": 0.4527596772761785,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 128,
+          "matrices": 28,
+          "a_overlap": 0.7037875449899964,
+          "b_overlap": 0.4319992046633706,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 256,
+          "matrices": 28,
+          "a_overlap": 0.6785354228154932,
+          "b_overlap": 0.4014389247670114,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "k_proj",
+          "rank": 512,
+          "matrices": 28,
+          "a_overlap": 0.6418556660640942,
+          "b_overlap": 0.3560802284314356,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 8,
+          "matrices": 28,
+          "a_overlap": 0.8427216209376018,
+          "b_overlap": 0.6524366850924694,
+          "a_more_stable_matrices": 27,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 16,
+          "matrices": 28,
+          "a_overlap": 0.8156817891861692,
+          "b_overlap": 0.6115647007462017,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 32,
+          "matrices": 28,
+          "a_overlap": 0.7800895135114347,
+          "b_overlap": 0.5506797304296389,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 64,
+          "matrices": 28,
+          "a_overlap": 0.7432655673081432,
+          "b_overlap": 0.4995462294051025,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 128,
+          "matrices": 28,
+          "a_overlap": 0.7041840740478632,
+          "b_overlap": 0.456872123928453,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 256,
+          "matrices": 28,
+          "a_overlap": 0.6591073529409326,
+          "b_overlap": 0.4009730150235824,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "v_proj",
+          "rank": 512,
+          "matrices": 28,
+          "a_overlap": 0.6325966209903113,
+          "b_overlap": 0.353257307138325,
+          "a_more_stable_matrices": 28,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 8,
+          "matrices": 5,
+          "a_overlap": 0.6791223351786106,
+          "b_overlap": 0.4476102968499918,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 16,
+          "matrices": 5,
+          "a_overlap": 0.7003837211216156,
+          "b_overlap": 0.45864629987499506,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 32,
+          "matrices": 5,
+          "a_overlap": 0.7287754067089675,
+          "b_overlap": 0.4558060288900059,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 64,
+          "matrices": 5,
+          "a_overlap": 0.7210595776059572,
+          "b_overlap": 0.46441314621551294,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 128,
+          "matrices": 5,
+          "a_overlap": 0.7209489123780098,
+          "b_overlap": 0.45762896306930817,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 256,
+          "matrices": 5,
+          "a_overlap": 0.6991101119395184,
+          "b_overlap": 0.4442284463442971,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "q_proj",
+          "rank": 512,
+          "matrices": 5,
+          "a_overlap": 0.6598685960347241,
+          "b_overlap": 0.397008651051296,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 8,
+          "matrices": 5,
+          "a_overlap": 0.8394417706682861,
+          "b_overlap": 0.6428542929492211,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 16,
+          "matrices": 5,
+          "a_overlap": 0.8354474769208027,
+          "b_overlap": 0.6213970785909197,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 32,
+          "matrices": 5,
+          "a_overlap": 0.7894435731050864,
+          "b_overlap": 0.6149317543792563,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 64,
+          "matrices": 5,
+          "a_overlap": 0.788851039523064,
+          "b_overlap": 0.5710108087835025,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 128,
+          "matrices": 5,
+          "a_overlap": 0.7616762276333106,
+          "b_overlap": 0.527876042846081,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 256,
+          "matrices": 5,
+          "a_overlap": 0.7246082769902176,
+          "b_overlap": 0.49377981293506173,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "o_proj",
+          "rank": 512,
+          "matrices": 5,
+          "a_overlap": 0.6946454030607141,
+          "b_overlap": 0.44432169957960976,
+          "a_more_stable_matrices": 5,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 8,
+          "matrices": 1,
+          "a_overlap": 0.8551695416213482,
+          "b_overlap": 0.6835518568198047,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 16,
+          "matrices": 1,
+          "a_overlap": 0.9255510406275912,
+          "b_overlap": 0.6465737472772426,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 32,
+          "matrices": 1,
+          "a_overlap": 0.8944202324158232,
+          "b_overlap": 0.6679161900298397,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 64,
+          "matrices": 1,
+          "a_overlap": 0.8645507090542529,
+          "b_overlap": 0.6440475488324847,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 128,
+          "matrices": 1,
+          "a_overlap": 0.8472684254146261,
+          "b_overlap": 0.6274097952971276,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 256,
+          "matrices": 1,
+          "a_overlap": 0.8088156060926541,
+          "b_overlap": 0.592550520637708,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "gate_proj",
+          "rank": 512,
+          "matrices": 1,
+          "a_overlap": 0.7559220651506363,
+          "b_overlap": 0.5402819403182052,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 8,
+          "matrices": 1,
+          "a_overlap": 0.8503496943376245,
+          "b_overlap": 0.6580244201050025,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 16,
+          "matrices": 1,
+          "a_overlap": 0.8485702117960762,
+          "b_overlap": 0.6131409408904523,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 32,
+          "matrices": 1,
+          "a_overlap": 0.8162053148965376,
+          "b_overlap": 0.5960982049704446,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 64,
+          "matrices": 1,
+          "a_overlap": 0.8094820267371774,
+          "b_overlap": 0.5803453830124924,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 128,
+          "matrices": 1,
+          "a_overlap": 0.797110059859546,
+          "b_overlap": 0.5704956014224881,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 256,
+          "matrices": 1,
+          "a_overlap": 0.768319205840072,
+          "b_overlap": 0.5498191460964909,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "up_proj",
+          "rank": 512,
+          "matrices": 1,
+          "a_overlap": 0.7263993456954619,
+          "b_overlap": 0.5025277166067227,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 8,
+          "matrices": 1,
+          "a_overlap": 0.8577514539368569,
+          "b_overlap": 0.6714020310322282,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 16,
+          "matrices": 1,
+          "a_overlap": 0.7939624022947115,
+          "b_overlap": 0.5860926702140801,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 32,
+          "matrices": 1,
+          "a_overlap": 0.7648248562233674,
+          "b_overlap": 0.5102209195367507,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 64,
+          "matrices": 1,
+          "a_overlap": 0.7245557505154877,
+          "b_overlap": 0.45136976660347594,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 128,
+          "matrices": 1,
+          "a_overlap": 0.6841337877150564,
+          "b_overlap": 0.40589588749049244,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 256,
+          "matrices": 1,
+          "a_overlap": 0.651888551664276,
+          "b_overlap": 0.36011490749934727,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        },
+        {
+          "module": "down_proj",
+          "rank": 512,
+          "matrices": 1,
+          "a_overlap": 0.6200766296025554,
+          "b_overlap": 0.3255096995829057,
+          "a_more_stable_matrices": 1,
+          "ties": 0
+        }
+      ],
+      "endpoint_risk": {
+        "109": {
+          "step": 320,
+          "n": 128,
+          "initial_rkl": 0.03380434384468154,
+          "rkl": 0.0012628873548567688,
+          "remaining": 0.03735873000994396,
+          "by_domain": {
+            "code": 0.0013625516795224288,
+            "if": 0.002294138217522912,
+            "math": 0.0006974297611908675
+          }
+        },
+        "110": {
+          "step": 320,
+          "n": 128,
+          "initial_rkl": 0.6160081357913156,
+          "rkl": 0.19197745280447617,
+          "remaining": 0.3116475930271027,
+          "by_domain": {
+            "code": 0.2610416123938643,
+            "if": 0.35023936978662695,
+            "math": 0.07831441451870672
+          }
+        }
+      }
+    }
+  ],
+  "proof": {
+    "data/layer-review/expanded-update-dynamics.json.gz": "4b95a79f43515ab3bc7694954c62689bd2b27cb0421940b0aeb502856c62a10f",
+    "data/layer-review/cohort-dynamics.json.gz": "6f5e5969a0dc43ba920e6c73244eb7f2c912fcbfebf61a5990cb09f91c7aa308",
+    "data/right-frame-20261112/summary.json": "6e326acbc60e19e41b0ffed4a5884a5739ac796d956e00ff30bf6390c17beb05",
+    "data/first-pass-20261112/analysis.json": "6450a100b1be62be832986af8a2308f9e446b6e4d4cbef7dab3a69d87eddaf1f",
+    "data/layer-review/cohort-readouts.json": "6a8e950db4dc5dfc3f2853873bbbe852e1e0a2cfdbbbfce778e6291e0109aed3",
+    "data/first-pass-20261112/identities.json": "13363b15c30b785c25041633d98267ce2514bc6b51b393e9e6aa06a287027027",
+    "data/layer-review/cohort-protocol-provenance.json": "3d14997ffdd88126f13409cdccdf0b2a58f49e2326278ad46607ae7e4219c926"
+  },
+  "teacher_lineage": {
+    "e3": {
+      "repo": "CMU-AIRe/e3-1.7B",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl"
+    },
+    "grpo-kl": {
+      "repo": "jaygala24/Qwen3-1.7B-GRPO-KL-math-reasoning",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "rl"
+    },
+    "sft-gsm8k": {
+      "repo": "SamsungSAILMontreal/Qwen3-1.7B-Math",
+      "parent": "Qwen/Qwen3-1.7B",
+      "method": "sft"
+    },
+    "sft-deepmath": {
+      "repo": "Thinking-Space/Qwen3-1.7B-SFT",
+      "parent": "Qwen/Qwen3-1.7B-Base",
+      "method": "sft"
+    }
+  },
+  "claim": "Qwen association in two specific comparisons; only GRPO/Samsung is direct-parent matched. Cross-family generality untested."
+}

@@ -1,0 +1,225 @@
+{
+  "schema": "local-research-artifacts-v1",
+  "policy": "meituan/code_archive.py source_artifact_reason; no deletion or relocation",
+  "artifacts": [
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/data/layer-review/cohort-readouts.json",
+      "bytes": 1114076,
+      "sha256": "6a8e950db4dc5dfc3f2853873bbbe852e1e0a2cfdbbbfce778e6291e0109aed3",
+      "reason": "experiment data exceeds the 1 MiB summary limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/data/layer-review/cohort-summary.json",
+      "bytes": 3210964,
+      "sha256": "8c408e83b9979598ebca25846a7729a8689d0cb1fea7611955469f8a2312b766",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/data/layer-review/paper-2511.08567.tex",
+      "bytes": 123682,
+      "sha256": "2ba99ef7e03973ef36d88ef7eb66ffd874a14986caeff91d9a24692e240b1483",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/data/layer-review/paper-2606.07082v3.tex",
+      "bytes": 85322,
+      "sha256": "bad3ff6ca7d3d41a1758f6977664800998fb6addd3823fc2936846d195ad9c4d",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/data/layer-review/paper-2608.03573.tex",
+      "bytes": 315044,
+      "sha256": "270ffefe6af396e81e139dcc080937557fb882fff8af815de82ea8a5ac2062a2",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/data/right-frame-20261112/summary.json",
+      "bytes": 2648203,
+      "sha256": "6e326acbc60e19e41b0ffed4a5884a5739ac796d956e00ff30bf6390c17beb05",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/absorption/figures/long-bank-20261112/curve-data.json",
+      "bytes": 28967197,
+      "sha256": "c6b4adcbfbb56a4180e1424170d11defc2c60945befad525260c0dc84b120579",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/cohort-comparison-20261112.json",
+      "bytes": 39409181,
+      "sha256": "0aafa8946cc2b67e79d02062c88c5fb9777e8d707a84e7ed0e60a372a91a801c",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/cohort-comparison-20261113.json",
+      "bytes": 40600890,
+      "sha256": "f2f3948184ba4572728e4a96aa0d61127b99873ab2c9d066827f40646baaf8a4",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/metric-synthesis-20261113.json",
+      "bytes": 54964040,
+      "sha256": "8c478b65c7ee629747c2650bf57a724dc03c4bf03ff5b116a3ec300f98f90f49",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/sigma0-bank/curve-data.json",
+      "bytes": 8301028,
+      "sha256": "970ab84380a176e233a7cebbcbf02d202a62d3623e6186a62aa375abb1c57397",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/explorer.html",
+      "bytes": 25274195,
+      "sha256": "b7e51d47bc3c8db7cb2ce7541e7836c7e12628f4faa9329f6d5ff64eae97065b",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2506.00772.tex",
+      "bytes": 105723,
+      "sha256": "28837be6aef5675aed0016e673a6c73d5214d81b1474c94461a4477e8f8c0d0f",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2509.17866.tex",
+      "bytes": 184929,
+      "sha256": "b41912e70371d6f3138d411934c9a2ff03ec54086cdc0c793d7b42866997b8ed",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2511.08567.tex",
+      "bytes": 123682,
+      "sha256": "2ba99ef7e03973ef36d88ef7eb66ffd874a14986caeff91d9a24692e240b1483",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2606.06021.tex",
+      "bytes": 186604,
+      "sha256": "66aed416a33dba0667220ba9cf1476121e7670d5a0a79c47eb713360a9592700",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2606.07082.tex",
+      "bytes": 85322,
+      "sha256": "bad3ff6ca7d3d41a1758f6977664800998fb6addd3823fc2936846d195ad9c4d",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2606.13657.tex",
+      "bytes": 84768,
+      "sha256": "582080065c948efa20464bd145cb7c9e24463ec2fbd48a11ff4e446f770515a7",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2607.19331.tex",
+      "bytes": 191255,
+      "sha256": "31b9d162a005216cbdf36da862a7f5408631734afe6ad59992c5254e6c3832d7",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2609.22146.tex",
+      "bytes": 100466,
+      "sha256": "5f2d7a4f3139db30db3f1c5076c209392b66fb6a2076a41ae26917b27de54498",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2609.34605.tex",
+      "bytes": 59540,
+      "sha256": "b1e0f27c6a78dddf53719ebf8a07ac68bdab2ff84b2256fa259e12ba8cfde980",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2609.36484.tex",
+      "bytes": 78050,
+      "sha256": "7f50d155491644402d6ad04a1377df89b662168a8332460e92db045f5a17db3b",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2609.39405.tex",
+      "bytes": 74147,
+      "sha256": "07e755fb4fc326860576575997f30df210eff504c7fde7eae44e5843a7c0cde6",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2610.02179.tex",
+      "bytes": 73863,
+      "sha256": "d136617eed07309f6f2fc8a907edd6dff2551da92e985d93fe16f24d441a8595",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2610.07237.tex",
+      "bytes": 74943,
+      "sha256": "6ece41156731cf450cd356416ecab35e27c4fd0d40e4f67acf18a355b871f62d",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2610.09639.tex",
+      "bytes": 79286,
+      "sha256": "0fc5a4bcbcc3d1690d152f6deb51afb07bcb3e827916ca9af8c7a4c50b1f76c0",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2610.22438.tex",
+      "bytes": 94658,
+      "sha256": "071326fe5d69a14fdfa0815b0611f183e92d5db04d3133d64086ca96b8e92570",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2610.26525.tex",
+      "bytes": 122407,
+      "sha256": "5205ab6710ac2f04804e4eed45d46e5878b8d530cdbd699aa96910ebf85c3810",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2611.05609.tex",
+      "bytes": 416177,
+      "sha256": "c65a5fe3f822315cc67ff2228ca26fd133192fc217437d381345628f56f981c6",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2611.08016.tex",
+      "bytes": 207564,
+      "sha256": "99bd1f5676514e078f5428f74bf06788093e88d0d7031dc4fda6f156bc9f085c",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/literature/teacher-transfer/data/mechanism-design-20261113/2611.08414.tex",
+      "bytes": 246052,
+      "sha256": "705b186f4c2dbf94c61ede9e3957557ffc8c50dd480e9f86a3378f2029f55aa3",
+      "reason": "downloaded paper source; retain citation metadata and local provenance"
+    },
+    {
+      "path": "examples/mirroropd/docs/progress/data/20261112/explorer-data.json",
+      "bytes": 3086712,
+      "sha256": "e5143d590ffe1eb815b06c723bd525f877a57dcd55189a365d018fa25f637f39",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/progress/data/20261112/rkl-trajectories.json",
+      "bytes": 12878310,
+      "sha256": "b86956e73ebde2bd3d397b88eb0f3723302b51ae263f259290163fb0836b96c0",
+      "reason": "file exceeds the 2 MiB source limit"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/readout.json.gz",
+      "bytes": 1073463460,
+      "sha256": "5bc37229ca8e5c7ae635b56614647a071755f9ddeb54f0752091ba9f20513cb3",
+      "reason": "raw/rebuildable evidence retained locally under existing artifact policy"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/explorer-data.json.gz",
+      "bytes": 15329758,
+      "sha256": "3b41d1700163d72ac367654922032b9b0b5d9b429ab5e11010c837b48e2729db",
+      "reason": "raw/rebuildable evidence retained locally under existing artifact policy"
+    },
+    {
+      "path": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/pair-expansion-30-20261112.json",
+      "bytes": 422291,
+      "sha256": "7bd321d3fea30b07714507c538e53104d97024fcc7964c9072a8da29f7800a37",
+      "reason": "raw upstream model-card bundle is tracked unchanged under checkpoint-dynamics/sources/"
+    }
+  ],
+  "ephemeral_outputs": [
+    "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/figures/training-20261113/"
+  ]
+}

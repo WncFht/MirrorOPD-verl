@@ -1,0 +1,24 @@
+{
+  "schema": "checkpoint-explorer-v1",
+  "pairs": [
+    "E94",
+    "E95",
+    "E96",
+    "E97",
+    "E98",
+    "E99",
+    "E100",
+    "E101",
+    "E102",
+    "E103",
+    "E104"
+  ],
+  "matrices": 2156,
+  "html_sha256": "b7e51d47bc3c8db7cb2ce7541e7836c7e12628f4faa9329f6d5ff64eae97065b",
+  "payload_sha256": "131f2ba7e5f0cc463ca8de7062f493dc90e29bc32f196b254ae541a53c0c529e",
+  "source": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/readout.json.gz",
+  "source_bytes": 1073463460,
+  "synthesis_sha256": "8c478b65c7ee629747c2650bf57a724dc03c4bf03ff5b116a3ec300f98f90f49",
+  "offline": true,
+  "aggregation": "matrix median and IQR; no seed confidence interval"
+}

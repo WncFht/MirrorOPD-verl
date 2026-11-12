@@ -1,0 +1,27 @@
+{
+  "figures": 10,
+  "audit_issues": {
+    "angles-by-layer-audit": [],
+    "angles-to-reference-audit": [],
+    "endpoint-right-angles-audit": [],
+    "full-weight-angles-audit": [],
+    "historical-angles-audit": [],
+    "later-increment-capture-audit": [],
+    "matched-risk-audit": [],
+    "pairwise-angles-audit": [],
+    "principal-angle-distribution-audit": [],
+    "update-rank-scale-audit": []
+  },
+  "visual_review": "All ten PNGs inspected; final full-W recoloring and sparse historical marker-only plots rechecked",
+  "measured_matrices": 219,
+  "failed": 0,
+  "reference_max_step": 320,
+  "training_started": false,
+  "gpu_used": false,
+  "checks": {
+    "ruff": "passed",
+    "ruff_format": "passed",
+    "docs_check": "passed; topic length review notices only",
+    "git_diff_check": "passed"
+  }
+}

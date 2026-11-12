@@ -1,0 +1,67 @@
+{
+  "schema": "sigma0-bank-performance-v2",
+  "complete_pairs": 4,
+  "expected_pairs": 4,
+  "benchmarks": [
+    {
+      "pair": "E102",
+      "matrices": 196,
+      "svd_seconds": 261.21656016260386,
+      "gram_seconds": 94.53677821159363,
+      "edit_speedup": 2.763121031879731,
+      "native_different_elements": 0,
+      "rkl_max_abs_error": 0.0,
+      "methods": {
+        "gram-fp64": 145,
+        "svd-fallback": 51
+      },
+      "scoring_speedup": 1.2029717836357077,
+      "passed": true
+    },
+    {
+      "pair": "E103",
+      "matrices": 196,
+      "svd_seconds": 564.1123895719647,
+      "gram_seconds": 236.3004869967699,
+      "edit_speedup": 2.387267147611405,
+      "native_different_elements": 0,
+      "rkl_max_abs_error": 0.0,
+      "methods": {
+        "gram-fp64": 140,
+        "svd-fallback": 56
+      },
+      "scoring_speedup": 1.1922424427870624,
+      "passed": true
+    },
+    {
+      "pair": "E94",
+      "matrices": 196,
+      "svd_seconds": 145.16645330935717,
+      "gram_seconds": 57.071069180965424,
+      "edit_speedup": 2.5436084410658575,
+      "native_different_elements": 0,
+      "rkl_max_abs_error": 0.0,
+      "methods": {
+        "gram-fp64": 146,
+        "svd-fallback": 50
+      },
+      "scoring_speedup": 1.142985565040561,
+      "passed": true
+    },
+    {
+      "pair": "E99",
+      "matrices": 196,
+      "svd_seconds": 261.46046102046967,
+      "gram_seconds": 94.07213766127825,
+      "edit_speedup": 2.779361323348469,
+      "native_different_elements": 0,
+      "rkl_max_abs_error": 0.0,
+      "methods": {
+        "gram-fp64": 145,
+        "svd-fallback": 51
+      },
+      "scoring_speedup": 1.1258217843627871,
+      "passed": true
+    }
+  ]
+}

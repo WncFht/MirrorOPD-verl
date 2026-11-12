@@ -1,0 +1,32 @@
+{
+  "conditions": 16,
+  "lower": 7,
+  "higher": 9,
+  "dense_trajectories": 11,
+  "risk_points": 691,
+  "paired_windows": 38,
+  "geometry_count": 25,
+  "teacher_geometry_unavailable": [
+    {
+      "job_id": 109,
+      "step": 64
+    },
+    {
+      "job_id": 109,
+      "step": 320
+    },
+    {
+      "job_id": 110,
+      "step": 64
+    },
+    {
+      "job_id": 110,
+      "step": 320
+    }
+  ],
+  "max_relative_identity_error": 0.0,
+  "max_parameter_identity_error": 4.440892098500626e-16,
+  "figure_audit_issues": 0,
+  "visual_inspection": "all three PNGs reviewed; labels, scales and measured point sparsity checked",
+  "gpu_used": false
+}

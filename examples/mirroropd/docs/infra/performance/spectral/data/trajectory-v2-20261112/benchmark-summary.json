@@ -1,0 +1,607 @@
+{
+  "arithmetic": "float64",
+  "checkpoint_count": 9,
+  "ranks": [
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "repetitions": 1,
+  "order": [
+    "reference-default",
+    "shared-default",
+    "shared-gesvd"
+  ],
+  "reference_helper": "Frozen trajectory main flow; all variants share current angle_metrics helper",
+  "environment": {
+    "torch": "2.11.0+cu129",
+    "cuda": "12.9",
+    "gpus": [
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01",
+      "NVIDIA H800, 550.163.01"
+    ]
+  },
+  "results": [
+    {
+      "pair": "E94",
+      "tensor": "model.layers.0.mlp.down_proj.weight",
+      "shape": [
+        1536,
+        8960
+      ],
+      "steps": [
+        16,
+        32,
+        48,
+        64,
+        128,
+        192,
+        320,
+        480,
+        640
+      ],
+      "input_tensor_sha256": {
+        "initial": "f0ffc37381645e27de8118d8b25de19cdd0212c323d0c40b9c47700d9a940600",
+        "teacher": "1d8c0e9a4b30d832482003d42fcda3944f0378529453490e536c63fd2cd128a9",
+        "16": "e4cf6c742dfa3ffdad9c24af3917c066b10cfe808c3ac6c295a4aa1696808868",
+        "32": "edb549f5543243c244483e629643149bcbad01b3321cf2563fda6cac24ad726c",
+        "48": "68cde831367cdd508423dbc592d28105eacd06b7796cedd4d6dceb1cd9ceb5a6",
+        "64": "a3ad90359de3feaac1bad8bb5fc8a15724fbe6a8915c56a22004291c0775ca32",
+        "128": "10db615182521c1daa2cf9669a3d513aefd716108b0633a545793692737a3a3c",
+        "192": "590e531f8b19029858f854bbb0d1dcff853323408213298a873b62543949503a",
+        "320": "05247ceda8d5f96b89621da82cd9004c63a580474d075ce363295ccd1d593680",
+        "480": "0282cdf4a96891e4971c2d968d583b453d592dc822f3b93b6d4a3f29367ef8cb",
+        "640": "3777c680b5a68c11247c7d104e48390846506b4ceae277e93ee1794605b40f8d"
+      },
+      "variants": [
+        {
+          "label": "reference-default",
+          "seconds": 82.90931571274996,
+          "timings": {
+            "read_hash_transfer": 2.6158398538827896,
+            "base_svd": 2.360961079597473,
+            "teacher_weight_svd": 2.109565809369087,
+            "teacher_svd": 2.133350692689419,
+            "update_svd": 19.264620155096054,
+            "full_weight_svd": 18.442134611308575,
+            "increment_svd": 17.311749421060085,
+            "stage_pairs": 9.213715478777885
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 0,
+            "overlap": 0,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 0
+          },
+          "result_sha256": "b39c1a8868136a8d9208ec8d67ca6bc581c5d2e3f9f0d64a0586db48e9bb1a28"
+        },
+        {
+          "label": "shared-default",
+          "seconds": 75.35343140363693,
+          "timings": {
+            "read_hash_transfer": 2.576776869595051,
+            "base_svd": 2.0565418526530266,
+            "teacher_weight_svd": 2.0430848598480225,
+            "teacher_svd": 2.1335156559944153,
+            "update_svd": 19.27626121044159,
+            "full_weight_svd": 18.451495796442032,
+            "increment_svd": 16.970891065895557,
+            "stage_pairs": 8.805025763809681
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 5.1648844884747424e-06,
+            "overlap": 6.661338147750939e-15,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 4.440892098500626e-16
+          },
+          "result_sha256": "50e90076476a474524d07d59c8beb6f126dcb268a1544c445835014a3a84ff53"
+        },
+        {
+          "label": "shared-gesvd",
+          "seconds": 39.47472705692053,
+          "timings": {
+            "read_hash_transfer": 2.5366284921765327,
+            "base_svd": 1.1557506769895554,
+            "teacher_weight_svd": 1.1489431038498878,
+            "teacher_svd": 1.03788423538208,
+            "update_svd": 9.51490792632103,
+            "full_weight_svd": 10.360724851489067,
+            "increment_svd": 2.025132991373539,
+            "stage_pairs": 8.66535285115242
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 3.811397540891964e-15,
+            "kappa_spec": 2.169242563354601e-11,
+            "angle": 6.949206021713909e-05,
+            "overlap": 7.619460618002449e-13,
+            "singular_values": 4.671818487622659e-12,
+            "rho_sigma": 3.7680067399570305e-12,
+            "residual_energy_ratio": 0,
+            "capture": 1.0472733791289102e-12
+          },
+          "result_sha256": "02a3e7b901b3c03e5de636f93d9b67b65a0f99b20edf793fb1810bdedd2fd816"
+        }
+      ],
+      "speedup": 2.1003138436701283
+    },
+    {
+      "pair": "E99",
+      "tensor": "model.layers.0.self_attn.q_proj.weight",
+      "shape": [
+        2048,
+        2048
+      ],
+      "steps": [
+        16,
+        32,
+        48,
+        64,
+        128,
+        192,
+        320,
+        480,
+        640
+      ],
+      "input_tensor_sha256": {
+        "initial": "7d3eb79b41399ffba59cc10871177f13c2d5c60cdf711c5a2f401535c1bb5c84",
+        "teacher": "02e74e045d2b56c112f22de15551fbbef0c5b37bd8673e67ac576cf2a8ec9bec",
+        "16": "17104944ba1e423946dd2cce4f52d9ed5cea93436df52e36452661a6c75e259f",
+        "32": "9b88f4aec98af8610038ed75f8dbc2af9bb3b8410cd790ac89c892506c8db4aa",
+        "48": "90a6ea1a4d129ec6edf3cfe8e28778e9205cb0edd7e7129e665e9561e9238bca",
+        "64": "6c298082f6939313c58d422a891ab1e39d891259dae6d1380d105920cfc6f77b",
+        "128": "935fe8dacb126b7b79f99799a48e321f10f2fe8f6e1dfa8c1cb8a1e14b526857",
+        "192": "ce03b5641580de469977b3713407c435257f55b62aafb6bdad0ad17a98d86ce0",
+        "320": "4d9c7c011a6c50767b22d23f29bde1645dc005df03c6e9169ea5e0635da50dc5",
+        "480": "7380203179d816074485bfdb0802ba33377d1e47c1c4d841fb5785d5d02f04b4",
+        "640": "f3eb9dd775c440d3a49cd84af2868328e51177dd6d0199e68ac18bd3ea6e51f0"
+      },
+      "variants": [
+        {
+          "label": "reference-default",
+          "seconds": 118.09582846611738,
+          "timings": {
+            "read_hash_transfer": 0.7670983225107193,
+            "base_svd": 3.685377173125744,
+            "teacher_weight_svd": 3.326747804880142,
+            "teacher_svd": 3.4058714285492897,
+            "update_svd": 31.07115264981985,
+            "full_weight_svd": 30.50531444698572,
+            "increment_svd": 28.068931713700294,
+            "stage_pairs": 7.7758887112140656
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 0,
+            "overlap": 0,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 0
+          },
+          "result_sha256": "7c6688c828b16e70eb32d45522818f07b10b9cc45ccd84c41aab51deb14791a3"
+        },
+        {
+          "label": "shared-default",
+          "seconds": 111.3351072371006,
+          "timings": {
+            "read_hash_transfer": 0.7067276239395142,
+            "base_svd": 3.4283862859010696,
+            "teacher_weight_svd": 3.322044514119625,
+            "teacher_svd": 3.4062947258353233,
+            "update_svd": 31.067889593541622,
+            "full_weight_svd": 30.50290208309889,
+            "increment_svd": 28.05479745566845,
+            "stage_pairs": 7.644606739282608
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 2.957266653780266e-10,
+            "overlap": 7.66053886991358e-15,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 4.440892098500626e-16
+          },
+          "result_sha256": "b4c825a785b24eb27dfbefc6f0ffe2d92219604847fb56105701fd2879db1027"
+        },
+        {
+          "label": "shared-gesvd",
+          "seconds": 38.48009657859802,
+          "timings": {
+            "read_hash_transfer": 0.6716314554214478,
+            "base_svd": 1.2320341020822525,
+            "teacher_weight_svd": 1.2286763489246368,
+            "teacher_svd": 1.2276591956615448,
+            "update_svd": 10.467443756759167,
+            "full_weight_svd": 11.056849531829357,
+            "increment_svd": 1.820286124944687,
+            "stage_pairs": 7.587178461253643
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 1.724408647558323e-14,
+            "kappa_spec": 3.5933478415017817e-12,
+            "angle": 2.398177073107052e-05,
+            "overlap": 3.3926195186495534e-12,
+            "singular_values": 8.109068971862143e-12,
+            "rho_sigma": 4.602261280406417e-11,
+            "residual_energy_ratio": 0,
+            "capture": 1.2715384301031918e-12
+          },
+          "result_sha256": "028e7bc56f0670c19b69ab6bce880453c8889367fd266b825f7db7b673859b55"
+        }
+      ],
+      "speedup": 3.069010708559403
+    },
+    {
+      "pair": "E103",
+      "tensor": "model.layers.0.self_attn.q_proj.weight",
+      "shape": [
+        3072,
+        3072
+      ],
+      "steps": [
+        16,
+        32,
+        48,
+        64,
+        128,
+        192,
+        320,
+        480,
+        640
+      ],
+      "input_tensor_sha256": {
+        "initial": "da465bed75e5d21e84d642b3b84eb59152cf7e80b1d119d9e7660776cd826fe4",
+        "teacher": "02a85e8c85817822fd39f1efc51d899a3016f95f054c2314f9e7fdfd41644053",
+        "16": "3b729df70baaae04339f0f60f21ef0db89172e9a6f89ef2b8c5a1bf7e33b3add",
+        "32": "ea39bacda60fe0c2e82a2108c9d9b6b38dc65eb014d1faceeb9fff6196a9a435",
+        "48": "ed500cd5c9a5e25be3a7fb376ed05f5403a60d7888567bae9ea08e21f9f041e5",
+        "64": "c663c4f47214ac43db67a7c670df1fda3037a2230f9725f61d6c08ca06370a43",
+        "128": "fc4d4f236de06c6093969dcbf7a7fd3c4dd316bc1b2d8d1e463bc8e3ebd10a66",
+        "192": "a1f19387d4bc42b8458c0b3a15fb48fe5f6bfac39571c2680ea7f19a7823a350",
+        "320": "bef58d24caa55755f828ea11ad9e1260b1e505154088c70ea6168c2cf30279d4",
+        "480": "f43fd6f014358ea69ca0959d92b1da1ad5f3113b449a7e149f737c9d4dfd213e",
+        "640": "9677688eead6d429f945fccab5322fa23ef223ebb9a96f8e9b03b3d732b03b78"
+      },
+      "variants": [
+        {
+          "label": "reference-default",
+          "seconds": 351.2202527746558,
+          "timings": {
+            "read_hash_transfer": 1.7523576393723488,
+            "base_svd": 11.428980454802513,
+            "teacher_weight_svd": 10.371197573840618,
+            "teacher_svd": 9.61660011857748,
+            "update_svd": 103.91699539870024,
+            "full_weight_svd": 100.02987474948168,
+            "increment_svd": 96.19613754749298,
+            "stage_pairs": 8.297850973904133
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 0,
+            "overlap": 0,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 0
+          },
+          "result_sha256": "990167b188b8e81c700ad4245f2bb87733c80e4790ecc04af3ab36e0a7518259"
+        },
+        {
+          "label": "shared-default",
+          "seconds": 324.35341200232506,
+          "timings": {
+            "read_hash_transfer": 1.7725575864315033,
+            "base_svd": 11.214277870953083,
+            "teacher_weight_svd": 10.371061943471432,
+            "teacher_svd": 9.614751376211643,
+            "update_svd": 103.9249641224742,
+            "full_weight_svd": 100.02951668947935,
+            "increment_svd": 76.06862282007933,
+            "stage_pairs": 8.065515212714672
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 4.2966352697959564e-10,
+            "overlap": 6.8833827526759706e-15,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 5.551115123125783e-16
+          },
+          "result_sha256": "91c45444bf7311e964edb2c0d102ab28ae3aa0d815a3692e188adb46b3461fcd"
+        },
+        {
+          "label": "shared-gesvd",
+          "seconds": 67.66363919526339,
+          "timings": {
+            "read_hash_transfer": 1.7149388045072556,
+            "base_svd": 2.4401869252324104,
+            "teacher_weight_svd": 2.4277904853224754,
+            "teacher_svd": 2.6135226041078568,
+            "update_svd": 21.857340320944786,
+            "full_weight_svd": 21.882183738052845,
+            "increment_svd": 3.4928406104445457,
+            "stage_pairs": 7.994994595646858
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 2.1228626021223447e-14,
+            "kappa_spec": 8.859135647298899e-12,
+            "angle": 2.1310162845882393e-05,
+            "overlap": 5.1665338673956285e-12,
+            "singular_values": 3.9676706364843994e-11,
+            "rho_sigma": 4.6702520323238517e-11,
+            "residual_energy_ratio": 0,
+            "capture": 2.2201129823429255e-12
+          },
+          "result_sha256": "aca8f315d5101c9d5eaf8b9e8bbdec3121754ad1d999a225e045c1e6f627b092"
+        }
+      ],
+      "speedup": 5.190679321298492
+    },
+    {
+      "pair": "E103",
+      "tensor": "model.layers.0.mlp.up_proj.weight",
+      "shape": [
+        8192,
+        3072
+      ],
+      "steps": [
+        16,
+        32,
+        48,
+        64,
+        128,
+        192,
+        320,
+        480,
+        640
+      ],
+      "input_tensor_sha256": {
+        "initial": "eca2dab3530f8053bcead4ae099f6055d372ac4cfd948a9f1abcdf32e35ea039",
+        "teacher": "04868e99632cf703e1c07802e0bb6cab9c5ab8fc54607aa96e2be75dcc84875d",
+        "16": "7e87c17bc382ee375da497b266a1ae3370c3a2e5bc8f12a9ec641961fbcfc4a8",
+        "32": "79e93cc9c879827bbe73e5708dba2d9e30dcc0cc6e911e0ae96e295eb454cb83",
+        "48": "4a1501b372eb6b975b4714d3e603e0f9cb415e86379eeafc2e884ae74bf58eac",
+        "64": "9874485a5c30b47eebc608b19db72728ab09f123711087512478dbaa69f6e925",
+        "128": "571de919ae3899a7d82351ba75033e6be37e295671bd6778fbff5f3f3e31cd75",
+        "192": "55af9a073338d0e8b817376cf13610f50d8fb00a00149243f6de302b77bca78d",
+        "320": "171b17ef2815f9ddf1b4ab823c50174c405319eb40174b22de67e19463a3f8d6",
+        "480": "11dd036401e9460e8de5b096922fd05935b5e631fade57f7fcdca9bd08d593b2",
+        "640": "bb47026aa4551454adee2f69f1ef806b9dd45e0789ebf16ed3290e11228a901b"
+      },
+      "variants": [
+        {
+          "label": "reference-default",
+          "seconds": 297.19093326479197,
+          "timings": {
+            "read_hash_transfer": 4.590333446860313,
+            "base_svd": 9.506464213132858,
+            "teacher_weight_svd": 9.107370018959045,
+            "teacher_svd": 9.314717009663582,
+            "update_svd": 85.03962126374245,
+            "full_weight_svd": 82.93339957296848,
+            "increment_svd": 76.10754185914993,
+            "stage_pairs": 10.697676554322243
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 0,
+            "overlap": 0,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 0
+          },
+          "result_sha256": "49420062d304d1885ae922238cc427c69396e03cba6be24639c96b3be75735c8"
+        },
+        {
+          "label": "shared-default",
+          "seconds": 273.4485751092434,
+          "timings": {
+            "read_hash_transfer": 4.580588296055794,
+            "base_svd": 9.22592567652464,
+            "teacher_weight_svd": 9.105622850358486,
+            "teacher_svd": 9.312506705522537,
+            "update_svd": 84.93768048286438,
+            "full_weight_svd": 82.94127338379622,
+            "increment_svd": 59.9932988807559,
+            "stage_pairs": 10.104093238711357
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 0,
+            "kappa_spec": 0,
+            "angle": 8.180099930754636e-10,
+            "overlap": 8.659739592076221e-15,
+            "singular_values": 0,
+            "rho_sigma": 0,
+            "residual_energy_ratio": 0,
+            "capture": 3.3306690738754696e-16
+          },
+          "result_sha256": "6215c2a5489e69472d823b8180af005fda176408925a99b7177e0432f84140d3"
+        },
+        {
+          "label": "shared-gesvd",
+          "seconds": 108.98661825805902,
+          "timings": {
+            "read_hash_transfer": 4.488182716071606,
+            "base_svd": 4.235627852380276,
+            "teacher_weight_svd": 4.209306128323078,
+            "teacher_svd": 4.082915715873241,
+            "update_svd": 34.93536984175444,
+            "full_weight_svd": 37.963051714003086,
+            "increment_svd": 5.880720369517803,
+            "stage_pairs": 9.986355729401112
+          },
+          "passed": true,
+          "differences": [],
+          "maximum_absolute_difference": {
+            "delta_sigma": 2.158099342134713e-15,
+            "kappa_spec": 1.7538193120003598e-11,
+            "angle": 2.3350358035739973e-05,
+            "overlap": 5.163203198321753e-12,
+            "singular_values": 5.9818816566803434e-12,
+            "rho_sigma": 2.1289497942333924e-12,
+            "residual_energy_ratio": 0,
+            "capture": 1.894040480010517e-12
+          },
+          "result_sha256": "990cbd1e2ab63b0a70756af4b20f9d9909d0a45925edb4b55059118242ed6b1c"
+        }
+      ],
+      "speedup": 2.7268570950710838
+    }
+  ],
+  "narrow_acceptance": {
+    "passed": true,
+    "results": [
+      {
+        "pair": "E94",
+        "tensor": "model.layers.0.self_attn.k_proj.weight",
+        "shape": [
+          256,
+          1536
+        ],
+        "seconds": 17.091937631368637,
+        "passed": true,
+        "differences": [],
+        "input_tensor_sha256": {
+          "initial": "28958f2e8da7c01aafc29fb8e5ca8abe4869f0effa3d3fb67c7d1602c83b22ae",
+          "teacher": "91e0d9eff70471b5fb806520234925c5ca7238fd573031d70f13e0506a1fcc1f",
+          "16": "32c0e674aa3617774da4cb89ac50c46eae130e384e73ddc7ba084085ef4d419a",
+          "32": "4df1a38e60c65d398e4db7a3db03375820886890efd7c8e47170ec5037c24791",
+          "48": "ff8e581adf626c5a7bdec64095fc1bb9e5e2b4e644d6f874b86b12b430bd6094",
+          "64": "8805e70ee3ba50ad1a2b8fdb69bf40abaf2a53a51518d39cd5cdb11dfcb206cd",
+          "128": "86c4d05b3c89408a1727b6c74b43f571df09725c62a48c55add756b7145e05ff",
+          "192": "2ca4c84014092b438ace6cfb9a952a6a0ad959cd3d5d7c39c923653d39f7537d",
+          "320": "6f89f03894ffc64bcb406f194f39719fb8c9155b071f2eb3c307d9170609c398",
+          "480": "f741db75719d69a3658c6e697b9c90c5089e2170667fe3fa286de8b2b88f7ccc",
+          "640": "e0bae468971e0310a0d8235e58790262341785ecbda527599dce171aa75c620f"
+        },
+        "reference_sha256": "4a6ebd039eba3fe2da2c7a93e567e4df7953dc7fcf2f7c782c31e0bdba6d176a",
+        "result_sha256": "a168e68d5d9acdb2e4878dc4ac61f5465d0e6cad7f5628827a48fba1772a5a6b"
+      },
+      {
+        "pair": "E99",
+        "tensor": "model.layers.0.self_attn.k_proj.weight",
+        "shape": [
+          1024,
+          2048
+        ],
+        "seconds": 26.334390588104725,
+        "passed": true,
+        "differences": [],
+        "input_tensor_sha256": {
+          "initial": "a1159573b3bbeb65c94a49ef75475590eb8fe0920167d4b8176f6bf83d90352e",
+          "teacher": "b301505ccfef8a6bea42234b10e21956f369fec21f6bc997b9515021f3abbc0a",
+          "16": "971aaafff354d4601208cce108d69395dbd5ecbd232a6c7cae3567c7441aae27",
+          "32": "d324f015f079bc702bb40e5c9a956eac2699ec1f22fd00130c0851dc97331844",
+          "48": "8910e0051149a8f4edfae00a0321be56de0618013cab075cd5442c006b0f2b33",
+          "64": "09a1c235856c299d75d41ee041b36ad53b17522ea4bb28d8376717dd1dc1163d",
+          "128": "3d779f1a435571fa51fe1c24a726fdc6ac40b807eefceb072ac380653ccce01c",
+          "192": "afacd6e1a6722c1d5b658c2fc8c85f4a409266c7d37a4b69df8fad9cdb59098f",
+          "320": "4dea00a8284c87b6a97a77d0a13b5e95f6ffc992d8ac6f0206052f4a682ef594",
+          "480": "437edc5ff308ff943d7126df28d39d6124b5e9673360f8f27fb869972acede96",
+          "640": "e9fab6c8c74ebf31fd2c4c4cd73f6987b9038ebcb0f404aea26dc913039c572f"
+        },
+        "reference_sha256": "2d39591b8fff839957aa96a2eba9324e852bd785e8740d445485be84be8b6a91",
+        "result_sha256": "3a3075a74dbee3d3fa45f154760b0548968d1ce6cd334ac8198e4a38184ab7e7"
+      },
+      {
+        "pair": "E103",
+        "tensor": "model.layers.0.self_attn.k_proj.weight",
+        "shape": [
+          1024,
+          3072
+        ],
+        "seconds": 25.84258969128132,
+        "passed": true,
+        "differences": [],
+        "input_tensor_sha256": {
+          "initial": "e4518d72d4853d5e79eef9f0d46dd8c28284fc10bd6bd21bca1bdce4a0282b28",
+          "teacher": "01642e9604ff41caaff1aef8f2d4dbb5b749bb2bc056edd2d610cea02711418a",
+          "16": "efa281c31ab113f8adc259f06d0c706b57ed714d59fb180ca3ff7b4e3bdc0238",
+          "32": "f7ead734e692c8ea4d488146e6fe964cc50828840b682023d7513b661cecad37",
+          "48": "6100d575634911c12f7cfa8b815e016f4429ea05e11c7384e3971522985b8785",
+          "64": "6ebd5ac140b2989ba560ea996afa84771fba581c4f5c783076c0112d926a880e",
+          "128": "16306e07a0c4440f101dbb03ce081a9dd53e18a08940e252c7b4fe2695efa164",
+          "192": "8c078659eb60a671215d37396451762e78afa473cd5fbd3d72c0e5d34d35930e",
+          "320": "f121992fbe3e611a84c16c8e88cb7a87df27ff075f061fa0e8f135f0a96323b3",
+          "480": "c24e25fa6ed9354b54f5d3f25d70039c4f5cb303b9ef171b63944543b463d03e",
+          "640": "b52b238a2a5ce49624ceab05e1343e09c6817d2f6dbe0ebd59041044811e5c03"
+        },
+        "reference_sha256": "4a42ed6bd29f2e14b109c03144a9ede1ec73baa9fac5ede01b4e24fe2ac4870d",
+        "result_sha256": "63a517deab1bc277067b53fb82aceae9e96ecea2b643613c2aae71cd3b45f83c"
+      },
+      {
+        "pair": "E94",
+        "tensor": "model.layers.0.self_attn.v_proj.weight",
+        "shape": [
+          256,
+          1536
+        ],
+        "seconds": 17.251778967678547,
+        "passed": true,
+        "differences": [],
+        "input_tensor_sha256": {
+          "initial": "b17c3fd8fbce80b50718ad2369bb26aca0ffaeb06c147f51456a0595e6fcd0c5",
+          "teacher": "8f8652a928e719497fb8701dfa03cfc0655654ea2758490e7ac8f1c2ea13a7b8",
+          "16": "d64f7340f68beb5b882d04c6bc92b08940c6f700fe5810bdb71347de8b33ab69",
+          "32": "8e777404beec660ee0825f9663e685d8fffcb69aa864c9c77e27e38aa406b33d",
+          "48": "63dccaa136fc2e6d58e0b68b75702667c7b202632c91a33631711118efee9d21",
+          "64": "bd8fae265489eeebb23927f770578114cdf561c18eaa65fb2399ca1f58fda7b8",
+          "128": "8525b485623d3d03161fe464b141002f139c1dc31be6268b7c54f6ced403ccf0",
+          "192": "502804deb9faeede749ebb466ad8626a989783b19c3fa7f35ad99c60bc6e0345",
+          "320": "0869700b0ca7554afb465d1c0a42c7c413875e429084fa29e501337c1a79aa2c",
+          "480": "566fe47bc9ea8bbe392a682142d589708e47eb0b1840cf3aa21e41778d03e092",
+          "640": "90c24fb158c5bcf370111a7db30cc65fd0c2211a92d61889496fdb314b58a6b5"
+        },
+        "reference_sha256": "c8c502415c11ec2bf2d3d0dbce0f11bf20620e91c0c489a58f137b2a098b863c",
+        "result_sha256": "9cbfaa02008f81f0c8ed7d1f24da9b61bdc006b1fc71dee879cf3fdc44f25354"
+      }
+    ]
+  }
+}
