@@ -137,10 +137,11 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
             return {}
         datasets = [(d, read_questions(d)) for d in options.datasets]
         accuracy_name = "initial-accuracy" if producer == "initial" else "teacher-accuracy"
-        collector = AccuracyCollector(
-            root.root / accuracy_name, datasets, initial_model.tokenizer, workers=options.verifier_workers
-        )
-        collector.follow_generation(root.root / producer, options.protocols)
+        if options.accuracy_enabled:
+            collector = AccuracyCollector(
+                root.root / accuracy_name, datasets, initial_model.tokenizer, workers=options.verifier_workers
+            )
+            collector.follow_generation(root.root / producer, options.protocols)
         generated = await generator.generate(
             root.root / producer,
             datasets,
@@ -149,7 +150,7 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
             model_identity=model_hash,
             progress=progress,
             resume_from=resume_generation,
-            on_batch=collector.check,
+            on_batch=collector.check if collector is not None else None,
         )
         if producer == "initial" and options.source_enabled:
             source = DatasetSpec(
@@ -166,7 +167,7 @@ async def generate_bootstrap(config, producer, *, tensor_parallel=1, source_conf
                 model_identity=model_hash,
                 progress=progress,
             )
-        metrics = await asyncio.to_thread(collector.finish, generated)
+        metrics = await asyncio.to_thread(collector.finish, generated) if collector is not None else {}
         collector = None
         return metrics
     finally:
@@ -232,6 +233,8 @@ def finalize_bootstrap(config):
         elif len(refs) != options.source_count:
             raise ValueError("Incomplete source bank")
     for child, generation in (("initial-accuracy", "initial"), ("teacher-accuracy", "teacher")):
+        if not options.accuracy_enabled:
+            continue
         accuracy = ArtifactStore(root.root / child).manifest(complete=True)
         generated = ArtifactStore(root.root / generation)
         if accuracy["metadata"].get("generation_sha256") != file_sha256(generated.manifest_path):
@@ -269,6 +272,9 @@ def main():
     preflight_pair(config)
     # Refuse attaching to any pre-existing cluster through ambient RAY_ADDRESS.
     os.environ["RAY_ADDRESS"] = "local"
+    from verl.utils.ray_utils import prewarm_local_ray, with_hf_modules_cache
+
+    prewarm_local_ray()
     ray.init(
         address="local",
         num_cpus=int(OmegaConf.select(config, "ray_kwargs.ray_init.num_cpus", default=32)),
@@ -276,7 +282,9 @@ def main():
         include_dashboard=False,
         _temp_dir=os.environ.get("SMOKE_RAY_TMPDIR"),
         object_store_memory=8 * 1024**3,
-        runtime_env=OmegaConf.to_container(config.ray_kwargs.ray_init.get("runtime_env", {}), resolve=True),
+        runtime_env=with_hf_modules_cache(
+            OmegaConf.to_container(config.ray_kwargs.ray_init.get("runtime_env", {}), resolve=True)
+        ),
     )
     try:
         asyncio.run(

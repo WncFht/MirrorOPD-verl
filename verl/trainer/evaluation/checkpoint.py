@@ -3,6 +3,7 @@
 """One final model export and native model-only reload parity, without optimizer files."""
 
 import math
+import uuid
 from pathlib import Path
 
 import pyarrow as pa
@@ -13,10 +14,14 @@ from .scoring import score_native_rows
 from .trajectory import load_trajectories
 
 
-def final_model_export(trainer, references, *, hidden_size, budget, destination, verify=True, live_payload_bytes=0):
+def final_model_export(
+    trainer, references, *, hidden_size, budget, destination, verify=True, live_payload_bytes=0, max_ckpt_to_keep=1
+):
     destination = Path(destination)
     if destination.exists():
         raise FileExistsError("Final export destination must be new")
+    published = destination
+    destination = destination.with_name(f".{destination.name}.staging-{uuid.uuid4().hex}")
     # Same exact rows and batching on both sides; no regenerated answers.
     selected = sorted((r for r in references if r["valid_tokens"] > 0), key=lambda r: (r["valid_tokens"], r["id"]))[:4]
     if verify and not selected:
@@ -25,7 +30,9 @@ def final_model_export(trainer, references, *, hidden_size, budget, destination,
         hidden_size=hidden_size, budget=budget, live_payload_bytes=live_payload_bytes, load_window=load_trajectories
     )
     before = score_native_rows(trainer, selected, **kwargs)[0] if verify else []
-    trainer.actor_rollout_wg.save_checkpoint(str(destination), None, trainer.global_steps, max_ckpt_to_keep=1)
+    trainer.actor_rollout_wg.save_checkpoint(
+        str(destination), None, trainer.global_steps, max_ckpt_to_keep=max_ckpt_to_keep
+    )
     if list(destination.glob("optim*")) or list(destination.glob("extra_state*")):
         raise RuntimeError("Final export unexpectedly saved optimizer or runtime state")
     tensor_rows = []
@@ -39,6 +46,9 @@ def final_model_export(trainer, references, *, hidden_size, budget, destination,
                 )
     if not tensor_rows or len({r["name"] for r in tensor_rows}) != len(tensor_rows):
         raise ValueError("HF export has missing or duplicate tensor identities")
+    if trainer.config.actor_rollout_ref.actor.checkpoint.get("preserve_hf_master_weights", False):
+        if any(row["dtype"] != "F32" for row in tensor_rows):
+            raise ValueError("Master-weight export contains non-FP32 tensors")
     max_error = None
     if verify:
         trainer.actor_rollout_wg.load_checkpoint(str(destination), None, del_local_after_load=False)
@@ -92,4 +102,5 @@ def final_model_export(trainer, references, *, hidden_size, budget, destination,
     if verify:
         for path in destination.glob("model_world_size_*_rank_*.pt"):
             path.unlink()
+    destination.rename(published)
     return {"eval/checkpoint/native_reload_verified": int(verify), "eval/checkpoint/hf_tensors": len(tensor_rows)}
