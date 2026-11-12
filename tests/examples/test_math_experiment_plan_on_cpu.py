@@ -329,3 +329,56 @@ def test_native_qwen_readout_uses_the_canonical_factory(tmp_path):
     callback, options = readout_definition(OmegaConf.create({"trainer": {"evaluation": declaration}}))
     assert callback is EvaluationCoordinator
     assert EvaluationConfig.parse(options).source_count == 64
+
+
+@pytest.mark.parametrize("number", range(94, 124))
+def test_absorption_panel_disables_generation_readouts_and_keeps_long_banks(tmp_path, number):
+    import json
+
+    from hydra.core.override_parser.overrides_parser import OverridesParser
+
+    from examples.mirroropd.launchers.absorption import PAIRS, SNAPSHOTS, STOP_TOKEN_IDS
+    from verl.trainer.evaluation.config import EvaluationConfig
+    from verl.trainer.evaluation.plan import compile_plan
+
+    questions = tmp_path / "questions"
+    questions.mkdir()
+    (questions / "datasets.json").write_text(
+        json.dumps(
+            [
+                {
+                    "name": "math",
+                    "domain": "math",
+                    "path": str(questions / "math.parquet"),
+                    "verifier": "math",
+                    "n": 1,
+                    "protocol": "public",
+                }
+            ]
+        )
+    )
+    result = plan([f"E{number}"], {"ABSORPTION_ROOT": str(tmp_path)})
+    expression = next(a.split("=", 1)[1] for a in result.arguments if a.startswith("++trainer.evaluation="))
+    raw = OverridesParser.create().parse_override("x=" + expression).value()
+    raw.pop("_target_")
+    config = EvaluationConfig.parse(raw)
+    assert not config.accuracy_enabled and not config.source_enabled and not config.history_enabled
+    assert config.protocols["public"].max_new_tokens == 7168
+    assert config.protocols["public"].prompt_limit == 4096
+    assert config.protocols["public"].stop_token_ids == STOP_TOKEN_IDS.get(number, ())
+    assert result.environment["FULL_KL_TERMINATION_TOKEN_IDS"] == "[]"
+    if number in STOP_TOKEN_IDS:
+        assert "actor_rollout_ref.rollout.stop_token_ids=[151643,151645]" in result.arguments
+    assert tuple(config.export_outers) == SNAPSHOTS
+    for outer in (0, 1, 20, 40):
+        event = compile_plan(config, outer=outer, total=40, optimizer_steps=outer * 16)
+        assert not event.generate_current and "accuracy" not in event.tasks
+        assert {"public_initial", "public_teacher"} <= set(event.tasks)
+    pair = next(row for row in PAIRS if row[0] == number)
+    assert int(result.environment["ROLLOUT_MAX_NUM_SEQS"]) == pair[4]
+    if pair[3] == "llama":
+        assert json.loads(config.protocols["public"].template_json) == {"date_string": "12 Nov 2026"}
+        assert any("data.apply_chat_template_kwargs.date_string=" in a for a in result.arguments)
+    assert result.environment["STUDENT_GPUS"] == "4"
+    assert "trainer.total_training_steps=40" in result.arguments
+    assert result.environment["PPO_EPOCHS"] == "16"

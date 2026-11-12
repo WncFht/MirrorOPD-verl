@@ -17,7 +17,7 @@ def occupied(resource, gpu):
 
 
 def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), env=None):
-    """Reserve an idle occupier-owned GPU, guard/attach a child, and await restoration.
+    """Reserve occupier-owned GPUs, guard/attach a child, and await restoration.
 
     Caller supplies the installed broker directory. No existing reservation is
     released or reassigned. The broker owns restoration after the guard exits.
@@ -28,8 +28,12 @@ def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), en
     output.mkdir(parents=True, exist_ok=False)
     if any(Path(path).exists() for path in stop_paths):
         raise InterruptedError("STOP exists before GPU reservation")
-    if not occupied(resource, gpu):
-        raise RuntimeError(f"GPU {gpu} has an active allocation; wait for broker occupancy")
+    devices = (gpu,) if isinstance(gpu, int) else tuple(gpu)
+    if not devices or len(devices) != len(set(devices)):
+        raise ValueError("Provide a nonempty unique GPU allocation")
+    for device in devices:
+        if not occupied(resource, device):
+            raise RuntimeError(f"GPU {device} has an active allocation; wait for broker occupancy")
     python = sys.executable
     gate = output / "ATTACHED"
     guarded = [
@@ -39,7 +43,7 @@ def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), en
         "--repo",
         str(repo),
         "--gpus",
-        str(gpu),
+        ",".join(map(str, devices)),
         "--",
         python,
         "-m",
@@ -50,27 +54,29 @@ def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), en
         *command,
     ]
     child = None
-    reserved = attached = False
+    reserved, attached = set(), set()
     cleanup_errors = []
     with (output / "broker.log").open("x") as log:
 
-        def broker_command(action, *arguments):
+        def broker_command(action, device, *arguments):
             return subprocess.run(
-                [python, str(resource / "broker.py"), action, "--gpu", str(gpu), "--owner", owner, *arguments],
+                [python, str(resource / "broker.py"), action, "--gpu", str(device), "--owner", owner, *arguments],
                 stdout=log,
                 stderr=subprocess.STDOUT,
                 check=True,
             )
 
         try:
-            broker_command("reserve")
-            reserved = True
+            for device in devices:
+                broker_command("reserve", device)
+                reserved.add(device)
             child = subprocess.Popen(
                 guarded, cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True
             )
             dump(output / "process.json", dict(pid=child.pid, argv=guarded, owner=owner, started_at=time.time()))
-            broker_command("attach", "--pid", str(child.pid), "--exit-receipt", str(output / "exit.json"))
-            attached = True
+            for device in devices:
+                broker_command("attach", device, "--pid", str(child.pid), "--exit-receipt", str(output / "exit.json"))
+                attached.add(device)
             if any(Path(path).exists() for path in stop_paths):
                 raise InterruptedError("STOP arrived during broker attach")
             gate.touch()
@@ -82,7 +88,10 @@ def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), en
             code = child.wait(timeout=90)
             return code
         except BaseException as error:
-            dump(output / "error.json", dict(error=repr(error), reserved=reserved, attached=attached, at=time.time()))
+            dump(
+                output / "error.json",
+                dict(error=repr(error), reserved=sorted(reserved), attached=sorted(attached), at=time.time()),
+            )
             raise
         finally:
             if child is not None and child.poll() is None:
@@ -94,10 +103,13 @@ def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), en
                     cleanup_errors.append(repr(error))
             if child is not None:
                 dump(output / "exit.json", dict(returncode=child.poll(), finished_at=time.time()))
-            if reserved and not attached and (child is None or child.poll() is not None):
+            if reserved - attached and (child is None or child.poll() is not None):
                 try:
                     # The broker checks owner identity before releasing this failed launch.
-                    broker_command("release", "--reason", "Guard launch/attach failed before execution gate")
+                    for device in reserved - attached:
+                        broker_command(
+                            "release", device, "--reason", "Guard launch/attach failed before execution gate"
+                        )
                 except Exception as error:
                     cleanup_errors.append(repr(error))
             restored = False
@@ -105,7 +117,7 @@ def run_leased(*, resource, repo, gpu, owner, output, command, stop_paths=(), en
                 deadline = time.monotonic() + 240
                 while time.monotonic() < deadline:
                     try:
-                        restored = occupied(resource, gpu)
+                        restored = all(occupied(resource, device) for device in reserved)
                     except Exception as error:
                         cleanup_errors.append(repr(error))
                         break

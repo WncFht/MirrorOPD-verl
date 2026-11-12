@@ -82,7 +82,12 @@ def test_workers_import_frozen_shared_code(tmp_path):
     (assets / "paths.py").write_text("ASSET = 'original asset resolver'\n")
     (assets / "model_registry.json").write_text('{"models": []}\n')
     (research / "__init__.py").write_text("from verl import VALUE\n")
+    rewards = original / "examples/mirroropd/rewards"
+    rewards.mkdir()
+    (rewards / "reward.py").write_text("def reward_func(): return 42\n")
     snapshot = freeze(original, tmp_path / "source")
+    (rewards / "reward.py").unlink()
+    assert (snapshot / "examples/mirroropd/rewards/reward.py").read_text() == "def reward_func(): return 42\n"
     (original / "verl/__init__.py").write_text("VALUE = 'changed'\n")
     (research / "__init__.py").write_text("VALUE = 'changed research'\n")
     (assets / "paths.py").write_text("ASSET = 'changed asset resolver'\n")

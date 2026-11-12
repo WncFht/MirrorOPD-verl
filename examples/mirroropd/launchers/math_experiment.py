@@ -17,6 +17,8 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 
 @dataclass(frozen=True)
@@ -363,6 +365,23 @@ def preset_catalog() -> dict[str, Preset]:
                 for value in preset.overrides
             ),
         )
+    from examples.mirroropd.launchers.absorption import PAIRS
+
+    for number, student, teacher, family, sequences, thinking in PAIRS:
+        presets[f"E{number}"] = Preset(
+            Budget(40, 16, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
+            method="full_kl",
+            pair=ModelPair(
+                student=student,
+                teacher=teacher,
+                family=family,
+                student_sequences=sequences,
+                teacher_sequences=32,
+                enable_thinking=thinking,
+            ),
+            evaluation_protocol="absorption",
+            environment=(("STUDENT_GPUS", "4"), ("ABSORPTION_EXPERIMENT", f"E{number}")),
+        )
     return presets
 
 
@@ -604,6 +623,12 @@ def build_plan(args, hydra: list[str], environment: dict[str, str], root: Path =
             from examples.mirroropd.launchers.stage_chains import options as stage_defaults
 
             prefix_options = stage_defaults(env, name, root, chain=preset.evaluation_protocol)
+    if preset and preset.evaluation_protocol == "absorption":
+        if role:
+            raise ValueError("Absorption presets use bank RKL only; no independent accuracy selector")
+        from examples.mirroropd.launchers.absorption import options as absorption_defaults
+
+        prefix_options = absorption_defaults(env, name, root)
     protocol = model_defaults(env, preset.pair, role, root) if preset and preset.pair else []
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S") + f"-{os.getpid()}"
     if role:
@@ -673,6 +698,8 @@ def _preset_ranges(numbers):
 
 
 def preset_overview() -> str:
+    from examples.mirroropd.launchers.absorption import PAIRS
+
     """Compact human reference, shared by --overview and the public entry comment."""
     pairs = []
     for sampled, full, sampled16, full16, pair in MODEL_MATRIX:
@@ -752,6 +779,13 @@ def preset_overview() -> str:
             "DRY_RUN=1 仅打印最终命令；-- 后的参数原样传给 Hydra。custom 使用公共默认值，不加载编号预算。\n"
             "本注释与 --overview 共用 launchers/math_experiment.py 的 preset_overview()；修改源后同步生成区。\n"
             "以下均为当前预设默认值；已启动实验以其 resolved config 为准。",
+            "E94–E123：30组吸收动力学，current OPD；四卡、batch64/reuse16、40 outer。\n"
+            "训练和双固定bank均cap7168，每outer只读bank RKL，不测accuracy、不重新生成current heldout。\n"
+            "保存outer1/2/3/4/8/12/20/30/40，9份FP32新增快照；ABSORPTION_ROOT指定新题单与bank。\n"
+            + _aligned_table(
+                ("Preset", "Student", "Teacher"),
+                [(f"E{number}", student, teacher) for number, student, teacher, *_ in PAIRS],
+            ),
             "一、E81–E90 / E92–E93：Qwen Base 的聚合与 future reward 对照\n"
             "学生 Qwen3-1.7B-Base ← 教师 Qwen3-30B-A3B-Instruct-2507。\n"
             "共同训练：full-vocab MDPO kappa=1/eta=0.1，LR=1e-6；shared_sync。\n"
@@ -916,6 +950,10 @@ def main(argv=None):
         plan = build_plan(args, hydra, dict(os.environ))
         if PRESETS.get(args.preset) and PRESETS[args.preset].rollout_arm:
             from examples.mirroropd.launchers.qwen_prefix import preflight
+
+            preflight(plan.environment)
+        if PRESETS.get(args.preset) and PRESETS[args.preset].evaluation_protocol == "absorption":
+            from examples.mirroropd.launchers.absorption import preflight
 
             preflight(plan.environment)
         if PRESETS.get(args.preset) and PRESETS[args.preset].evaluation_protocol == "mimo":

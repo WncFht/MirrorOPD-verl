@@ -21,6 +21,8 @@ def freeze(repo, destination):
             shutil.copy2(source, destination / relative)
     shutil.copytree(repo / "examples/mirroropd/research", target / "research", ignore=ignore)
     shutil.copytree(repo / "examples/mirroropd/assets", target / "assets", ignore=ignore)
+    if (repo / "examples/mirroropd/rewards").exists():
+        shutil.copytree(repo / "examples/mirroropd/rewards", target / "rewards", ignore=ignore)
     return destination
 
 
