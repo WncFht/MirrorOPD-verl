@@ -27,6 +27,29 @@ def frame_components(base, delta, *, frame=None):
     return {"diag": diagonal, "off": in_frame - diagonal, "null": delta - in_frame}
 
 
+def right_frame_components(delta, basis):
+    """Split a window update by an orthonormal input-space basis (n by k).
+
+    basis comes from an earlier cumulative update, not the full weight matrix
+    or a teacher residual. Products avoid materializing an n by n projector.
+    No norm matching is applied: the two outputs sum to the actual update.
+    """
+    if delta.ndim != 2 or basis.ndim != 2 or delta.shape[1] != basis.shape[0]:
+        raise ValueError("delta must be m by n and basis n by k")
+    if basis.shape[1] == 0 or basis.shape[1] > basis.shape[0]:
+        raise ValueError("basis must have between 1 and n columns")
+    if delta.dtype != basis.dtype or delta.device != basis.device:
+        raise ValueError("delta and basis must share dtype and device")
+    if delta.dtype not in (torch.float32, torch.float64):
+        raise ValueError("frame decomposition requires FP32 or FP64")
+    gram = basis.T @ basis
+    tolerance = 1e-5 if basis.dtype == torch.float32 else 1e-10
+    if not torch.allclose(gram, torch.eye(len(gram), dtype=gram.dtype, device=gram.device), atol=tolerance, rtol=0):
+        raise ValueError("right basis must be orthonormal")
+    inside = (delta @ basis) @ basis.T
+    return {"in": inside, "out": delta - inside}
+
+
 def spectrum_summary(matrix, *, threshold=1e-5, singular_values=None, driver=None):
     """Full-spectrum rank diagnostics; threshold is relative to the largest value."""
     if not 0 < threshold < 1:
