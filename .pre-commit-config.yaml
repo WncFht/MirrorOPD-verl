@@ -1,3 +1,6 @@
+# Preserve the byte identity of relocated, immutable experiment source snapshots.
+exclude: ^examples/mirroropd/research-evidence/prefix-s0/source/
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: "v0.12.2"

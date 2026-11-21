@@ -235,10 +235,11 @@ outputs
 # Literature search stderr is an execution diagnostic.
 /examples/mirroropd/docs/literature/teacher-transfer/sources/claim-audit-20261107/*.stderr
 
-# Rebuildable teacher-construction and fixed-state execution bundles.
-/examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/
-/examples/mirroropd/docs/experiments/teacher-transfer/fixed-state-results/
-/examples/mirroropd/docs/experiments/teacher-transfer/figures/teacher-construction-20261108/
+# Rebuildable teacher-construction execution bundles.
+/examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/*
+!/examples/mirroropd/docs/experiments/teacher-transfer/data/teacher-construction-20261108/source.py
+# Keep fixed-state reports, figures and summaries visible; embedded-data explorers stay local.
+/examples/mirroropd/docs/experiments/teacher-transfer/fixed-state-results/**/explorer.html
 
 # Teacher-spectrum report: commit verified raw-data bundles and curated results.
 # Expanded per-matrix copies remain beside the document for local recomputation.
@@ -303,3 +304,31 @@ outputs
 /examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/figures/training-20261113/
 
 /examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/pair-expansion-30-20261112.json
+
+# Local research evidence used by published reports.
+/examples/mirroropd/research-evidence/*
+!/examples/mirroropd/research-evidence/README.md
+!/examples/mirroropd/research-evidence/prefix-s0/
+/examples/mirroropd/research-evidence/prefix-s0/*
+!/examples/mirroropd/research-evidence/prefix-s0/source/
+
+# Output from local report reproduction examples.
+/rebuild/
+
+# Raw per-token probe observations; retain validated summaries and report figures.
+/examples/mirroropd/docs/experiments/reuse-budget/inner-bank/probe-data/outer-*/inner-*.json
+/examples/mirroropd/docs/experiments/reuse-budget/inner-bank/probe-data/outer-*/trajectories.json
+/examples/mirroropd/docs/experiments/reuse-budget/inner-bank/probe-data/banks-*.json
+
+# Large generated reports and full diagnostic tables are reproduced locally.
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/latent-state.html
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/latent-state-pooled.html
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/analyses/metric-screening/correlations.csv
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/analyses/metric-screening/relative-reduction-ranked.csv
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/analyses/metric-screening/relative-reduction-all-model-ranked.csv
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/analyses/metric-screening/index.html
+/examples/mirroropd/docs/progress/data/20261116-section4/correlations.csv
+
+# Local publication failures and literature search diagnostics.
+/examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/optimizer-comparison/publication-error.json
+/examples/mirroropd/docs/literature/rollout-policy/data/*.stderr.txt
