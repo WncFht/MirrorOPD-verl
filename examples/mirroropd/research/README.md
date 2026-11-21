@@ -31,21 +31,22 @@ python -m examples.mirroropd.research production.refresh_tables --logs-repo ../w
 
 ## 研究与报告
 
-| 研究包                                   | 主要用途                                 | 文档入口                                                                               |
-| ---------------------------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------- |
-| `state_sources`                          | S/I 来源、在线交集与固定输入控制         | [跨源泛化总览](../docs/experiments/teacher-transfer/cross-batch-transfer.md#mechanism) |
-| `state_analysis`                         | rollout state 表示、coverage 与分布诊断  | [State 分析](../docs/experiments/state-analysis/README.md)                             |
-| `cross_batch`                            | B/N/L 跨批、覆盖、batch 与单遍训练       | [跨批结果](../docs/experiments/teacher-transfer/cross-batch-transfer.md#batches)       |
-| `capability_filter`                      | 筛选、温度、功能保持与续写控制           | [能力筛选假说](../docs/experiments/teacher-transfer/mechanisms/capability-filter.md)   |
-| `spectral`                               | 权重/函数谱、吸收干预、梯度与教师核对    | [谱分析与重构](studies/spectral/README.md)                                             |
-| `polaris_transfer`                       | E48、KL 方向和教师谱系探针               | [Polaris 迁移](../docs/experiments/teacher-transfer/appendix/polaris-long-run.md)      |
-| `boundary`                               | R1 边界与续训实验的明确协议              | [运行说明](studies/boundary/README.md)                                                 |
-| `fixed_transfer`                         | 按既有计划组织模型、冻结银行、训练和评测 | [固定状态迁移](studies/fixed_transfer/README.md)                                       |
-| `precision`、`polaris`、`rkl_optimizers` | 精度、优化器与反弹机制                   | [优化器与精度](../docs/infra/numerics/optimization/README.md)                          |
-| `termination`                            | 终止动作、E54 长度和目标干预             | [E54 诊断](../docs/infra/model-compatibility/qwen-e54/2026-10-29-E54长度膨胀诊断.md)   |
-| `qwen_base`、`qwen_teachers`             | Qwen 教师与生产运行分析                  | [教师对比](../docs/experiments/teacher-transfer/failure-reproduction.md)               |
-| `production`、`production_precision`     | 运行表、预算、生产精度与 KL 轨迹         | [实验维护说明](../docs/experiments/维护说明.md)                                        |
-| `pipeline`                               | 已记录流水线、性能与旧运行证据分析       | [性能研究](../docs/infra/performance/README.md)                                        |
+| 研究包                                   | 主要用途                                   | 文档入口                                                                               |
+| ---------------------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `state_sources`                          | S/I 来源、在线交集与固定输入控制           | [跨源泛化总览](../docs/experiments/teacher-transfer/cross-batch-transfer.md#mechanism) |
+| `state_analysis`                         | rollout state 表示、coverage 与分布诊断    | [State 分析](../docs/experiments/state-analysis/README.md)                             |
+| `cross_batch`                            | B/N/L 跨批、覆盖、batch 与单遍训练         | [跨批结果](../docs/experiments/teacher-transfer/cross-batch-transfer.md#batches)       |
+| `capability_filter`                      | 筛选、温度、功能保持与续写控制             | [能力筛选假说](../docs/experiments/teacher-transfer/mechanisms/capability-filter.md)   |
+| `spectral`                               | 权重/函数谱、吸收干预、梯度与教师核对      | [谱分析与重构](studies/spectral/README.md)                                             |
+| `polaris_transfer`                       | E48、KL 方向和教师谱系探针                 | [Polaris 迁移](../docs/experiments/teacher-transfer/appendix/polaris-long-run.md)      |
+| `boundary`                               | R1 边界与续训实验的明确协议                | [运行说明](studies/boundary/README.md)                                                 |
+| `fixed_transfer`                         | 按既有计划组织模型、冻结银行、训练和评测   | [固定状态迁移](studies/fixed_transfer/README.md)                                       |
+| `absorption_dynamics`                    | 完整吸收训练、独立 SGD LR 校准和 Muon 接入 | [优化器分支](../docs/infra/training/optimizers.md)                                     |
+| `precision`、`polaris`、`rkl_optimizers` | 精度、优化器与反弹机制                     | [优化器与精度](../docs/infra/numerics/optimization/README.md)                          |
+| `termination`                            | 终止动作、E54 长度和目标干预               | [E54 诊断](../docs/infra/model-compatibility/qwen-e54/2026-10-29-E54长度膨胀诊断.md)   |
+| `qwen_base`、`qwen_teachers`             | Qwen 教师与生产运行分析                    | [教师对比](../docs/experiments/teacher-transfer/failure-reproduction.md)               |
+| `production`、`production_precision`     | 运行表、预算、生产精度与 KL 轨迹           | [实验维护说明](../docs/experiments/维护说明.md)                                        |
+| `pipeline`                               | 已记录流水线、性能与旧运行证据分析         | [性能研究](../docs/infra/performance/README.md)                                        |
 
 ## 公共实现与实验差异
 

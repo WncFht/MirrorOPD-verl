@@ -16,4 +16,4 @@
 | 复算研究结果与维护文档                | [实验维护](experiments/维护说明.md)、[文档维护](infra/maintenance/README.md)                         |
 | 查旧接口、历史设计及迁移位置          | [历史依据](infra/maintenance/history.md)                                                             |
 
-原始运行日志与大型证据保留在同级 wandb-logs 及原运行目录。文档不放活跃 Python 工具；复算入口位于 research、benchmarks 和 tools，冻结源码保持原样。[AGENTS.md](AGENTS.md)说明内容归属与保护边界。
+原始训练日志见同级 wandb-logs。正式图和绘图表随专题保存，原始测量、评测明细和配置见[研究证据](../research-evidence/README.md)。文档不放活跃 Python 工具；复算入口位于 research、benchmarks 和 tools，冻结源码保持原样。[AGENTS.md](AGENTS.md)说明内容归属与保护边界。

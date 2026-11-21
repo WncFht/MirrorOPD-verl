@@ -8,7 +8,7 @@
 
 ```bash
 python -m examples.mirroropd.research.studies.spectral.scan \
-  --manifest runs/teacher-spectrum-expansion-20261110-v3/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-spectrum/teacher-spectrum-expansion-20261110-v3/manifest.json \
   --output runs/spectral-scan-new \
   --device cuda:0 --driver gesvd --transpose-wide \
   --updates --stages --cache runs/spectral-scan-cache \
@@ -64,7 +64,7 @@ $$
 
 ```bash
 python -m examples.mirroropd.research.studies.spectral.scan_benchmark \
-  --manifest runs/spectral-scan-infra-20261111-v1/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-spectrum/spectral-scan-infra-20261111-v1/manifest.json \
   --job-id 1 --output runs/spectral-scan-benchmark-new \
   --stop-paths runs/spectral-scan-benchmark-new/STOP
 ```

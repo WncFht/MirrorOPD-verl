@@ -7,8 +7,8 @@
 从仓库根目录执行，使用 `envs/mirroropd-fusion` 环境。准备阶段只运行 CPU，要求新目录；训练、生成和评分由独占 GPU 入口执行。
 
 ```bash
-../envs/mirroropd-fusion/bin/python -m examples.mirroropd.research.studies.fixed_transfer.sft_distribution prepare --root runs/teacher-construction-20261109/sft-distribution-v1 --plan examples/mirroropd/research/studies/fixed_transfer/plans/sft-distribution-long.json
-../envs/mirroropd-fusion/bin/python -u -m examples.mirroropd.research.studies.fixed_transfer.sft_distribution wait-run --root runs/teacher-construction-20261109/sft-distribution-v1 --gpus 0,5,6,7
+../envs/mirroropd-fusion/bin/python -m examples.mirroropd.research.studies.fixed_transfer.sft_distribution prepare --root examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261109/sft-distribution-v1 --plan examples/mirroropd/research/studies/fixed_transfer/plans/sft-distribution-long.json
+../envs/mirroropd-fusion/bin/python -u -m examples.mirroropd.research.studies.fixed_transfer.sft_distribution wait-run --root examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261109/sft-distribution-v1 --gpus 0,5,6,7
 ```
 
 `wait-run` 先等待既有长预算评测的完成回执，再等待 GPU0/5/6/7 的原有资源锁和 compute process 全部释放。等待期间仅有 CPU 控制进程；不借用已有队列的卡、不结束其他任务。取得四卡后运行以下顺序：
@@ -30,7 +30,7 @@
 生成中断按每题的 16 个固定 seed 槽位恢复；已完成的题不再生成。SFT 失败后保持失败轨迹，显式选择带完整状态的 checkpoint：
 
 ```bash
-../envs/mirroropd-fusion/bin/python -m examples.mirroropd.research.studies.fixed_transfer.sft_distribution train --root runs/teacher-construction-20261109/sft-distribution-v1 --arm RAW-C --seed 20261109 --resume runs/teacher-construction-20261109/sft-distribution-v1/teachers/RAW-C-20261109/step0256
+../envs/mirroropd-fusion/bin/python -m examples.mirroropd.research.studies.fixed_transfer.sft_distribution train --root examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261109/sft-distribution-v1 --arm RAW-C --seed 20261109 --resume examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261109/sft-distribution-v1/teachers/RAW-C-20261109/step0256
 ```
 
 该恢复命令须在原资源 guard 保护的单卡环境内执行。恢复加载模型、optimizer、全部 RNG 和抽样位置；checkpoint 之后的旧 metrics 先归档，已有 checkpoint 不覆盖。运行中源码、依赖或来源变化会拒绝继续，需记录迁移或使用新目录。

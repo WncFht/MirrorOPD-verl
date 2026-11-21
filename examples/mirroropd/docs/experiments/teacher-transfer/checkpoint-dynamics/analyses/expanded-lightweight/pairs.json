@@ -1,0 +1,2132 @@
+{
+  "E94": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.001236126350091739,
+      "teacher_amplitude": 0.0012478987829744994,
+      "parameter_cosine": 0.3734808244555781,
+      "student_global_amplitude": 0.0011935717884920254,
+      "progress_global_16": 0.31575554418173607,
+      "progress_median_16": 0.33331821051234595,
+      "progress_global_32": 0.5788221567231484,
+      "progress_median_32": 0.613575369852474,
+      "progress_global_48": 0.7384393360875472,
+      "progress_median_48": 0.7690464518700464,
+      "progress_global_64": 0.8422894585512388,
+      "progress_median_64": 0.8673194767302213,
+      "progress_global_128": 0.9107495057807304,
+      "progress_median_128": 0.9244088578660146,
+      "progress_global_192": 0.9329748987390982,
+      "progress_median_192": 0.9404672820297628,
+      "progress_global_320": 0.9612235663187927,
+      "progress_median_320": 0.9641220036200312,
+      "progress_global_480": 0.9831489141769636,
+      "progress_median_480": 0.9840492135673401,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.3751719497129095,
+      "baseline_initial_math": 0.042946537771085314,
+      "baseline_initial_code": 0.033959705239237435,
+      "baseline_initial_if": 0.017771928580873175,
+      "baseline_initial_all": 0.03155939053039864,
+      "baseline_teacher_math": 0.03886040194594458,
+      "baseline_teacher_code": 0.030761983028575024,
+      "baseline_teacher_if": 0.018259273547446907,
+      "baseline_teacher_all": 0.02929388617398884
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.042946537771085314,
+        "final": 0.0002570674989346252,
+        "reduction": 0.04268947027215069,
+        "relative": 0.994014243934986
+      },
+      "initial/code": {
+        "initial": 0.033959705239237435,
+        "final": 0.00031705149733624114,
+        "reduction": 0.033642653741901195,
+        "relative": 0.9906638913647013
+      },
+      "initial/if": {
+        "initial": 0.017771928580873175,
+        "final": 0.000879490146535509,
+        "reduction": 0.016892438434337666,
+        "relative": 0.9505123969785672
+      },
+      "initial/all": {
+        "initial": 0.03155939053039864,
+        "final": 0.0004845363809354585,
+        "reduction": 0.031074854149463184,
+        "relative": 0.9846468397268717
+      },
+      "teacher/math": {
+        "initial": 0.03886040194594458,
+        "final": 0.0002211126747372657,
+        "reduction": 0.038639289271207314,
+        "relative": 0.9943100775168296
+      },
+      "teacher/code": {
+        "initial": 0.030761983028575024,
+        "final": 0.0002913253571965384,
+        "reduction": 0.030470657671378486,
+        "relative": 0.9905296951459234
+      },
+      "teacher/if": {
+        "initial": 0.018259273547446907,
+        "final": 0.0008838216259444492,
+        "reduction": 0.017375451921502458,
+        "relative": 0.9515960137380148
+      },
+      "teacher/all": {
+        "initial": 0.02929388617398884,
+        "final": 0.00046541988595941776,
+        "reduction": 0.02882846628802942,
+        "relative": 0.9841120470259531
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "DeepScaleR",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "RL"
+  },
+  "E95": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.004571804610704922,
+      "teacher_amplitude": 0.0045244158864772305,
+      "parameter_cosine": 0.25649343721205736,
+      "student_global_amplitude": 0.0020760260466228795,
+      "progress_global_16": 0.1857438892246505,
+      "progress_median_16": 0.18534133625048743,
+      "progress_global_32": 0.33925616292729377,
+      "progress_median_32": 0.3409923502221255,
+      "progress_global_48": 0.46555249782480174,
+      "progress_median_48": 0.467672173644208,
+      "progress_global_64": 0.5717743159696604,
+      "progress_median_64": 0.5745931982758767,
+      "progress_global_128": 0.7234845054308797,
+      "progress_median_128": 0.7225552125198854,
+      "progress_global_192": 0.8032877148442604,
+      "progress_median_192": 0.8017751333884093,
+      "progress_global_320": 0.8857475962923518,
+      "progress_median_320": 0.884348379074659,
+      "progress_global_480": 0.9528518155509103,
+      "progress_median_480": 0.9518548638911877,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.2415975114025564,
+      "baseline_initial_math": 0.10996396245151686,
+      "baseline_initial_code": 0.11813217870697082,
+      "baseline_initial_if": 0.19339660784725662,
+      "baseline_initial_all": 0.14049758300191476,
+      "baseline_teacher_math": 0.09213145739204744,
+      "baseline_teacher_code": 0.09891623131874817,
+      "baseline_teacher_if": 0.3735161260581823,
+      "baseline_teacher_all": 0.18818793825632596
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.10996396245151686,
+        "final": 0.0021107476967815184,
+        "reduction": 0.10785321475473535,
+        "relative": 0.9808050960539718
+      },
+      "initial/code": {
+        "initial": 0.11813217870697082,
+        "final": 0.005379090054952867,
+        "reduction": 0.11275308865201795,
+        "relative": 0.95446549692192
+      },
+      "initial/if": {
+        "initial": 0.19339660784725662,
+        "final": 0.10095153715952751,
+        "reduction": 0.09244507068772911,
+        "relative": 0.4780077154235385
+      },
+      "initial/all": {
+        "initial": 0.14049758300191476,
+        "final": 0.03614712497042063,
+        "reduction": 0.10435045803149412,
+        "relative": 0.742720663244947
+      },
+      "teacher/math": {
+        "initial": 0.09213145739204744,
+        "final": 0.0018512004509273435,
+        "reduction": 0.09028025694112009,
+        "relative": 0.9799069665961114
+      },
+      "teacher/code": {
+        "initial": 0.09891623131874817,
+        "final": 0.004566126512974333,
+        "reduction": 0.09435010480577384,
+        "relative": 0.953838450453491
+      },
+      "teacher/if": {
+        "initial": 0.3735161260581823,
+        "final": 0.24370200227938071,
+        "reduction": 0.12981412377880158,
+        "relative": 0.34754623621947867
+      },
+      "teacher/all": {
+        "initial": 0.18818793825632596,
+        "final": 0.0833731097477608,
+        "reduction": 0.10481482850856516,
+        "relative": 0.556968897580458
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "JustRL",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "RL"
+  },
+  "E96": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.02735762355778574,
+      "teacher_amplitude": 0.025266783068495325,
+      "parameter_cosine": 0.07001279264379245,
+      "student_global_amplitude": 0.0026486193742018267,
+      "progress_global_16": 0.1438271816589749,
+      "progress_median_16": 0.1445553386829031,
+      "progress_global_32": 0.2586893444908405,
+      "progress_median_32": 0.26123705399908886,
+      "progress_global_48": 0.34516551714279553,
+      "progress_median_48": 0.345955779001352,
+      "progress_global_64": 0.41570150996412647,
+      "progress_median_64": 0.41539947872669036,
+      "progress_global_128": 0.5551450330152986,
+      "progress_median_128": 0.5544659033472874,
+      "progress_global_192": 0.645950224168384,
+      "progress_median_192": 0.6450364872616083,
+      "progress_global_320": 0.7750509894454977,
+      "progress_median_320": 0.774394386240872,
+      "progress_global_480": 0.9006666895991914,
+      "progress_median_480": 0.9005320138854511,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.058764617431298835,
+      "baseline_initial_math": 0.06603495709402281,
+      "baseline_initial_code": 0.07670308174647397,
+      "baseline_initial_if": 0.17819439517401994,
+      "baseline_initial_all": 0.10697747800483891,
+      "baseline_teacher_math": 0.13112128045880664,
+      "baseline_teacher_code": 0.09088168722068873,
+      "baseline_teacher_if": 0.20895368907467787,
+      "baseline_teacher_all": 0.14365221891805777
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.06603495709402281,
+        "final": 0.006377841237605002,
+        "reduction": 0.05965711585641781,
+        "relative": 0.9034171972198904
+      },
+      "initial/code": {
+        "initial": 0.07670308174647397,
+        "final": 0.010933958902341282,
+        "reduction": 0.0657691228441327,
+        "relative": 0.8574508526465573
+      },
+      "initial/if": {
+        "initial": 0.17819439517401994,
+        "final": 0.0636356394041676,
+        "reduction": 0.11455875576985235,
+        "relative": 0.6428864143452845
+      },
+      "initial/all": {
+        "initial": 0.10697747800483891,
+        "final": 0.02698247984803796,
+        "reduction": 0.07999499815680094,
+        "relative": 0.7477742011564579
+      },
+      "teacher/math": {
+        "initial": 0.13112128045880664,
+        "final": 0.008201563091975842,
+        "reduction": 0.1229197173668308,
+        "relative": 0.9374505567419892
+      },
+      "teacher/code": {
+        "initial": 0.09088168722068873,
+        "final": 0.011332871633476429,
+        "reduction": 0.0795488155872123,
+        "relative": 0.8753008226403551
+      },
+      "teacher/if": {
+        "initial": 0.20895368907467787,
+        "final": 0.07116613305310696,
+        "reduction": 0.13778755602157092,
+        "relative": 0.6594167187559301
+      },
+      "teacher/all": {
+        "initial": 0.14365221891805777,
+        "final": 0.030233522592853074,
+        "reduction": 0.1134186963252047,
+        "relative": 0.7895366822694266
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "MiniMath",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "SFT"
+  },
+  "E97": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.004531298426116743,
+      "teacher_amplitude": 0.004597074834724826,
+      "parameter_cosine": 0.24570004335281176,
+      "student_global_amplitude": 0.002170890837416015,
+      "progress_global_16": 0.1774059168891975,
+      "progress_median_16": 0.17625727366160865,
+      "progress_global_32": 0.32228258185731096,
+      "progress_median_32": 0.3238603080042347,
+      "progress_global_48": 0.4497125201906559,
+      "progress_median_48": 0.452219008182873,
+      "progress_global_64": 0.56311588738934,
+      "progress_median_64": 0.5651411708350496,
+      "progress_global_128": 0.7476965750299356,
+      "progress_median_128": 0.746138680022743,
+      "progress_global_192": 0.8254706965964276,
+      "progress_median_192": 0.8229137962608112,
+      "progress_global_320": 0.901235317565771,
+      "progress_median_320": 0.9000205546939959,
+      "progress_global_480": 0.9591787829951,
+      "progress_median_480": 0.9587310389727752,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.22929076782924085,
+      "baseline_initial_math": 0.24527952388483265,
+      "baseline_initial_code": 0.2726591404860849,
+      "baseline_initial_if": 0.3287528452604853,
+      "baseline_initial_all": 0.28223050321046766,
+      "baseline_teacher_math": 0.18360498311144952,
+      "baseline_teacher_code": 0.21706160486413764,
+      "baseline_teacher_if": 0.2597607847697324,
+      "baseline_teacher_all": 0.2201424575817732
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.24527952388483265,
+        "final": 0.0035604600255836416,
+        "reduction": 0.24171906385924902,
+        "relative": 0.9854840715230049
+      },
+      "initial/code": {
+        "initial": 0.2726591404860849,
+        "final": 0.037996444596873846,
+        "reduction": 0.23466269588921107,
+        "relative": 0.8606448896995148
+      },
+      "initial/if": {
+        "initial": 0.3287528452604853,
+        "final": 0.1452825663922528,
+        "reduction": 0.18347027886823253,
+        "relative": 0.5580796683991007
+      },
+      "initial/all": {
+        "initial": 0.28223050321046766,
+        "final": 0.06227982367157009,
+        "reduction": 0.21995067953889758,
+        "relative": 0.7793299343511209
+      },
+      "teacher/math": {
+        "initial": 0.18360498311144952,
+        "final": 0.0017839443880931496,
+        "reduction": 0.18182103872335637,
+        "relative": 0.990283791006858
+      },
+      "teacher/code": {
+        "initial": 0.21706160486413764,
+        "final": 0.056658977598688716,
+        "reduction": 0.16040262726544893,
+        "relative": 0.7389728246312723
+      },
+      "teacher/if": {
+        "initial": 0.2597607847697324,
+        "final": 0.09859981725065153,
+        "reduction": 0.16116096751908088,
+        "relative": 0.6204206984589442
+      },
+      "teacher/all": {
+        "initial": 0.2201424575817732,
+        "final": 0.05234757974581113,
+        "reduction": 0.16779487783596206,
+        "relative": 0.7622104326405718
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "Nemotron",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "RL"
+  },
+  "E98": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.005457435703898553,
+      "teacher_amplitude": 0.0055625717050038995,
+      "parameter_cosine": 0.31745774734723065,
+      "student_global_amplitude": 0.0027096854414846174,
+      "progress_global_16": 0.14075664484483438,
+      "progress_median_16": 0.1383350283125767,
+      "progress_global_32": 0.2559540519532489,
+      "progress_median_32": 0.2553775921272333,
+      "progress_global_48": 0.3579256703483422,
+      "progress_median_48": 0.3616675363731726,
+      "progress_global_64": 0.4581424435426637,
+      "progress_median_64": 0.4647799660635811,
+      "progress_global_128": 0.6891566929154254,
+      "progress_median_128": 0.6939296211783543,
+      "progress_global_192": 0.7748405770290118,
+      "progress_median_192": 0.7782750174363258,
+      "progress_global_320": 0.8786721160238561,
+      "progress_median_320": 0.8792828882800512,
+      "progress_global_480": 0.9498792938726796,
+      "progress_median_480": 0.9502814270866524,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.29256886276156996,
+      "baseline_initial_math": 0.25857003859215266,
+      "baseline_initial_code": 0.34366921513103665,
+      "baseline_initial_if": 0.42649057319507094,
+      "baseline_initial_all": 0.3429099423060868,
+      "baseline_teacher_math": 0.23219616112137445,
+      "baseline_teacher_code": 0.27813054143756016,
+      "baseline_teacher_if": 0.4480559321603248,
+      "baseline_teacher_all": 0.31946087823975317
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.25857003859215266,
+        "final": 0.004788248680572158,
+        "reduction": 0.2537817899115805,
+        "relative": 0.9814818116335406
+      },
+      "initial/code": {
+        "initial": 0.34366921513103665,
+        "final": 0.05096929492304468,
+        "reduction": 0.29269992020799196,
+        "relative": 0.8516908332810352
+      },
+      "initial/if": {
+        "initial": 0.42649057319507094,
+        "final": 0.2175270002853506,
+        "reduction": 0.20896357290972034,
+        "relative": 0.48996059008822046
+      },
+      "initial/all": {
+        "initial": 0.3429099423060868,
+        "final": 0.09109484796298915,
+        "reduction": 0.2518150943430976,
+        "relative": 0.7343476034833762
+      },
+      "teacher/math": {
+        "initial": 0.23219616112137445,
+        "final": 0.004688448125702301,
+        "reduction": 0.22750771299567216,
+        "relative": 0.9798082444470236
+      },
+      "teacher/code": {
+        "initial": 0.27813054143756016,
+        "final": 0.06755522853372689,
+        "reduction": 0.21057531290383327,
+        "relative": 0.7571096356963987
+      },
+      "teacher/if": {
+        "initial": 0.4480559321603248,
+        "final": 0.2923741104889645,
+        "reduction": 0.1556818216713603,
+        "relative": 0.3474606862601559
+      },
+      "teacher/all": {
+        "initial": 0.31946087823975317,
+        "final": 0.1215392623827979,
+        "reduction": 0.19792161585695528,
+        "relative": 0.6195488378655758
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "BroRL",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "RL"
+  },
+  "E99": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0005365263942592409,
+      "teacher_amplitude": 0.0005639927027617981,
+      "parameter_cosine": 0.2088514338968544,
+      "student_global_amplitude": 0.0008240959823784255,
+      "progress_global_16": 0.49373955324901325,
+      "progress_median_16": 0.49906305832720455,
+      "progress_global_32": 0.712517863523748,
+      "progress_median_32": 0.7181027344009911,
+      "progress_global_48": 0.7906527837732186,
+      "progress_median_48": 0.7976907469819886,
+      "progress_global_64": 0.8186224570772993,
+      "progress_median_64": 0.8201745729387466,
+      "progress_global_128": 0.8682518553113789,
+      "progress_median_128": 0.8723483947583477,
+      "progress_global_192": 0.9003442486937775,
+      "progress_median_192": 0.9031729608949455,
+      "progress_global_320": 0.935234106261056,
+      "progress_median_320": 0.9378807664887413,
+      "progress_global_480": 0.9695086926468052,
+      "progress_median_480": 0.9705613798104041,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.2059257671100417,
+      "baseline_initial_math": 0.031038955695813015,
+      "baseline_initial_code": 0.024620858991615365,
+      "baseline_initial_if": 0.016406831600278546,
+      "baseline_initial_all": 0.024022215429235643,
+      "baseline_teacher_math": 0.04209392774815608,
+      "baseline_teacher_code": 0.02636630423851989,
+      "baseline_teacher_if": 0.017002253571271234,
+      "baseline_teacher_all": 0.0284874951859824
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.031038955695813015,
+        "final": 0.00033152481653780935,
+        "reduction": 0.030707430879275206,
+        "relative": 0.9893190731097139
+      },
+      "initial/code": {
+        "initial": 0.024620858991615365,
+        "final": 0.0005512564259397602,
+        "reduction": 0.024069602565675606,
+        "relative": 0.9776101871129886
+      },
+      "initial/if": {
+        "initial": 0.016406831600278546,
+        "final": 0.0010052426773837885,
+        "reduction": 0.015401588922894758,
+        "relative": 0.9387302373868016
+      },
+      "initial/all": {
+        "initial": 0.024022215429235643,
+        "final": 0.0006293413066204527,
+        "reduction": 0.02339287412261519,
+        "relative": 0.9738016958313291
+      },
+      "teacher/math": {
+        "initial": 0.04209392774815608,
+        "final": 0.0003422722505797607,
+        "reduction": 0.04175165549757632,
+        "relative": 0.9918688450118615
+      },
+      "teacher/code": {
+        "initial": 0.02636630423851989,
+        "final": 0.0006107403289590886,
+        "reduction": 0.025755563909560804,
+        "relative": 0.9768363315755559
+      },
+      "teacher/if": {
+        "initial": 0.017002253571271234,
+        "final": 0.00107100347359391,
+        "reduction": 0.015931250097677322,
+        "relative": 0.9370081460610852
+      },
+      "teacher/all": {
+        "initial": 0.0284874951859824,
+        "final": 0.0006746720177109198,
+        "reduction": 0.02781282316827148,
+        "relative": 0.9763169063020009
+      }
+    },
+    "student_group": "Qwen3-1.7B",
+    "student": "Qwen3-1.7B",
+    "teacher": "GRPO-KL-math",
+    "family": "Qwen3 thinking",
+    "teacher_stage": "RL"
+  },
+  "E100": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0005080106529000389,
+      "teacher_amplitude": 0.0005471453332931372,
+      "parameter_cosine": 0.18506272570124782,
+      "student_global_amplitude": 0.0008343333056059449,
+      "progress_global_16": 0.4988856628068127,
+      "progress_median_16": 0.49365015658854805,
+      "progress_global_32": 0.7956406767110344,
+      "progress_median_32": 0.8003103896569578,
+      "progress_global_48": 0.8035023037484661,
+      "progress_median_48": 0.8030808790559809,
+      "progress_global_64": 0.8318396905994258,
+      "progress_median_64": 0.8361482153266897,
+      "progress_global_128": 0.8718282108670748,
+      "progress_median_128": 0.8776747812271448,
+      "progress_global_192": 0.8951251056871858,
+      "progress_median_192": 0.9022419070563797,
+      "progress_global_320": 0.9268549168929352,
+      "progress_median_320": 0.9334270072059747,
+      "progress_global_480": 0.9721527353112457,
+      "progress_median_480": 0.973272821100287,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.18169926585602725,
+      "baseline_initial_math": 0.0467911173061817,
+      "baseline_initial_code": 0.04879557455156354,
+      "baseline_initial_if": 0.029518622251675723,
+      "baseline_initial_all": 0.04170177136980699,
+      "baseline_teacher_math": 0.04119503238514781,
+      "baseline_teacher_code": 0.0419288933944388,
+      "baseline_teacher_if": 0.025971680406406,
+      "baseline_teacher_all": 0.03636520206199754
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.0467911173061817,
+        "final": 0.000337135787687841,
+        "reduction": 0.04645398151849386,
+        "relative": 0.9927948763120623
+      },
+      "initial/code": {
+        "initial": 0.04879557455156354,
+        "final": 0.0007543606614329227,
+        "reduction": 0.048041213890130614,
+        "relative": 0.9845403877633253
+      },
+      "initial/if": {
+        "initial": 0.029518622251675723,
+        "final": 0.001782798183487194,
+        "reduction": 0.02773582406818853,
+        "relative": 0.939604288835466
+      },
+      "initial/all": {
+        "initial": 0.04170177136980699,
+        "final": 0.0009580982108693192,
+        "reduction": 0.04074367315893767,
+        "relative": 0.9770249996727236
+      },
+      "teacher/math": {
+        "initial": 0.04119503238514781,
+        "final": 0.0003431421710877928,
+        "reduction": 0.040851890214060015,
+        "relative": 0.9916703021888749
+      },
+      "teacher/code": {
+        "initial": 0.0419288933944388,
+        "final": 0.0006981848784093857,
+        "reduction": 0.04123070851602942,
+        "relative": 0.9833483590458414
+      },
+      "teacher/if": {
+        "initial": 0.025971680406406,
+        "final": 0.0015486277638420648,
+        "reduction": 0.024423052642563933,
+        "relative": 0.9403724464644155
+      },
+      "teacher/all": {
+        "initial": 0.03636520206199754,
+        "final": 0.0008633182711130812,
+        "reduction": 0.03550188379088446,
+        "relative": 0.9762597697204805
+      }
+    },
+    "student_group": "Qwen3-1.7B",
+    "student": "Qwen3-1.7B",
+    "teacher": "e3-1.7B",
+    "family": "Qwen3 thinking",
+    "teacher_stage": "RL"
+  },
+  "E101": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.007400160933989414,
+      "teacher_amplitude": 0.007559848481119627,
+      "parameter_cosine": 0.20647012593237585,
+      "student_global_amplitude": 0.0024390242872986633,
+      "progress_global_16": 0.1730639131564138,
+      "progress_median_16": 0.17279722479929482,
+      "progress_global_32": 0.3126686463509493,
+      "progress_median_32": 0.30913343489843115,
+      "progress_global_48": 0.40075062744274953,
+      "progress_median_48": 0.39845665552675424,
+      "progress_global_64": 0.4663382530075988,
+      "progress_median_64": 0.46256203714138344,
+      "progress_global_128": 0.5993429170962051,
+      "progress_median_128": 0.599145495628786,
+      "progress_global_192": 0.6879550596697016,
+      "progress_median_192": 0.6852445268717537,
+      "progress_global_320": 0.8280967895545106,
+      "progress_median_320": 0.8254790907540098,
+      "progress_global_480": 0.9363230660146895,
+      "progress_median_480": 0.9344489161544425,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.19277884324065728,
+      "baseline_initial_math": 0.17141720600135005,
+      "baseline_initial_code": 0.17657630920937206,
+      "baseline_initial_if": 0.2789168886030922,
+      "baseline_initial_all": 0.20897013460460478,
+      "baseline_teacher_math": 0.6572494547899401,
+      "baseline_teacher_code": 0.48325849282364497,
+      "baseline_teacher_if": 0.5887584198782038,
+      "baseline_teacher_all": 0.576422122497263
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.17141720600135005,
+        "final": 0.01709867171853256,
+        "reduction": 0.1543185342828175,
+        "relative": 0.9002511351258525
+      },
+      "initial/code": {
+        "initial": 0.17657630920937206,
+        "final": 0.011985544103849121,
+        "reduction": 0.16459076510552295,
+        "relative": 0.9321225811236236
+      },
+      "initial/if": {
+        "initial": 0.2789168886030922,
+        "final": 0.024709229947387033,
+        "reduction": 0.25420765865570516,
+        "relative": 0.9114100617171695
+      },
+      "initial/all": {
+        "initial": 0.20897013460460478,
+        "final": 0.017931148589922907,
+        "reduction": 0.1910389860146819,
+        "relative": 0.9141927691062138
+      },
+      "teacher/math": {
+        "initial": 0.6572494547899401,
+        "final": 0.009104181899176621,
+        "reduction": 0.6481452728907635,
+        "relative": 0.9861480571298665
+      },
+      "teacher/code": {
+        "initial": 0.48325849282364497,
+        "final": 0.03187081832858628,
+        "reduction": 0.4513876744950587,
+        "relative": 0.934050164038779
+      },
+      "teacher/if": {
+        "initial": 0.5887584198782038,
+        "final": 0.08538875212893722,
+        "reduction": 0.5033696677492665,
+        "relative": 0.8549681002496718
+      },
+      "teacher/all": {
+        "initial": 0.576422122497263,
+        "final": 0.0421212507855667,
+        "reduction": 0.5343008717116963,
+        "relative": 0.9269263806130781
+      }
+    },
+    "student_group": "Qwen3-1.7B",
+    "student": "Qwen3-1.7B",
+    "teacher": "Samsung Math",
+    "family": "Qwen3 thinking",
+    "teacher_stage": "SFT"
+  },
+  "E102": {
+    "measurement_source": "spectral-readout",
+    "cross_size": true,
+    "features": {
+      "student_global_amplitude": 0.0027216789411706895,
+      "progress_global_16": 0.1518942533632437,
+      "progress_median_16": 0.15500170288415893,
+      "progress_global_32": 0.2399231556402094,
+      "progress_median_32": 0.24439305634630637,
+      "progress_global_48": 0.3022953545572353,
+      "progress_median_48": 0.30915515525113,
+      "progress_global_64": 0.36042271671747367,
+      "progress_median_64": 0.36775589103426665,
+      "progress_global_128": 0.5003584418754418,
+      "progress_median_128": 0.5087773754366202,
+      "progress_global_192": 0.5969241790354042,
+      "progress_median_192": 0.6064308416338446,
+      "progress_global_320": 0.739586012335692,
+      "progress_median_320": 0.7473137145542403,
+      "progress_global_480": 0.8810472257480009,
+      "progress_median_480": 0.8844946641226499,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "baseline_initial_math": 0.4202329313843218,
+      "baseline_initial_code": 0.9283744618532334,
+      "baseline_initial_if": 1.4517291915471766,
+      "baseline_initial_all": 0.9334455282615773,
+      "baseline_teacher_math": 0.42044119263839935,
+      "baseline_teacher_code": 1.1157398389180997,
+      "baseline_teacher_if": 1.3053546532992966,
+      "baseline_teacher_all": 0.9471785616185985
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.4202329313843218,
+        "final": 0.25277259920317025,
+        "reduction": 0.16746033218115153,
+        "relative": 0.39849407239339263
+      },
+      "initial/code": {
+        "initial": 0.9283744618532334,
+        "final": 0.8967654954999804,
+        "reduction": 0.03160896635325294,
+        "relative": 0.03404764742252253
+      },
+      "initial/if": {
+        "initial": 1.4517291915471766,
+        "final": 1.3907200820871972,
+        "reduction": 0.061009109459979394,
+        "relative": 0.04202513100598271
+      },
+      "initial/all": {
+        "initial": 0.9334455282615773,
+        "final": 0.8467527255967826,
+        "reduction": 0.08669280266479473,
+        "relative": 0.0928739814376196
+      },
+      "teacher/math": {
+        "initial": 0.42044119263839935,
+        "final": 0.27447353924684037,
+        "reduction": 0.14596765339155898,
+        "relative": 0.34717733644404947
+      },
+      "teacher/code": {
+        "initial": 1.1157398389180997,
+        "final": 1.3564940782511035,
+        "reduction": -0.24075423933300377,
+        "relative": -0.2157799075871094
+      },
+      "teacher/if": {
+        "initial": 1.3053546532992966,
+        "final": 1.340019198509649,
+        "reduction": -0.03466454521035245,
+        "relative": -0.026555652996476775
+      },
+      "teacher/all": {
+        "initial": 0.9471785616185985,
+        "final": 0.9903289386691977,
+        "reduction": -0.04315037705059921,
+        "relative": -0.045556750119915224
+      }
+    },
+    "student_group": "Qwen3-1.7B",
+    "student": "Qwen3-1.7B",
+    "teacher": "Qwen3-4B-Instruct-2507",
+    "family": "Qwen3 non-thinking",
+    "teacher_stage": "Instruct/mixed"
+  },
+  "E103": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0011268282157490558,
+      "teacher_amplitude": 0.0011742892433717084,
+      "parameter_cosine": 0.23777127519661223,
+      "student_global_amplitude": 0.0010994132903371292,
+      "progress_global_16": 0.5395425555882951,
+      "progress_median_16": 0.5412085191480198,
+      "progress_global_32": 0.73797552603401,
+      "progress_median_32": 0.740593550693569,
+      "progress_global_48": 0.8065127334591878,
+      "progress_median_48": 0.8108273868954756,
+      "progress_global_64": 0.8326514288519897,
+      "progress_median_64": 0.8366759314126069,
+      "progress_global_128": 0.8781518788666134,
+      "progress_median_128": 0.8808780248820434,
+      "progress_global_192": 0.905665332128264,
+      "progress_median_192": 0.9073223694566985,
+      "progress_global_320": 0.9405086919471044,
+      "progress_median_320": 0.9415950900385699,
+      "progress_global_480": 0.9714231600535541,
+      "progress_median_480": 0.971720574145684,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.2318557610575579,
+      "baseline_initial_math": 0.11282506687163397,
+      "baseline_initial_code": 0.03871949331469913,
+      "baseline_initial_if": 0.026051581054610837,
+      "baseline_initial_all": 0.05919871374698132,
+      "baseline_teacher_math": 0.07304955194107503,
+      "baseline_teacher_code": 0.04633999895825294,
+      "baseline_teacher_if": 0.020783150869901432,
+      "baseline_teacher_all": 0.04672423392307647
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.11282506687163397,
+        "final": 0.009725906488138198,
+        "reduction": 0.10309916038349577,
+        "relative": 0.9137965812224709
+      },
+      "initial/code": {
+        "initial": 0.03871949331469913,
+        "final": 0.008886006058258119,
+        "reduction": 0.02983348725644101,
+        "relative": 0.7705030387139722
+      },
+      "initial/if": {
+        "initial": 0.026051581054610837,
+        "final": 0.00437933432941478,
+        "reduction": 0.02167224672519606,
+        "relative": 0.8318975604499947
+      },
+      "initial/all": {
+        "initial": 0.05919871374698132,
+        "final": 0.007663748958603699,
+        "reduction": 0.051534964788377616,
+        "relative": 0.8705419683380453
+      },
+      "teacher/math": {
+        "initial": 0.07304955194107503,
+        "final": 0.0003780289623938686,
+        "reduction": 0.07267152297868115,
+        "relative": 0.9948250337976227
+      },
+      "teacher/code": {
+        "initial": 0.04633999895825294,
+        "final": 0.010463907242244136,
+        "reduction": 0.03587609171600881,
+        "relative": 0.7741927605205403
+      },
+      "teacher/if": {
+        "initial": 0.020783150869901432,
+        "final": 0.0018675029352004861,
+        "reduction": 0.018915647934700946,
+        "relative": 0.9101434163236027
+      },
+      "teacher/all": {
+        "initial": 0.04672423392307647,
+        "final": 0.004236479713279497,
+        "reduction": 0.042487754209796974,
+        "relative": 0.9093301407519245
+      }
+    },
+    "student_group": "Llama3.2-3B-Instruct",
+    "student": "Llama3.2-3B-Instruct",
+    "teacher": "Co-rewarding",
+    "family": "Llama-3.2 Instruct",
+    "teacher_stage": "RL"
+  },
+  "E104": {
+    "measurement_source": "spectral-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0484682460558728,
+      "teacher_amplitude": 0.04892049851500929,
+      "parameter_cosine": 0.08496272329645527,
+      "student_global_amplitude": 0.003897638656631754,
+      "progress_global_16": 0.1836005774753176,
+      "progress_median_16": 0.18439720183466732,
+      "progress_global_32": 0.275479913175022,
+      "progress_median_32": 0.27622993287599296,
+      "progress_global_48": 0.32623465969575477,
+      "progress_median_48": 0.32645865746330893,
+      "progress_global_64": 0.3604501675500649,
+      "progress_median_64": 0.36010460983650017,
+      "progress_global_128": 0.47628949830610495,
+      "progress_median_128": 0.47655096076427816,
+      "progress_global_192": 0.561507346048925,
+      "progress_median_192": 0.5631261141510985,
+      "progress_global_320": 0.7046325362137038,
+      "progress_median_320": 0.7057969406481215,
+      "progress_global_480": 0.8690028871355195,
+      "progress_median_480": 0.8693586631025285,
+      "progress_global_640": 1.0,
+      "progress_median_640": 1.0,
+      "parameter_global_cosine": 0.08810759381321608,
+      "baseline_initial_math": 0.45010009207053275,
+      "baseline_initial_code": 0.5625522653254016,
+      "baseline_initial_if": 0.6059418316803412,
+      "baseline_initial_all": 0.5395313963587586,
+      "baseline_teacher_math": 0.7020093996957903,
+      "baseline_teacher_code": 1.99891859316992,
+      "baseline_teacher_if": 1.1217911593644003,
+      "baseline_teacher_all": 1.2742397174100368
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.45010009207053275,
+        "final": 0.1355388995253083,
+        "reduction": 0.31456119254522447,
+        "relative": 0.6988694250165389
+      },
+      "initial/code": {
+        "initial": 0.5625522653254016,
+        "final": 0.3026085220254477,
+        "reduction": 0.2599437432999539,
+        "relative": 0.4620792756911086
+      },
+      "initial/if": {
+        "initial": 0.6059418316803412,
+        "final": 0.29773310912797807,
+        "reduction": 0.30820872255236315,
+        "relative": 0.5086440751213157
+      },
+      "initial/all": {
+        "initial": 0.5395313963587586,
+        "final": 0.24529351022624468,
+        "reduction": 0.2942378861325139,
+        "relative": 0.5453582277478102
+      },
+      "teacher/math": {
+        "initial": 0.7020093996957903,
+        "final": 0.08773959944208816,
+        "reduction": 0.6142698002537021,
+        "relative": 0.875016489123779
+      },
+      "teacher/code": {
+        "initial": 1.99891859316992,
+        "final": 0.34613723923874906,
+        "reduction": 1.652781353931171,
+        "relative": 0.8268377509612141
+      },
+      "teacher/if": {
+        "initial": 1.1217911593644003,
+        "final": 0.31642000285320254,
+        "reduction": 0.8053711565111978,
+        "relative": 0.7179332354228178
+      },
+      "teacher/all": {
+        "initial": 1.2742397174100368,
+        "final": 0.25009894717801323,
+        "reduction": 1.0241407702320235,
+        "relative": 0.8037269253493736
+      }
+    },
+    "student_group": "Llama3.2-3B-Instruct",
+    "student": "Llama3.2-3B-Instruct",
+    "teacher": "arithmetic-full",
+    "family": "Llama-3.2 Instruct",
+    "teacher_stage": "SFT?"
+  },
+  "E105": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.19635508441298338,
+      "teacher_amplitude": 0.1917671330958391,
+      "progress_median_16": 0.20059009792614235,
+      "progress_global_16": 0.19962597493886627,
+      "parameter_cosine_16": 0.002205156775031143,
+      "parameter_global_cosine_16": 0.0024270895026751367,
+      "progress_median_32": 0.29141877807508243,
+      "progress_global_32": 0.2904530084298207,
+      "parameter_cosine_32": 0.003912664601339036,
+      "parameter_global_cosine_32": 0.00397906425462597,
+      "progress_median_48": 0.3415554310127933,
+      "progress_global_48": 0.34061061005400645,
+      "parameter_cosine_48": 0.005541249797056157,
+      "parameter_global_cosine_48": 0.005531598833978368,
+      "progress_median_64": 0.3775242236860287,
+      "progress_global_64": 0.37716591794831233,
+      "parameter_cosine_64": 0.007126329758213028,
+      "parameter_global_cosine_64": 0.006913613269849602,
+      "progress_median_128": 0.4924945437800451,
+      "progress_global_128": 0.49146782650986315,
+      "parameter_cosine_128": 0.011930630667269522,
+      "parameter_global_cosine_128": 0.011198254681209855,
+      "progress_median_192": 0.5819784115809776,
+      "progress_global_192": 0.5815345708186423,
+      "parameter_cosine_192": 0.015750112531049798,
+      "parameter_global_cosine_192": 0.014568821244303913,
+      "progress_median_320": 0.7294876449378415,
+      "progress_global_320": 0.7283036731759266,
+      "parameter_cosine_320": 0.021848235633948155,
+      "parameter_global_cosine_320": 0.01996700253588601,
+      "progress_median_480": 0.8763423049095986,
+      "progress_global_480": 0.875501472731139,
+      "parameter_cosine_480": 0.028080848694192875,
+      "parameter_global_cosine_480": 0.025499768282966122,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.033091309026674495,
+      "parameter_cosine": 0.033091309026674495,
+      "parameter_global_cosine_640": 0.030081899362488652,
+      "parameter_global_cosine": 0.030081899362488652,
+      "student_global_amplitude": 0.004049443786098757,
+      "baseline_initial_math": 2.1821053777401165,
+      "baseline_initial_code": 1.1047513168685708,
+      "baseline_initial_if": 1.6277367805256413,
+      "baseline_initial_all": 1.6381978250447762,
+      "baseline_teacher_math": 0.18088938693506162,
+      "baseline_teacher_code": 0.20609811729863803,
+      "baseline_teacher_if": 1.1323682155835066,
+      "baseline_teacher_all": 0.5064519066057355
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 2.1821053777401165,
+        "final": 0.3491883946231389,
+        "reduction": 1.8329169831169776,
+        "relative": 0.8399763832740408
+      },
+      "initial/code": {
+        "initial": 1.1047513168685708,
+        "final": 0.3882601993831013,
+        "reduction": 0.7164911174854695,
+        "relative": 0.6485542099342059
+      },
+      "initial/if": {
+        "initial": 1.6277367805256413,
+        "final": 0.6804120513205434,
+        "reduction": 0.9473247292050979,
+        "relative": 0.5819888943586939
+      },
+      "initial/all": {
+        "initial": 1.6381978250447762,
+        "final": 0.4726202151089279,
+        "reduction": 1.1655776099358484,
+        "relative": 0.7114999129631918
+      },
+      "teacher/math": {
+        "initial": 0.18088938693506162,
+        "final": 0.1321338014079297,
+        "reduction": 0.04875558552713191,
+        "relative": 0.2695325931124689
+      },
+      "teacher/code": {
+        "initial": 0.20609811729863803,
+        "final": 0.16096073163747154,
+        "reduction": 0.045137385661166485,
+        "relative": 0.21900920907376364
+      },
+      "teacher/if": {
+        "initial": 1.1323682155835066,
+        "final": 0.8055435728100108,
+        "reduction": 0.3268246427734959,
+        "relative": 0.2886204666254112
+      },
+      "teacher/all": {
+        "initial": 0.5064519066057355,
+        "final": 0.366212701951804,
+        "reduction": 0.14023920465393147,
+        "relative": 0.2769052753573804
+      }
+    },
+    "student_group": "MiMo-Base",
+    "student": "MiMo-7B-Base",
+    "teacher": "MiMo-7B-SFT",
+    "family": "MiMo",
+    "teacher_stage": "SFT"
+  },
+  "E106": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0016803422370089403,
+      "teacher_amplitude": 0.0016964141723158003,
+      "progress_median_16": 0.45598768804169365,
+      "progress_global_16": 0.4617699743320201,
+      "parameter_cosine_16": 0.0672896005541386,
+      "parameter_global_cosine_16": 0.07642202019745209,
+      "progress_median_32": 0.6069682081061212,
+      "progress_global_32": 0.623168006096798,
+      "parameter_cosine_32": 0.09969552094596383,
+      "parameter_global_cosine_32": 0.11098179957381776,
+      "progress_median_48": 0.6842753896871534,
+      "progress_global_48": 0.6993176326513104,
+      "parameter_cosine_48": 0.12366666430600173,
+      "parameter_global_cosine_48": 0.13605642387877115,
+      "progress_median_64": 0.7205267586868112,
+      "progress_global_64": 0.7330318987165936,
+      "parameter_cosine_64": 0.14099078793003766,
+      "parameter_global_cosine_64": 0.15269032110670894,
+      "progress_median_128": 0.802354756315248,
+      "progress_global_128": 0.808933851428838,
+      "parameter_cosine_128": 0.18706832885307234,
+      "parameter_global_cosine_128": 0.19528152263453177,
+      "progress_median_192": 0.8483302514376134,
+      "progress_global_192": 0.8519127277003524,
+      "parameter_cosine_192": 0.21367154780754727,
+      "parameter_global_cosine_192": 0.22005953609916945,
+      "progress_median_320": 0.9064561230348394,
+      "progress_global_320": 0.9054853562445013,
+      "parameter_cosine_320": 0.2477000616832017,
+      "parameter_global_cosine_320": 0.2506078845854582,
+      "progress_median_480": 0.968963177894367,
+      "progress_global_480": 0.9686177730854837,
+      "parameter_cosine_480": 0.2646612407790478,
+      "parameter_global_cosine_480": 0.26649854090480973,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.2798245862440657,
+      "parameter_cosine": 0.2798245862440657,
+      "parameter_global_cosine_640": 0.28056406175467175,
+      "parameter_global_cosine": 0.28056406175467175,
+      "student_global_amplitude": 0.0014960805119509934,
+      "baseline_initial_math": 0.07088422170551673,
+      "baseline_initial_code": 0.056697964811993254,
+      "baseline_initial_if": 0.026264842413665748,
+      "baseline_initial_all": 0.051282342977058575,
+      "baseline_teacher_math": 0.0786486499097964,
+      "baseline_teacher_code": 0.05715842839692588,
+      "baseline_teacher_if": 0.039566229100143895,
+      "baseline_teacher_all": 0.05845776913562206
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.07088422170551673,
+        "final": 0.0008557699975001701,
+        "reduction": 0.07002845170801655,
+        "relative": 0.9879272145914869
+      },
+      "initial/code": {
+        "initial": 0.056697964811993254,
+        "final": 0.010331685587989695,
+        "reduction": 0.04636627922400356,
+        "relative": 0.81777678224873
+      },
+      "initial/if": {
+        "initial": 0.026264842413665748,
+        "final": 0.0012901582768903037,
+        "reduction": 0.024974684136775442,
+        "relative": 0.9508788875801887
+      },
+      "initial/all": {
+        "initial": 0.051282342977058575,
+        "final": 0.0041592046207933895,
+        "reduction": 0.047123138356265186,
+        "relative": 0.9188959712185141
+      },
+      "teacher/math": {
+        "initial": 0.0786486499097964,
+        "final": 0.0006566667632022851,
+        "reduction": 0.07799198314659413,
+        "relative": 0.9916506289179099
+      },
+      "teacher/code": {
+        "initial": 0.05715842839692588,
+        "final": 0.006549684609737994,
+        "reduction": 0.05060874378718788,
+        "relative": 0.8854117442793397
+      },
+      "teacher/if": {
+        "initial": 0.039566229100143895,
+        "final": 0.0017136665800518253,
+        "reduction": 0.037852562520092066,
+        "relative": 0.9566886554765061
+      },
+      "teacher/all": {
+        "initial": 0.05845776913562206,
+        "final": 0.0029733393176640346,
+        "reduction": 0.05548442981795803,
+        "relative": 0.949136969103869
+      }
+    },
+    "student_group": "MiMo-Base",
+    "student": "MiMo-7B-Base",
+    "teacher": "MiMo-7B-RL-Zero",
+    "family": "MiMo",
+    "teacher_stage": "RL"
+  },
+  "E107": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0034194385165008103,
+      "teacher_amplitude": 0.003456050803175615,
+      "progress_median_16": 0.3983309972783667,
+      "progress_global_16": 0.40041158906554813,
+      "parameter_cosine_16": 0.0473665177919035,
+      "parameter_global_cosine_16": 0.04837307339892442,
+      "progress_median_32": 0.5572563292183915,
+      "progress_global_32": 0.5621629331055323,
+      "parameter_cosine_32": 0.06710285978071545,
+      "parameter_global_cosine_32": 0.06788304946958341,
+      "progress_median_48": 0.6349483613843331,
+      "progress_global_48": 0.6401593614266352,
+      "parameter_cosine_48": 0.08143688330126547,
+      "parameter_global_cosine_48": 0.08267686645275671,
+      "progress_median_64": 0.6738705190481641,
+      "progress_global_64": 0.6788559860149517,
+      "parameter_cosine_64": 0.09331432981922141,
+      "parameter_global_cosine_64": 0.09356218577894085,
+      "progress_median_128": 0.7652895470930158,
+      "progress_global_128": 0.7688094409838236,
+      "parameter_cosine_128": 0.12648209254559617,
+      "parameter_global_cosine_128": 0.12451475376696156,
+      "progress_median_192": 0.8204768862585221,
+      "progress_global_192": 0.8232828822250652,
+      "parameter_cosine_192": 0.14867590640631462,
+      "parameter_global_cosine_192": 0.14451525254054018,
+      "progress_median_320": 0.8926020213851449,
+      "progress_global_320": 0.8941224312927074,
+      "parameter_cosine_320": 0.17879492728816784,
+      "parameter_global_cosine_320": 0.1708552977892993,
+      "progress_median_480": 0.9522822880221089,
+      "progress_global_480": 0.9532955345822695,
+      "parameter_cosine_480": 0.20410134372544608,
+      "parameter_global_cosine_480": 0.19266139733885546,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.22134978933893562,
+      "parameter_cosine": 0.22134978933893562,
+      "parameter_global_cosine_640": 0.20842528677130012,
+      "parameter_global_cosine": 0.20842528677130012,
+      "student_global_amplitude": 0.0019826835700388705,
+      "baseline_initial_math": 0.037391158437435776,
+      "baseline_initial_code": 0.036519502684887954,
+      "baseline_initial_if": 0.052243954429455376,
+      "baseline_initial_all": 0.0420515385172597,
+      "baseline_teacher_math": 0.03556239319308849,
+      "baseline_teacher_code": 0.032785937027126906,
+      "baseline_teacher_if": 0.05401201766062059,
+      "baseline_teacher_all": 0.04078678262694533
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.037391158437435776,
+        "final": 0.001116794363692625,
+        "reduction": 0.036274364073743154,
+        "relative": 0.9701321272096641
+      },
+      "initial/code": {
+        "initial": 0.036519502684887954,
+        "final": 0.004080369101177563,
+        "reduction": 0.032439133583710394,
+        "relative": 0.8882687659690927
+      },
+      "initial/if": {
+        "initial": 0.052243954429455376,
+        "final": 0.008974183614920372,
+        "reduction": 0.04326977081453501,
+        "relative": 0.8282254145398174
+      },
+      "initial/all": {
+        "initial": 0.0420515385172597,
+        "final": 0.0047237823599301865,
+        "reduction": 0.037327756157329514,
+        "relative": 0.8876668363039476
+      },
+      "teacher/math": {
+        "initial": 0.03556239319308849,
+        "final": 0.001105720922332275,
+        "reduction": 0.03445667227075621,
+        "relative": 0.9689075783980936
+      },
+      "teacher/code": {
+        "initial": 0.032785937027126906,
+        "final": 0.0038058671980107242,
+        "reduction": 0.028980069829116183,
+        "relative": 0.8839176932822823
+      },
+      "teacher/if": {
+        "initial": 0.05401201766062059,
+        "final": 0.008878152897630175,
+        "reduction": 0.04513386476299042,
+        "relative": 0.835626342392628
+      },
+      "teacher/all": {
+        "initial": 0.04078678262694533,
+        "final": 0.004596580339324392,
+        "reduction": 0.03619020228762094,
+        "relative": 0.8873022081352474
+      }
+    },
+    "student_group": "MiMo-SFT",
+    "student": "MiMo-7B-SFT",
+    "teacher": "MiMo-7B-RL",
+    "family": "MiMo",
+    "teacher_stage": "RL"
+  },
+  "E108": {
+    "measurement_source": "norm-readout",
+    "cross_size": true,
+    "features": {
+      "progress_median_16": 0.16158607156598664,
+      "progress_global_16": 0.1618413166348936,
+      "progress_median_32": 0.26136066267202784,
+      "progress_global_32": 0.2609227038294624,
+      "progress_median_48": 0.32437723966933246,
+      "progress_global_48": 0.3229150295529621,
+      "progress_median_64": 0.36816414718291,
+      "progress_global_64": 0.3675924443423949,
+      "progress_median_128": 0.48881208591632397,
+      "progress_global_128": 0.48940369609126844,
+      "progress_median_192": 0.5785581964869977,
+      "progress_global_192": 0.5788311538317853,
+      "progress_median_320": 0.7266799031864495,
+      "progress_global_320": 0.7277727212884698,
+      "progress_median_480": 0.8738495099398788,
+      "progress_global_480": 0.8734031235348796,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "student_global_amplitude": 0.002314610650742709,
+      "baseline_initial_math": 0.11645282915279839,
+      "baseline_initial_code": 0.1556683641264462,
+      "baseline_initial_if": 0.9274337670857803,
+      "baseline_initial_all": 0.3998516534550083,
+      "baseline_teacher_math": 0.1140881948880368,
+      "baseline_teacher_code": 0.14778418680879898,
+      "baseline_teacher_if": 1.1478531088161323,
+      "baseline_teacher_all": 0.46990849683765606
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.11645282915279839,
+        "final": 0.10353679587616346,
+        "reduction": 0.01291603327663493,
+        "relative": 0.11091214675160643
+      },
+      "initial/code": {
+        "initial": 0.1556683641264462,
+        "final": 0.13918684954545785,
+        "reduction": 0.016481514580988343,
+        "relative": 0.10587581281191305
+      },
+      "initial/if": {
+        "initial": 0.9274337670857803,
+        "final": 0.8286776059772507,
+        "reduction": 0.09875616110852958,
+        "relative": 0.10648324938485387
+      },
+      "initial/all": {
+        "initial": 0.3998516534550083,
+        "final": 0.35713375046629064,
+        "reduction": 0.04271790298871764,
+        "relative": 0.10683437874922852
+      },
+      "teacher/math": {
+        "initial": 0.1140881948880368,
+        "final": 0.10300470872327255,
+        "reduction": 0.011083486164764247,
+        "relative": 0.09714840501807653
+      },
+      "teacher/code": {
+        "initial": 0.14778418680879898,
+        "final": 0.13543980511807138,
+        "reduction": 0.012344381690727602,
+        "relative": 0.0835297873019295
+      },
+      "teacher/if": {
+        "initial": 1.1478531088161323,
+        "final": 1.021817169985413,
+        "reduction": 0.12603593883071929,
+        "relative": 0.10980145269694808
+      },
+      "teacher/all": {
+        "initial": 0.46990849683765606,
+        "final": 0.42008722794225234,
+        "reduction": 0.049821268895403725,
+        "relative": 0.10602334120511969
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "R1-7B (distill SFT)",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "SFT"
+  },
+  "E109": {
+    "measurement_source": "norm-readout",
+    "cross_size": true,
+    "features": {
+      "progress_median_16": 0.15358811595217747,
+      "progress_global_16": 0.14921431554956524,
+      "progress_median_32": 0.26320108273377574,
+      "progress_global_32": 0.26006336760463866,
+      "progress_median_48": 0.3479628131325484,
+      "progress_global_48": 0.34587643314033084,
+      "progress_median_64": 0.4189000949062789,
+      "progress_global_64": 0.41800015418754344,
+      "progress_median_128": 0.5427764657015065,
+      "progress_global_128": 0.541911056516794,
+      "progress_median_192": 0.6240156437385742,
+      "progress_global_192": 0.6258431795976801,
+      "progress_median_320": 0.756192764743647,
+      "progress_global_320": 0.7565945702521527,
+      "progress_median_480": 0.8890967713846264,
+      "progress_global_480": 0.8897665048479394,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "student_global_amplitude": 0.0025589053755307135,
+      "baseline_initial_math": 0.19682700423356148,
+      "baseline_initial_code": 0.20773127833415694,
+      "baseline_initial_if": 1.0631644267954898,
+      "baseline_initial_all": 0.48924090312106944,
+      "baseline_teacher_math": 0.7444648028748172,
+      "baseline_teacher_code": 0.2179701402760417,
+      "baseline_teacher_if": 1.6113265291926473,
+      "baseline_teacher_all": 0.8579204907811687
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.19682700423356148,
+        "final": 0.17971909058345917,
+        "reduction": 0.017107913650102308,
+        "relative": 0.08691852887117812
+      },
+      "initial/code": {
+        "initial": 0.20773127833415694,
+        "final": 0.1807949368859271,
+        "reduction": 0.026936341448229845,
+        "relative": 0.1296691652034221
+      },
+      "initial/if": {
+        "initial": 1.0631644267954898,
+        "final": 0.9661666681660424,
+        "reduction": 0.09699775862944748,
+        "relative": 0.09123495499356649
+      },
+      "initial/all": {
+        "initial": 0.48924090312106944,
+        "final": 0.4422268985451429,
+        "reduction": 0.04701400457592653,
+        "relative": 0.09609581757372454
+      },
+      "teacher/math": {
+        "initial": 0.7444648028748172,
+        "final": 0.3646716201423782,
+        "reduction": 0.379793182732439,
+        "relative": 0.5101559956438958
+      },
+      "teacher/code": {
+        "initial": 0.2179701402760417,
+        "final": 0.1702659489689489,
+        "reduction": 0.0477041913070928,
+        "relative": 0.2188565426745116
+      },
+      "teacher/if": {
+        "initial": 1.6113265291926473,
+        "final": 1.3868479715070472,
+        "reduction": 0.2244785576856001,
+        "relative": 0.13931289134678038
+      },
+      "teacher/all": {
+        "initial": 0.8579204907811687,
+        "final": 0.6405951802061248,
+        "reduction": 0.2173253105750439,
+        "relative": 0.25331637711224386
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "Polaris-7B",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "RL"
+  },
+  "E110": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.0020121968270385227,
+      "teacher_amplitude": 0.002065441035960563,
+      "progress_median_16": 0.3755861227899039,
+      "progress_global_16": 0.36821741746838077,
+      "parameter_cosine_16": 0.025818558881220154,
+      "parameter_global_cosine_16": 0.03430057624443757,
+      "progress_median_32": 0.6195022585903823,
+      "progress_global_32": 0.6361719677514471,
+      "parameter_cosine_32": 0.03968941583790867,
+      "parameter_global_cosine_32": 0.04532496835135376,
+      "progress_median_48": 0.7259004576686585,
+      "progress_global_48": 0.7553532742614203,
+      "parameter_cosine_48": 0.05129407277688701,
+      "parameter_global_cosine_48": 0.05546963564871579,
+      "progress_median_64": 0.7784461469188599,
+      "progress_global_64": 0.801879574340954,
+      "parameter_cosine_64": 0.05909885252976915,
+      "parameter_global_cosine_64": 0.06258595225658735,
+      "progress_median_128": 0.8510681705324918,
+      "progress_global_128": 0.8619733718444965,
+      "parameter_cosine_128": 0.074977101430393,
+      "parameter_global_cosine_128": 0.07828281314873423,
+      "progress_median_192": 0.8837718482330009,
+      "progress_global_192": 0.8917336913753425,
+      "parameter_cosine_192": 0.0878020743542822,
+      "parameter_global_cosine_192": 0.08808427448401474,
+      "progress_median_320": 0.9294617859649423,
+      "progress_global_320": 0.9334690866558967,
+      "parameter_cosine_320": 0.1017645836364686,
+      "parameter_global_cosine_320": 0.1009264180118555,
+      "progress_median_480": 0.9703810759813309,
+      "progress_global_480": 0.9713597817192433,
+      "parameter_cosine_480": 0.11616735667879034,
+      "parameter_global_cosine_480": 0.11186648814591656,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.1252033639290443,
+      "parameter_cosine": 0.1252033639290443,
+      "parameter_global_cosine_640": 0.11938528597997614,
+      "parameter_global_cosine": 0.11938528597997614,
+      "student_global_amplitude": 0.0013480533175363662,
+      "baseline_initial_math": 0.07295206317415344,
+      "baseline_initial_code": 0.02242424714227688,
+      "baseline_initial_if": 0.03564660582484501,
+      "baseline_initial_all": 0.043674305380425105,
+      "baseline_teacher_math": 0.23943454233977246,
+      "baseline_teacher_code": 0.026274795934103944,
+      "baseline_teacher_if": 0.0483906180486519,
+      "baseline_teacher_all": 0.10469998544084276
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.07295206317415344,
+        "final": 0.0015456317157077296,
+        "reduction": 0.0714064314584457,
+        "relative": 0.9788130499884842
+      },
+      "initial/code": {
+        "initial": 0.02242424714227688,
+        "final": 0.0006155589276918205,
+        "reduction": 0.021808688214585058,
+        "relative": 0.9725494049460731
+      },
+      "initial/if": {
+        "initial": 0.03564660582484501,
+        "final": 0.001910053100793956,
+        "reduction": 0.03373655272405105,
+        "relative": 0.9464169713610522
+      },
+      "initial/all": {
+        "initial": 0.043674305380425105,
+        "final": 0.0013570812480645019,
+        "reduction": 0.0423172241323606,
+        "relative": 0.9689272391113346
+      },
+      "teacher/math": {
+        "initial": 0.23943454233977246,
+        "final": 0.0006577712417488371,
+        "reduction": 0.23877677109802362,
+        "relative": 0.9972528139201594
+      },
+      "teacher/code": {
+        "initial": 0.026274795934103944,
+        "final": 0.0006032000276622565,
+        "reduction": 0.025671595906441688,
+        "relative": 0.9770426370132406
+      },
+      "teacher/if": {
+        "initial": 0.0483906180486519,
+        "final": 0.002144828957350215,
+        "reduction": 0.046245789091301684,
+        "relative": 0.9556767604167856
+      },
+      "teacher/all": {
+        "initial": 0.10469998544084276,
+        "final": 0.0011352667422537695,
+        "reduction": 0.10356471869858899,
+        "relative": 0.9891569541535876
+      }
+    },
+    "student_group": "R1-7B",
+    "student": "R1-7B",
+    "teacher": "Polaris-7B",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "RL"
+  },
+  "E111": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.011591009554222265,
+      "teacher_amplitude": 0.011357176579526947,
+      "progress_median_16": 0.17519022379183538,
+      "progress_global_16": 0.17585873322810175,
+      "parameter_cosine_16": 0.032855081127066706,
+      "parameter_global_cosine_16": 0.031982810572685205,
+      "progress_median_32": 0.2917314240674781,
+      "progress_global_32": 0.29595341530740865,
+      "parameter_cosine_32": 0.04412896672594727,
+      "parameter_global_cosine_32": 0.04245225630333707,
+      "progress_median_48": 0.3627284086346316,
+      "progress_global_48": 0.3628800529031731,
+      "parameter_cosine_48": 0.057147203577015124,
+      "parameter_global_cosine_48": 0.05385346106991817,
+      "progress_median_64": 0.42048558638348643,
+      "progress_global_64": 0.41995708896061024,
+      "parameter_cosine_64": 0.06673538105703739,
+      "parameter_global_cosine_64": 0.06291873419683963,
+      "progress_median_128": 0.5582547440956969,
+      "progress_global_128": 0.5570171421094748,
+      "parameter_cosine_128": 0.09742727063534393,
+      "parameter_global_cosine_128": 0.09112256497618995,
+      "progress_median_192": 0.647386265446951,
+      "progress_global_192": 0.6473072466398708,
+      "parameter_cosine_192": 0.11873914037124633,
+      "parameter_global_cosine_192": 0.11111378603496203,
+      "progress_median_320": 0.782563711807926,
+      "progress_global_320": 0.7818923380907175,
+      "parameter_cosine_320": 0.1517973233563959,
+      "parameter_global_cosine_320": 0.13963692374783152,
+      "progress_median_480": 0.9035665429160595,
+      "progress_global_480": 0.903444703731965,
+      "parameter_cosine_480": 0.17979195992440336,
+      "parameter_global_cosine_480": 0.16589404608931616,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.19998253121814527,
+      "parameter_cosine": 0.19998253121814527,
+      "parameter_global_cosine_640": 0.18582903768148898,
+      "parameter_global_cosine": 0.18582903768148898,
+      "student_global_amplitude": 0.003081977768272309,
+      "baseline_initial_math": 0.07770315336889426,
+      "baseline_initial_code": 0.07863687390381598,
+      "baseline_initial_if": 0.17669573979994052,
+      "baseline_initial_all": 0.11101192235755025,
+      "baseline_teacher_math": 0.2812333366730266,
+      "baseline_teacher_code": 0.11061151641731809,
+      "baseline_teacher_if": 0.27319083512148784,
+      "baseline_teacher_all": 0.22167856273727748
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.07770315336889426,
+        "final": 0.013344417553305942,
+        "reduction": 0.06435873581558832,
+        "relative": 0.8282641440566308
+      },
+      "initial/code": {
+        "initial": 0.07863687390381598,
+        "final": 0.012509645405549195,
+        "reduction": 0.06612722849826679,
+        "relative": 0.8409188363610403
+      },
+      "initial/if": {
+        "initial": 0.17669573979994052,
+        "final": 0.03502454149542974,
+        "reduction": 0.14167119830451078,
+        "relative": 0.8017804983012866
+      },
+      "initial/all": {
+        "initial": 0.11101192235755025,
+        "final": 0.020292868151428292,
+        "reduction": 0.09071905420612196,
+        "relative": 0.8172010021944448
+      },
+      "teacher/math": {
+        "initial": 0.2812333366730266,
+        "final": 0.025333177739736115,
+        "reduction": 0.2559001589332905,
+        "relative": 0.9099211422108556
+      },
+      "teacher/code": {
+        "initial": 0.11061151641731809,
+        "final": 0.015454722779674933,
+        "reduction": 0.09515679363764315,
+        "relative": 0.8602792613260364
+      },
+      "teacher/if": {
+        "initial": 0.27319083512148784,
+        "final": 0.045311560854929246,
+        "reduction": 0.2278792742665586,
+        "relative": 0.8341395280160873
+      },
+      "teacher/all": {
+        "initial": 0.22167856273727748,
+        "final": 0.028699820458113433,
+        "reduction": 0.19297874227916406,
+        "relative": 0.8705340737339269
+      }
+    },
+    "student_group": "R1-7B",
+    "student": "R1-7B",
+    "teacher": "Light-R1-7B-DS",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "SFT"
+  },
+  "E112": {
+    "measurement_source": "norm-readout",
+    "cross_size": true,
+    "features": {
+      "progress_median_16": 0.15421988611056536,
+      "progress_global_16": 0.14725679229205738,
+      "progress_median_32": 0.23519224200253802,
+      "progress_global_32": 0.22953101905592777,
+      "progress_median_48": 0.29609976658317005,
+      "progress_global_48": 0.29385954633349126,
+      "progress_median_64": 0.3544917378671245,
+      "progress_global_64": 0.3545848016567976,
+      "progress_median_128": 0.5118568150128744,
+      "progress_global_128": 0.5083745362617881,
+      "progress_median_192": 0.6124778777789919,
+      "progress_global_192": 0.6067028460575974,
+      "progress_median_320": 0.7541751319772829,
+      "progress_global_320": 0.7486190472092286,
+      "progress_median_480": 0.8900697983330932,
+      "progress_global_480": 0.8865832040846766,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "student_global_amplitude": 0.0035477879866509967,
+      "baseline_initial_math": 0.7415145508406688,
+      "baseline_initial_code": 1.1858508429800532,
+      "baseline_initial_if": 2.3002704606770767,
+      "baseline_initial_all": 1.4092119514992663,
+      "baseline_teacher_math": 0.7754735027216009,
+      "baseline_teacher_code": 1.8679323871241296,
+      "baseline_teacher_if": 2.4090011372070106,
+      "baseline_teacher_all": 1.684135675684247
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.7415145508406688,
+        "final": 0.4116592679991626,
+        "reduction": 0.32985528284150617,
+        "relative": 0.44483993263185884
+      },
+      "initial/code": {
+        "initial": 1.1858508429800532,
+        "final": 1.0915828882040421,
+        "reduction": 0.09426795477601102,
+        "relative": 0.07949393916954584
+      },
+      "initial/if": {
+        "initial": 2.3002704606770767,
+        "final": 2.1349614157629886,
+        "reduction": 0.16530904491408815,
+        "relative": 0.07186504706295715
+      },
+      "initial/all": {
+        "initial": 1.4092119514992663,
+        "final": 1.212734523988731,
+        "reduction": 0.1964774275105352,
+        "relative": 0.13942361708010076
+      },
+      "teacher/math": {
+        "initial": 0.7754735027216009,
+        "final": 0.5032838140379225,
+        "reduction": 0.2721896886836783,
+        "relative": 0.35099805180757526
+      },
+      "teacher/code": {
+        "initial": 1.8679323871241296,
+        "final": 1.9655119518932327,
+        "reduction": -0.09757956476910312,
+        "relative": -0.05223934519350393
+      },
+      "teacher/if": {
+        "initial": 2.4090011372070106,
+        "final": 2.171620061739009,
+        "reduction": 0.2373810754680017,
+        "relative": 0.09853921270590216
+      },
+      "teacher/all": {
+        "initial": 1.684135675684247,
+        "final": 1.5468052758900548,
+        "reduction": 0.13733039979419215,
+        "relative": 0.0815435488820675
+      }
+    },
+    "student_group": "Qwen3-0.6B",
+    "student": "Qwen3-0.6B",
+    "teacher": "Qwen3-4B-Instruct-2507",
+    "family": "Qwen3 non-thinking",
+    "teacher_stage": "Instruct/mixed"
+  },
+  "E113": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.1806175785168814,
+      "teacher_amplitude": 0.17686300732254023,
+      "progress_median_16": 0.18891646235753398,
+      "progress_global_16": 0.18831191263832012,
+      "parameter_cosine_16": 0.0015064112356102072,
+      "parameter_global_cosine_16": 0.0014764244648527384,
+      "progress_median_32": 0.27819670610754915,
+      "progress_global_32": 0.27785776846139154,
+      "parameter_cosine_32": 0.002538599428840109,
+      "parameter_global_cosine_32": 0.0025960408743573994,
+      "progress_median_48": 0.33382802392700184,
+      "progress_global_48": 0.33242748606363476,
+      "parameter_cosine_48": 0.0036634094510287823,
+      "parameter_global_cosine_48": 0.0038515353172516756,
+      "progress_median_64": 0.3858015878377319,
+      "progress_global_64": 0.3819741521530769,
+      "parameter_cosine_64": 0.0047411842565371586,
+      "parameter_global_cosine_64": 0.005015669823584389,
+      "progress_median_128": 0.5151258205038696,
+      "progress_global_128": 0.5096787669108565,
+      "parameter_cosine_128": 0.007968854386429471,
+      "parameter_global_cosine_128": 0.008458341682292045,
+      "progress_median_192": 0.6042912819047441,
+      "progress_global_192": 0.5995138455688667,
+      "parameter_cosine_192": 0.010353124746600214,
+      "parameter_global_cosine_192": 0.010984602752661535,
+      "progress_median_320": 0.744657161793058,
+      "progress_global_320": 0.740351625950596,
+      "parameter_cosine_320": 0.014106338056140375,
+      "parameter_global_cosine_320": 0.01483621384388063,
+      "progress_median_480": 0.8819134822750536,
+      "progress_global_480": 0.880979446448835,
+      "parameter_cosine_480": 0.017960389063333682,
+      "parameter_global_cosine_480": 0.018772695803431702,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.02111882576849751,
+      "parameter_cosine": 0.02111882576849751,
+      "parameter_global_cosine_640": 0.021876438521272145,
+      "parameter_global_cosine": 0.021876438521272145,
+      "student_global_amplitude": 0.00312197735956329,
+      "baseline_initial_math": 0.2719266319079414,
+      "baseline_initial_code": 0.8296191518909373,
+      "baseline_initial_if": 0.8417032372159493,
+      "baseline_initial_all": 0.6477496736716093,
+      "baseline_teacher_math": 0.28399924446052,
+      "baseline_teacher_code": 0.9619709807255857,
+      "baseline_teacher_if": 0.7646989478067677,
+      "baseline_teacher_all": 0.6702230576642911
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.2719266319079414,
+        "final": 0.08442644612652822,
+        "reduction": 0.1875001857814132,
+        "relative": 0.6895249077511829
+      },
+      "initial/code": {
+        "initial": 0.8296191518909373,
+        "final": 0.7834141914451493,
+        "reduction": 0.046204960445787924,
+        "relative": 0.05569418249382707
+      },
+      "initial/if": {
+        "initial": 0.8417032372159493,
+        "final": 0.7510092834068726,
+        "reduction": 0.09069395380907674,
+        "relative": 0.10775051086777288
+      },
+      "initial/all": {
+        "initial": 0.6477496736716093,
+        "final": 0.5396166403261834,
+        "reduction": 0.1081330333454259,
+        "relative": 0.16693645360328857
+      },
+      "teacher/math": {
+        "initial": 0.28399924446052,
+        "final": 0.08992889677559299,
+        "reduction": 0.194070347684927,
+        "relative": 0.6833481126105798
+      },
+      "teacher/code": {
+        "initial": 0.9619709807255857,
+        "final": 1.2058603173489457,
+        "reduction": -0.24388933662336,
+        "relative": -0.25353086684527804
+      },
+      "teacher/if": {
+        "initial": 0.7646989478067677,
+        "final": 0.7093231909229487,
+        "reduction": 0.055375756883819016,
+        "relative": 0.07241510798810713
+      },
+      "teacher/all": {
+        "initial": 0.6702230576642911,
+        "final": 0.6683708016824959,
+        "reduction": 0.001852255981795281,
+        "relative": 0.002763641090251845
+      }
+    },
+    "student_group": "Qwen3-4B",
+    "student": "Qwen3-4B",
+    "teacher": "Qwen3-4B-Instruct-2507",
+    "family": "Qwen3 non-thinking",
+    "teacher_stage": "Instruct/mixed"
+  },
+  "E114": {
+    "measurement_source": "norm-readout",
+    "cross_size": true,
+    "features": {
+      "progress_median_16": 0.14813920320810964,
+      "progress_global_16": 0.14498318900799856,
+      "progress_median_32": 0.24743960494781803,
+      "progress_global_32": 0.24543888071703576,
+      "progress_median_48": 0.31749927317760185,
+      "progress_global_48": 0.31646358414615205,
+      "progress_median_64": 0.3771543575681976,
+      "progress_global_64": 0.3757011951989757,
+      "progress_median_128": 0.5117492640520074,
+      "progress_global_128": 0.5157404049925719,
+      "progress_median_192": 0.6069857925448623,
+      "progress_global_192": 0.6103874631769421,
+      "progress_median_320": 0.7443079056927451,
+      "progress_global_320": 0.7476574111404533,
+      "progress_median_480": 0.8835921303864549,
+      "progress_global_480": 0.8839803438109701,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "student_global_amplitude": 0.0026311273793478036,
+      "baseline_initial_math": 0.21875479549458943,
+      "baseline_initial_code": 0.28140261626403534,
+      "baseline_initial_if": 1.1838659980075215,
+      "baseline_initial_all": 0.5613411365887154,
+      "baseline_teacher_math": 0.727340166884283,
+      "baseline_teacher_code": 0.3918564280447263,
+      "baseline_teacher_if": 2.196414406101833,
+      "baseline_teacher_all": 1.1052036670102807
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 0.21875479549458943,
+        "final": 0.1780765789929452,
+        "reduction": 0.040678216501644215,
+        "relative": 0.1859534846295533
+      },
+      "initial/code": {
+        "initial": 0.28140261626403534,
+        "final": 0.2198489269209297,
+        "reduction": 0.06155368934310565,
+        "relative": 0.218738866611499
+      },
+      "initial/if": {
+        "initial": 1.1838659980075215,
+        "final": 1.0742410186948474,
+        "reduction": 0.10962497931267401,
+        "relative": 0.09259914508667011
+      },
+      "initial/all": {
+        "initial": 0.5613411365887154,
+        "final": 0.4907221748695741,
+        "reduction": 0.07061896171914134,
+        "relative": 0.12580400244367373
+      },
+      "teacher/math": {
+        "initial": 0.727340166884283,
+        "final": 0.440922620907732,
+        "reduction": 0.28641754597655106,
+        "relative": 0.3937876100030083
+      },
+      "teacher/code": {
+        "initial": 0.3918564280447263,
+        "final": 0.29412952058382974,
+        "reduction": 0.09772690746089657,
+        "relative": 0.24939467740399568
+      },
+      "teacher/if": {
+        "initial": 2.196414406101833,
+        "final": 1.9247988881593818,
+        "reduction": 0.2716155179424511,
+        "relative": 0.12366314716743765
+      },
+      "teacher/all": {
+        "initial": 1.1052036670102807,
+        "final": 0.8866170098836479,
+        "reduction": 0.21858665712663283,
+        "relative": 0.1977795257574001
+      }
+    },
+    "student_group": "R1-1.5B",
+    "student": "R1-1.5B",
+    "teacher": "Light-R1-7B-DS",
+    "family": "R1-Distill-Qwen",
+    "teacher_stage": "SFT"
+  },
+  "E117": {
+    "measurement_source": "norm-readout",
+    "cross_size": false,
+    "features": {
+      "teacher_global_amplitude": 0.015000549039642399,
+      "teacher_amplitude": 0.01497639149782418,
+      "progress_median_16": 0.16727015209408302,
+      "progress_global_16": 0.1597182924536122,
+      "parameter_cosine_16": 0.013828495675982691,
+      "parameter_global_cosine_16": 0.016663869069858957,
+      "progress_median_32": 0.2668784341119599,
+      "progress_global_32": 0.25674990002292297,
+      "parameter_cosine_32": 0.023041408491355088,
+      "parameter_global_cosine_32": 0.02694370815221205,
+      "progress_median_48": 0.34032033447620536,
+      "progress_global_48": 0.32898587442311894,
+      "parameter_cosine_48": 0.03483249611134291,
+      "parameter_global_cosine_48": 0.040203675056932155,
+      "progress_median_64": 0.4069069366645527,
+      "progress_global_64": 0.3941023302786432,
+      "parameter_cosine_64": 0.04657004104794524,
+      "parameter_global_cosine_64": 0.053157298693582516,
+      "progress_median_128": 0.5406108575781725,
+      "progress_global_128": 0.5309855139427873,
+      "parameter_cosine_128": 0.09006436813158995,
+      "parameter_global_cosine_128": 0.0992513760799234,
+      "progress_median_192": 0.6164367835245972,
+      "progress_global_192": 0.6112272734593502,
+      "parameter_cosine_192": 0.1217618150331471,
+      "parameter_global_cosine_192": 0.13201563572031547,
+      "progress_median_320": 0.7506462660541242,
+      "progress_global_320": 0.7468732558268826,
+      "parameter_cosine_320": 0.17077460113479473,
+      "parameter_global_cosine_320": 0.18274422244649788,
+      "progress_median_480": 0.8807437064273578,
+      "progress_global_480": 0.8789278505905748,
+      "parameter_cosine_480": 0.2178423178729036,
+      "parameter_global_cosine_480": 0.22939171296407393,
+      "progress_median_640": 1.0,
+      "progress_global_640": 1.0,
+      "parameter_cosine_640": 0.2520096454930544,
+      "parameter_cosine": 0.2520096454930544,
+      "parameter_global_cosine_640": 0.2659942475283577,
+      "parameter_global_cosine": 0.2659942475283577,
+      "student_global_amplitude": 0.0026062775512021847,
+      "baseline_initial_math": 2.071569229135977,
+      "baseline_initial_code": 1.366781055595018,
+      "baseline_initial_if": 1.4632811695038357,
+      "baseline_initial_all": 1.6338771514116104,
+      "baseline_teacher_math": 0.3088090251382613,
+      "baseline_teacher_code": 0.2704152041413575,
+      "baseline_teacher_if": 0.3432358122610597,
+      "baseline_teacher_all": 0.3074866805135595
+    },
+    "outcomes": {
+      "initial/math": {
+        "initial": 2.071569229135977,
+        "final": 0.317207403296215,
+        "reduction": 1.7543618258397622,
+        "relative": 0.8468757892158314
+      },
+      "initial/code": {
+        "initial": 1.366781055595018,
+        "final": 0.4358549186152932,
+        "reduction": 0.9309261369797248,
+        "relative": 0.6811084578388841
+      },
+      "initial/if": {
+        "initial": 1.4632811695038357,
+        "final": 0.7038966513757074,
+        "reduction": 0.7593845181281282,
+        "relative": 0.5189600836492809
+      },
+      "initial/all": {
+        "initial": 1.6338771514116104,
+        "final": 0.48565299109573856,
+        "reduction": 1.1482241603158718,
+        "relative": 0.702760399901454
+      },
+      "teacher/math": {
+        "initial": 0.3088090251382613,
+        "final": 0.0312265088128227,
+        "reduction": 0.2775825163254386,
+        "relative": 0.8988808413263122
+      },
+      "teacher/code": {
+        "initial": 0.2704152041413575,
+        "final": 0.04686208840196834,
+        "reduction": 0.22355311573938916,
+        "relative": 0.8267032042419052
+      },
+      "teacher/if": {
+        "initial": 0.3432358122610597,
+        "final": 0.09584135034512725,
+        "reduction": 0.24739446191593245,
+        "relative": 0.7207711231710523
+      },
+      "teacher/all": {
+        "initial": 0.3074866805135595,
+        "final": 0.057976649186639424,
+        "reduction": 0.24951003132692007,
+        "relative": 0.8114498843013046
+      }
+    },
+    "student_group": "Qwen3-1.7B-Base",
+    "student": "Qwen3-1.7B-Base",
+    "teacher": "Thinking-Space SFT",
+    "family": "Qwen3 Base",
+    "teacher_stage": "SFT"
+  }
+}

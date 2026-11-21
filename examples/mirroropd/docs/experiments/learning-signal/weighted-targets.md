@@ -52,9 +52,9 @@
 | E85  | 1／0.1       |   256 | none     | token-sum           |       8 | 1520／1440                       | 五集 n16；现有 W&B 快照        |
 | E86  | 1／0.1       |   256 | none     | seq-mean-token-sum  |       8 | 1360／1280                       | 五集 n16；现有 W&B 快照        |
 
-E55–E57 的冻结源码标识为 `9fd276af`；E82/E83 使用 `c996d634` 加当时配置与保存回调，实际条件分别保存在[历史 A/B 配置](../../../../../runs/topd-large-batch-20261105/configs)和[E83 源码合同](../../../../../runs/topd-learning-signal-20261106/source-contract.json)。E84 附件包含完整 resolved config，但没有对应源码 commit；其[实际配置](data/e84-20261110/resolved-config.json)确认八卡、BF16、precompute_fused、future=mean 和上述预算。硬件、执行版本及历史停止协议差异在比较时保留，不把这些在线实验写成 batch 单因素的因果估计。
+E55–E57 的冻结源码标识为 `9fd276af`；E82/E83 使用 `c996d634` 加当时配置与保存回调，实际条件分别保存在历史 A/B 配置（原始资料缺失）和 E83 源码合同（原始资料缺失）。E84 附件包含完整 resolved config，但没有对应源码 commit；其[实际配置](data/e84-20261110/resolved-config.json)确认八卡、BF16、precompute_fused、future=mean 和上述预算。硬件、执行版本及历史停止协议差异在比较时保留，不把这些在线实验写成 batch 单因素的因果估计。
 
-E55–E57、E81/E82、E85/E86 都不保存训练 checkpoint、最终 HF 模型或 optimizer。E83 每 25 outer 保存完整训练状态，现有最新可恢复点为 [outer25／update400](../../../../../runs/topd-learning-signal-20261106/formal/E83/checkpoints/global_step_25/trainer_state.json)，不能从该点直接恢复为 update480。E84 的实际 `save_freq=25`，日志记录 outer25/50/75/100 保存和旧状态清理；原机器的 checkpoint 路径在 resolved config 中，本次保存的是收到的完整日志与可重算结果，附件没有模型／optimizer 张量。
+E55–E57、E81/E82、E85/E86 都不保存训练 checkpoint、最终 HF 模型或 optimizer。E83 每 25 outer 保存完整训练状态，现有最新可恢复点为 outer25／update400（原始资料缺失），不能从该点直接恢复为 update480。E84 的实际 `save_freq=25`，日志记录 outer25/50/75/100 保存和旧状态清理；原机器的 checkpoint 路径在 resolved config 中，本次保存的是收到的完整日志与可重算结果，附件没有模型／optimizer 张量。
 
 <a id="e85e90八卡聚合与-future-消融"></a>
 
@@ -449,7 +449,7 @@ E57 冻结配置实际为 `trainer.val_before_train=false`，所以原日志的�
 python -m examples.mirroropd.research.studies.weighted_targets.plot_topd_e57_budget \
   --data examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-budget-20261104 \
   --baseline examples/mirroropd/docs/experiments/learning-signal/data/topd-e57-step0-20261104/baseline.json \
-  --out runs/topd-e57-budget-replot
+  --out ./rebuild/topd-e57-budget-replot
 ```
 
 ### Figure5 全部消融曲线
@@ -570,7 +570,7 @@ $$
 
 ### E84 结果保全
 
-本次输入为完整收到的 console 导出，原样保存至[原始日志](../../../../../runs/e84-results-20261110/train-console.txt)，大小 2,019,046 字节，SHA-256 为`94410f1494d1a35abcd808e8f7f846c5838286a17871df7ad7b77b0f5e0254e4`。派生结果与配置在[data/e84-20261110](data/e84-20261110)：
+本次输入为完整收到的 console 导出，原样保存至[原始日志](../../../research-evidence/tracking-logs/e84-results-20261110/train-console.txt)，大小 2,019,046 字节，SHA-256 为`94410f1494d1a35abcd808e8f7f846c5838286a17871df7ad7b77b0f5e0254e4`。派生结果与配置在[data/e84-20261110](data/e84-20261110)：
 
 - [resolved config](data/e84-20261110/resolved-config.json)：日志打印的完整配置，不由当前 launcher 反推。
 - [原始 console 指标](data/e84-20261110/console-metrics.jsonl)：100 个训练 outer 及五个验证事件，保留原始行号；终点训练和验证共用一个事件。
@@ -578,7 +578,7 @@ $$
 - [全部 3,134 个终点评测指标](data/e84-20261110/final-validation-metrics.json)与[核验摘要](data/e84-20261110/summary.json)：逐项核对终点 console 与 pprint 共同字段，验证每题集回答数和正确计数的整数性。
 - [新图组](figures/e82-e84-20261110)包含 PNG、PDF、绘图审计和输入哈希；终点停止分项有观测，早期缺失不补零。
 
-补齐的原始 W&B 日志位于日志仓库 `MirrorOPD-verl/wandb/offline-run-20261109_022054-x73jzh0z/run-x73jzh0z.wandb`，来源提交为 `3633b7c3a554e7e6e4ebdfa5c85ed9d61b881fd1`。完整解码 history、config、summary 和 run 元数据保存至[runs/wandb-e84-20261110](../../../../../runs/wandb-e84-20261110)；共 1,700 个 history 事件，其中 1,600 个为逐更新事件、100 个为 outer 事件，五次验证包含在 outer 事件中，正确率与 console 25 个题集节点逐项一致。可重算的[逐更新 CSV](data/e84-wandb-20261110/updates.csv)、[双组 outer 均值](data/e84-wandb-20261110/outers.csv)、[reuse 首末变化](data/e84-wandb-20261110/reuse-changes.csv)、[位置统计](data/e84-wandb-20261110/position-profiles.csv)、[汇总](data/e84-wandb-20261110/summary.json)和[来源哈希](data/e84-wandb-20261110/provenance.json)与 console 提取物分别保留。逐题回答、评分原文和 checkpoint 张量仍未取回；其原机器路径保留在 console 与 resolved config 中。
+补齐的原始 W&B 日志位于日志仓库 `MirrorOPD-verl/wandb/offline-run-20261109_022054-x73jzh0z/run-x73jzh0z.wandb`，来源提交为 `3633b7c3a554e7e6e4ebdfa5c85ed9d61b881fd1`。完整解码 history、config、summary 和 run 元数据保存至[examples/mirroropd/research-evidence/training/wandb-e84-20261110](../../../research-evidence/tracking-logs/wandb-e84-20261110)；共 1,700 个 history 事件，其中 1,600 个为逐更新事件、100 个为 outer 事件，五次验证包含在 outer 事件中，正确率与 console 25 个题集节点逐项一致。可重算的[逐更新 CSV](data/e84-wandb-20261110/updates.csv)、[双组 outer 均值](data/e84-wandb-20261110/outers.csv)、[reuse 首末变化](data/e84-wandb-20261110/reuse-changes.csv)、[位置统计](data/e84-wandb-20261110/position-profiles.csv)、[汇总](data/e84-wandb-20261110/summary.json)和[来源哈希](data/e84-wandb-20261110/provenance.json)与 console 提取物分别保留。逐题回答、评分原文和 checkpoint 张量仍未取回；其原机器路径保留在 console 与 resolved config 中。
 
 在仓库根重算 E84 并重画：
 
@@ -589,9 +589,9 @@ python -m examples.mirroropd.research.studies.weighted_targets.analyze_e84
 
 ### 其他实验与论文
 
-E82/E83完整验证已按`data_source/prompt_id/sample_index`核对，行序是异步完成顺序；不能按 JSONL 行号推断题集。有效完整回答数为 E81 50,400、E82 201,600、E83 50,400，见[验证来源核验](figures/validation-comparison-20261106/source-audit.json)。E82 重复实例写入的 48 次更新和 3 条 outer 已用 SHA256 字节区间排除清单隔离，原始日志保留；有效运行有连续 1–1,600 次更新，见[数据核验](../../../../../runs/topd-learning-signal-20261106/e82-data-audit.json)。E83 的 480 次更新均应用，提前停止原因是资源收回，见[停止凭据](../../../../../runs/topd-learning-signal-20261106/user-stop-receipt-20261107.json)。这些排除和状态不改变已完成节点的含义。
+E82/E83完整验证已按`data_source/prompt_id/sample_index`核对，行序是异步完成顺序；不能按 JSONL 行号推断题集。有效完整回答数为 E81 50,400、E82 201,600、E83 50,400，见[验证来源核验](figures/validation-comparison-20261106/source-audit.json)。E82 重复实例写入的 48 次更新和 3 条 outer 已用 SHA256 字节区间排除清单隔离，原始日志保留；有效运行有连续 1–1,600 次更新，见数据核验（原始资料缺失）。E83 的 480 次更新均应用，提前停止原因是资源收回，见停止凭据（原始资料缺失）。这些排除和状态不改变已完成节点的含义。
 
-E85/E86的W&B快照位于[runs/wandb-e85-e86-20261109](../../../../../runs/wandb-e85-e86-20261109)，run ID 分别为`sjdbuh0p`、`sh3mrf3r`；图中状态与范围截至该快照，不推断之后的进度。聚合图从[统一脚本](../../../research/studies/weighted_targets/plot_e82_e83_e85_e86.py)重画，全部验证图默认读取冻结 CSV；仅`--refresh`重新提取原始输入。
+E85/E86的W&B快照位于[W&B 快照目录](../../../research-evidence/tracking-logs/wandb-e85-e86-20261109)，run ID 分别为`sjdbuh0p`、`sh3mrf3r`；图中状态与范围截至该快照，不推断之后的进度。聚合图从[统一脚本](../../../research/studies/weighted_targets/plot_e82_e83_e85_e86.py)重画，全部验证图默认读取冻结 CSV；仅`--refresh`重新提取原始输入。
 
 ```bash
 python -m examples.mirroropd.research.studies.weighted_targets.plot_e82_e83_e85_e86 --refresh
@@ -600,7 +600,7 @@ python -m examples.mirroropd.research.studies.weighted_targets.plot_validation_c
 
 E55–E57 原始日志及实际配置的[完整绘图输入](../../../../../../wandb-logs/MirrorOPD-verl/analysis/document-evidence-20261103/experiments/learning-signal/data/e55-e57-20261103/data.json)、[来源与脚本](data/e55-e57-20261103/provenance.json)、[汇总](data/e55-e57-20261103/summary.json)由[分析脚本](../../../research/studies/termination/analyze_e55_e57.py)复算。三组日志分别完成于北京时间 11 月 3 日 07:29:22、11 月 2 日 03:11:30、11 月 1 日 15:40:42；[云端指标核验](data/e55-e57-20261102-1600/cloud-audit.json)和[历史阶段报告](../../archive/experiments/weighted-target/2026-10-31-E55至E57阶段快照.md)保留当时范围，未覆盖冻结输入。
 
-论文与官方源码 SHA 见[TOP-D 核对](data/e55-e57-20261101-2259/topd-comparison.json)，官方源码快照位于`runs/topd-comparison-20261101/source/`；[原始检索报告](../../progress/data/topd-20261101/paper-search.md)及[检索诊断](../../progress/data/topd-20261101/search-stderr.log)保持冻结。性能、精度与 optimizer 依据归[工程专题](../../infra/numerics/optimization/README.md)。
+论文与官方源码 SHA 见[TOP-D 核对](data/e55-e57-20261101-2259/topd-comparison.json)，官方源码快照位于`examples/mirroropd/research-evidence/topd-comparison-20261101/source/`；[原始检索报告](../../progress/data/topd-20261101/paper-search.md)及[检索诊断](../../progress/data/topd-20261101/search-stderr.log)保持冻结。性能、精度与 optimizer 依据归[工程专题](../../infra/numerics/optimization/README.md)。
 
 <a id="grid"></a>
 

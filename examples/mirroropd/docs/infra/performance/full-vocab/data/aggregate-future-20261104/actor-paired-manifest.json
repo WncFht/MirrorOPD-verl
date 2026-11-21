@@ -1,5 +1,5 @@
 {
-  "source_snapshot": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-source",
+  "source_snapshot": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-source",
   "source_manifest_sha256": "693a1115e6c66f567e8c5f49d872f0a4526a9d57f8052b0115a06a635686f54e",
   "benchmark_commit": "510aae1e",
   "teacher_cache_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-30B-A3B-Instruct-2507/0d7cf23991f47feeb3a57ecb4c9cee8ea4a17bfe",
@@ -8,16 +8,16 @@
     "transformers": "5.12.1",
     "triton": "3.6.0"
   },
-  "summarizer_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/summarize_actor.py",
+  "summarizer_source": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/summarize_actor.py",
   "summarizer_sha256": "c041c42054fb8693d5385a21fdbcf89dcf32d06123b0201bb9b4ba8042ad5c6f",
   "commands": {
     "short": {
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-source",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-source",
         "--gpus",
         "1,2",
         "--",
@@ -31,9 +31,9 @@
         "--student",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
         "--cache",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-short.pt",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-short.pt",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-short.json",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-short.json",
         "--repeat-input",
         "1",
         "--reuse",
@@ -47,17 +47,17 @@
         "--chunk",
         "256",
         "--paired-cases",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-cases.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-cases.json"
       ],
       "started": 1793777843.0581496
     },
     "long": {
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-source",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-source",
         "--gpus",
         "1,2",
         "--",
@@ -71,9 +71,9 @@
         "--student",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
         "--cache",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-long.pt",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-long.json",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-long.json",
         "--repeat-input",
         "1",
         "--reuse",
@@ -87,17 +87,17 @@
         "--chunk",
         "256",
         "--paired-cases",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-cases.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-cases.json"
       ],
       "started": 1793778425.3117719
     },
     "mixed": {
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-source",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-source",
         "--gpus",
         "1,2",
         "--",
@@ -111,9 +111,9 @@
         "--student",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
         "--cache",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-mixed.pt",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-mixed.pt",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-mixed.json",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-mixed.json",
         "--repeat-input",
         "1",
         "--reuse",
@@ -127,7 +127,7 @@
         "--chunk",
         "256",
         "--paired-cases",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-cases.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-cases.json"
       ],
       "started": 1793779077.5446498
     }

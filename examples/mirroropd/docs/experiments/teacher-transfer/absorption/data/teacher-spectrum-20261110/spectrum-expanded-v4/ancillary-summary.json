@@ -3,9 +3,9 @@
     {
       "run_id": "controlled-RAW",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/teachers/RAW/step0128",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/teachers/RAW/step0128",
       "checkpoints": {
-        "256": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/RAW/step0256"
+        "256": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/RAW/step0256"
       },
       "protocol": "controlled Qwen SFT128 / OPD256 / question-token-domain macro",
       "features": {
@@ -572,9 +572,9 @@
     {
       "run_id": "controlled-CCS-rho0",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/teachers/CCS-rho0/step0128",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/teachers/CCS-rho0/step0128",
       "checkpoints": {
-        "256": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256"
+        "256": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256"
       },
       "protocol": "controlled Qwen SFT128 / OPD256 / question-token-domain macro",
       "features": {
@@ -1141,9 +1141,9 @@
     {
       "run_id": "controlled-CCS-rho1",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/teachers/CCS-rho1/step0128",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/teachers/CCS-rho1/step0128",
       "checkpoints": {
-        "256": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256"
+        "256": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256"
       },
       "protocol": "controlled Qwen SFT128 / OPD256 / question-token-domain macro",
       "features": {

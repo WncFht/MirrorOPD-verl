@@ -20,27 +20,27 @@
   "official_sources": [
     {
       "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/README.md",
-      "local_snapshot": "runs/topd-comparison-20261101/source/README.md",
+      "local_snapshot": "examples/mirroropd/research-evidence/topd-comparison-20261101/source/README.md",
       "sha256": "8eece888fd9db27e271c9590d7f34dd6a77c7536a292731937f6266a2f3acf87"
     },
     {
       "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/core_algos.py",
-      "local_snapshot": "runs/topd-comparison-20261101/source/core_algos.py",
+      "local_snapshot": "examples/mirroropd/research-evidence/topd-comparison-20261101/source/core_algos.py",
       "sha256": "e8fc26c07647c473153d4af7fe3d38fec25d57bf328a73f8cc28f4b4fa592834"
     },
     {
       "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_teacher_dapo17k_common.sh",
-      "local_snapshot": "runs/topd-comparison-20261101/source/common.sh",
+      "local_snapshot": "examples/mirroropd/research-evidence/topd-comparison-20261101/source/common.sh",
       "sha256": "88c219e42008ec6ed6731cfd9f59a8fcc9b490fd7966735eae14f261285ddfd3"
     },
     {
       "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/recipe/opd/run_qwen3_1p7b_base_qwen3_30a3b_teacher_dapo17k_topd_alpha0p1_16k_kl0.sh",
-      "local_snapshot": "runs/topd-comparison-20261101/source/entry.sh",
+      "local_snapshot": "examples/mirroropd/research-evidence/topd-comparison-20261101/source/entry.sh",
       "sha256": "6479de2275f428c73552bb650ef7a6431276e5e132167473b1255a94515ecb8c"
     },
     {
       "url": "https://github.com/xie-lab-ml/TOP-D/blob/9a2716cba22cab508825ad3be3f78327bb8139e5/verl/verl/trainer/ppo/ray_trainer.py",
-      "local_snapshot": "runs/topd-comparison-20261101/source/ray_trainer.py",
+      "local_snapshot": "examples/mirroropd/research-evidence/topd-comparison-20261101/source/ray_trainer.py",
       "sha256": "d6ea9222350d62aaa2ecd6e7c1ed48c36523efc2bc15fb65056f6792de9b19d4"
     }
   ],

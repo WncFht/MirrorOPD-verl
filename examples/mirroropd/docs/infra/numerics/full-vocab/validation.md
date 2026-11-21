@@ -12,7 +12,7 @@
 
 原混合精度严格失败条件单独复测：MDPO＋EOS `[1,4]`、`bf16_fp32`、无 future、token-mean、activation checkpointing、三次 Adam 更新。Fused/precompute 的最大参数绝对差仍为 **1.6333884559571743e-5**，原 `atol=1e-6, rtol=1e-5` 门槛仍失败；同 backend A/A 为零且 checkpoint 下一步一致。Future mean/seq-mean 的新比较通过不能覆盖这个旧条件。已有小梯度与 FP64 AdamW 解释继续见[混合精度差异](#混合精度-mdpo-参数差异)，不声称长期训练等价。
 
-[分布式输出、命令与原失败记录](../../performance/full-vocab/data/kl-execution-20261104/fsdp-acceptance.json)、[最终源码哈希](../../performance/full-vocab/data/kl-execution-20261104/acceptance-source.json)保留可审查证据。全部原始日志位于 `runs/kl-backend-20261104/`；最初 readout 测试误对 jagged 张量调用 reshape 的失败日志保留，最终通过使用 values 断言。数值门槛没有放宽。
+[分布式输出、命令与原失败记录](../../performance/full-vocab/data/kl-execution-20261104/fsdp-acceptance.json)、[最终源码哈希](../../performance/full-vocab/data/kl-execution-20261104/acceptance-source.json)保留可审查证据。全部原始日志位于 `examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/`；最初 readout 测试误对 jagged 张量调用 reshape 的失败日志保留，最终通过使用 values 断言。数值门槛没有放宽。
 
 ## 验证矩阵
 

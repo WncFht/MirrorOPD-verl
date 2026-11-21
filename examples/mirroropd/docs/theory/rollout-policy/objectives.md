@@ -496,7 +496,7 @@ Frank Nielsen 的 Bernoulli Java 示例 $p=0.1,q=0.7$ 已编译运行，原端�
 python -m examples.mirroropd.research.checks.rollout_policy.audit_centers --out /tmp/centers-recheck.json
 python -m examples.mirroropd.research.checks.rollout_policy.audit_aggregation --out /tmp/aggregation-recheck.json
 python -m examples.mirroropd.research.checks.rollout_policy.audit_source_weights \
-  --out runs/rollout-policy-is-20261106/verification.json
+  --out ./rebuild/rollout-policy-is-20261106/verification.json
 ```
 
 实际研究保持 learner loss、初始化、prompt、动作空间和 token / 更新预算可比，以纯 student 为参照，按问题选择几何中点、minimax、Hellinger 或覆盖方向对照。先在真实同前缀分布上检查中心变化与 EOS 差异，再以纯 learner accuracy、轨迹质量、token 与墙钟成本评价，不按各自 rollout loss 排序。已运行的协议与结果见[实验入口](../../experiments/rollout-policy/README.md)。

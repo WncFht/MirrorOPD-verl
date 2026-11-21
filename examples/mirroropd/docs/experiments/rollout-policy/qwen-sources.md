@@ -26,9 +26,9 @@
 
 2026-11-04 已清理本实验 smoke、正式运行及旧尝试生成的 learner 权重与 optimizer／恢复状态，包含 outer20／40 导出；表中保存设置描述运行时行为，现已不能用这些 checkpoint 追加评测或连续续训。共享 initial student／teacher 原始模型保持原位。两套固定银行各 128 条，完整保留 prompt／response token IDs、behavior log-prob、seed 和停止原因；已有逐题 RKL／JS、评测回答、配置、日志及完成回执均保留。六组正式配置的 `rollout_data_dir` 均为空，现有训练请求计划不包含完整实际回答，不能将固定银行或评测回答视为每轮训练 rollout 的完整归档。下文已有结果仍可由冻结输入复算与重画。
 
-正式运行固定为 `462e3f3a`，环境为 vLLM 0.25.1+cu129、Torch 2.11.0+cu129，LM/PM 分别使用 GPU6/7 的一张 H800 80GB。初次短检查的共享 embedding/head 同步失败及修复后的检查都保留在运行目录，失败尝试不计入 40 轮。准备阶段的四卡安排随后收敛为两个通道：GPU6 按 LM→current→initial 执行，GPU7 按 PM→teacher→batch fusion 执行；每个条件先通过自己的短检查，再启动正式预算。2026-11-01，S0 从 GPU6 的待办中提前交由 GPU0 执行，仍使用同一冻结版本、单卡配置和独立初始 Adam 状态。两轮接线检查通过后启动正式预算；共享的阶段独占回执阻止原队列重复派发。当前分配与排队情况以[合并活动状态](../../../../../runs/qwen-prefix-six-20261031/dispatch-status.json)为准，交接依据见[S0 派发清单](../../../../../runs/qwen-prefix-six-20261031/initial-dispatch-20261101/manifest.json)。
+正式运行固定为 `462e3f3a`，环境为 vLLM 0.25.1+cu129、Torch 2.11.0+cu129，LM/PM 分别使用 GPU6/7 的一张 H800 80GB。初次短检查的共享 embedding/head 同步失败及修复后的检查都保留在运行目录，失败尝试不计入 40 轮。准备阶段的四卡安排随后收敛为两个通道：GPU6 按 LM→current→initial 执行，GPU7 按 PM→teacher→batch fusion 执行；每个条件先通过自己的短检查，再启动正式预算。2026-11-01，S0 从 GPU6 的待办中提前交由 GPU0 执行，仍使用同一冻结版本、单卡配置和独立初始 Adam 状态。两轮接线检查通过后启动正式预算；共享的阶段独占回执阻止原队列重复派发。当前分配与排队情况以[合并活动状态](../../../research-evidence/qwen-prefix-six/dispatch-status.json)为准，交接依据见[S0 派发清单](../../../research-evidence/qwen-prefix-six/initial-dispatch-20261101/manifest.json)。
 
-[LM 审计](../../../../../runs/qwen-prefix-six-20261031/recovery-20261101/stages/science-LM-audit.json)和[PM 审计](../../../../../runs/qwen-prefix-six-20261031/recovery-20261101/stages/science-PM-audit.json)核对各 640 次更新及规定读出。本文分析直接读取冻结运行的 metrics、评分和资源记录，不修改运行中的 worktree。早期 LM/PM 完整成本的输入 SHA-256 见[来源清单](data/qwen-prefix-20261101/sources.json)，派生值见[汇总](data/qwen-prefix-20261101/summary.json)；新终点与 TM 的来源以本页最新快照为准。
+[LM 审计](../../../research-evidence/qwen-prefix-six/recovery-20261101/stages/science-LM-audit.json)和[PM 审计](../../../research-evidence/qwen-prefix-six/recovery-20261101/stages/science-PM-audit.json)核对各 640 次更新及规定读出。本文分析直接读取冻结运行的 metrics、评分和资源记录，不修改运行中的 worktree。早期 LM/PM 完整成本的输入 SHA-256 见[来源清单](data/qwen-prefix-20261101/sources.json)，派生值见[汇总](data/qwen-prefix-20261101/summary.json)；新终点与 TM 的来源以本页最新快照为准。
 
 ## 六组训练与共同状态快照
 
@@ -221,7 +221,7 @@ Current 的终点生成耗时约 1.81 小时，平均回答约 3808 token，17/2
 
 ### 已有加速证据与比较边界
 
-此前同一批 64 条冻结 prompt、cap7168、同模型与精度的独立 logit 生成筛选提供以下数据；每档为一次预热后的单次筛选，配置变化可能改变自然轨迹。完整输入与测量见[历史汇总](../../../../../runs/token-fusion-tuning-20261031/summary.json)。
+此前同一批 64 条冻结 prompt、cap7168、同模型与精度的独立 logit 生成筛选提供以下数据；每档为一次预热后的单次筛选，配置变化可能改变自然轨迹。完整输入与测量见[历史汇总](../../../research-evidence/qwen-prefix-six/token-fusion-tuning-20261031/summary.json)。
 
 | 单卡活跃并发 / KV 预算 | 完整 batch 耗时 | 有效 token/s | 独立进程峰值 |
 | ---------------------- | --------------: | -----------: | -----------: |
@@ -249,9 +249,9 @@ Current 的终点生成耗时约 1.81 小时，平均回答约 3808 token，17/2
 
 ```bash
 "$PYTHON_BIN" examples/mirroropd/research/studies/prefix_fusion/report_qwen.py \
-  --root runs/qwen-prefix-six-20261031 \
-  --out runs/qwen-prefix-report-rebuild/data \
-  --figures runs/qwen-prefix-report-rebuild/figures \
+  --root examples/mirroropd/research-evidence/qwen-prefix-six \
+  --out ./rebuild/qwen-prefix-report-rebuild/data \
+  --figures ./rebuild/qwen-prefix-report-rebuild/figures \
   --style "$FIGURE_VIZ_MPL"
 ```
 
@@ -261,11 +261,11 @@ Current 的终点生成耗时约 1.81 小时，平均回答约 3808 token，17/2
 "$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.report_qwen_snapshot \
   --replot \
   --out examples/mirroropd/docs/experiments/rollout-policy/data/qwen-prefix-final-20261103 \
-  --figures runs/qwen-prefix-final-replot-20261103/figures \
+  --figures ./rebuild/qwen-prefix-final-replot-20261103/figures \
   --style "$FIGURE_VIZ_MPL"
 ```
 
-新快照使用同一脚本的 `--root runs/qwen-prefix-six-20261031`，省略 `--replot`，并指定新的 `--out` 和 `--figures` 目录。脚本拒绝覆盖现有输出；收集器与配对统计实现的版本指纹见来源清单，渲染版本及 CSV 哈希见[渲染回执](figures/qwen-prefix-final-20261103/render-provenance.json)。
+新快照使用同一脚本的 `--root examples/mirroropd/research-evidence/qwen-prefix-six`，省略 `--replot`，并指定新的 `--out` 和 `--figures` 目录。脚本拒绝覆盖现有输出；收集器与配对统计实现的版本指纹见来源清单，渲染版本及 CSV 哈希见[渲染回执](figures/qwen-prefix-final-20261103/render-provenance.json)。
 
 此前 17:08 的[中途快照](data/qwen-prefix-progress-20261101-170847/summary.json)及 [22:42 快照](data/qwen-prefix-progress-20261101-224221/summary.json)保持冻结，本页展示六组最终终点。
 

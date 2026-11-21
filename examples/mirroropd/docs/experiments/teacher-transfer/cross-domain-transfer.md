@@ -181,7 +181,7 @@ Accuracy 使用全部 1648 题，每模型／节点生成 6703 条回答。各 b
 
 核对结果与来源 hash 见[统计审计](transfer-mechanism/r1/data/justrl-bench-audit-20261101/audit.json)、[轨迹及 mask 核对](transfer-mechanism/r1/data/justrl-bench-audit-20261101/bank-audit.json)。核对使用既存标量与轨迹身份。原始数据粒度为逐题；定位重复段内的 KL 峰值还需要逐 token 读出。
 
-完整日志位于仓库 `runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/`。运行清单核对到 6400 道唯一训练题、1600 条实际更新、51 个完整评估节点，RKL 无无效读数。最终只保留一个 HF 模型，不含 optimizer 或中途恢复点；native 重载和独立新进程 HF 回读均通过，原 128 条来源轨迹的逐题 RKL 最大误差为 0，见[独立回读记录](transfer-mechanism/r1/data/justrl-math-refresh-20261101/hf-reload.json)。
+完整日志位于仓库 `examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/`。运行清单核对到 6400 道唯一训练题、1600 条实际更新、51 个完整评估节点，RKL 无无效读数。最终只保留一个 HF 模型，不含 optimizer 或中途恢复点；native 重载和独立新进程 HF 回读均通过，原 128 条来源轨迹的逐题 RKL 最大误差为 0，见[独立回读记录](transfer-mechanism/r1/data/justrl-math-refresh-20261101/hf-reload.json)。
 
 [分析表与来源 hash](transfer-mechanism/r1/data/justrl-math-refresh-20261101/summary.json)、[图表清单](transfer-mechanism/r1/figures/justrl-math-refresh-20261101/manifest.json)记录实际产物。图表由[统一绘图入口](../../../research/studies/pipeline/plot_unified_evaluation.py)生成，分析表由[汇总入口](../../../research/studies/pipeline/summarize_unified_evaluation.py)生成；CSV、PNG、PDF 与审计记录同目录保存。
 

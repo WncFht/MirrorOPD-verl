@@ -554,7 +554,7 @@ for RUN_ID in 9hx3uegm d6jhh378 lwgb5eex; do
     --project MirrorOPD-verl --run "$RUN_ID"
 done
 
-ANALYSIS=runs/equal-budget-reanalysis
+ANALYSIS=./rebuild/equal-budget-reanalysis
 python3 -m examples.mirroropd.research.studies.production.analyze_equal_budget \
   --logs-repo ../wandb-logs --out "$ANALYSIS"
 

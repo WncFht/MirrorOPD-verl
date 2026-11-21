@@ -1,9 +1,9 @@
 {
   "status": "complete",
   "metadata": {
-    "hf_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/huggingface",
-    "export_audit": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/export-audit",
-    "reference_event": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/events/outer-050",
+    "hf_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/huggingface",
+    "export_audit": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/final-model/export-audit",
+    "reference_event": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/justrl-r1-1p5b-math-50outer-common-v1/evaluation/events/outer-050",
     "metrics": {
       "eval/checkpoint/hf_reload_verified": 1,
       "eval/checkpoint/hf_reload_max_rkl_error": 0.0
@@ -42,5 +42,5 @@
     "atol": 1e-06
   },
   "manifest_sha256": "5102d4f737261dd65b210105e219818ee75c55277c3228992f43df433dbfe661",
-  "source_manifest": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/formal-hf-reload-a01/readout/manifest.json"
+  "source_manifest": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/formal-hf-reload-a01/readout/manifest.json"
 }

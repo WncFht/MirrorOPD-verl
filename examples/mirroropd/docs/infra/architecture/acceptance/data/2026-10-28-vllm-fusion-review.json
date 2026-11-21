@@ -368,27 +368,27 @@
       "bytes": 963
     },
     "dense-ref": {
-      "path": "runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-reference/summary.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-reference/summary.json",
       "sha256": "f4320cf9a23dd9f82e83058f24975558136d7bec5a60ed57680567d9d8241327",
       "bytes": 604
     },
     "dense-opt": {
-      "path": "runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-optimized/summary.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-optimized/summary.json",
       "sha256": "109367b7260f1e2f8602857796877aa5ac3fe558ab6df163f8f8d7d9596ff756",
       "bytes": 609
     },
     "failed-compaction": {
-      "path": "runs/rollout-fusion-20261028/dense-base-optimized-long/compaction_equivalence.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/dense-base-optimized-long/compaction_equivalence.json",
       "sha256": "90d37b2a3e8dc92b20ec17d8d57e0c55adaca639f1be9b64368494246de2b8a6",
       "bytes": 432
     },
     "dense-numerics": {
-      "path": "runs/rollout-fusion-20261028/dense-numerics-stable-long7168.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/dense-numerics-stable-long7168.json",
       "sha256": "da61eadb40e6815484dc832ffa49b5d985c3bc70602753f32ab9d0c379ab8ca8",
       "bytes": 7891
     },
     "moe-numerics": {
-      "path": "runs/rollout-fusion-20261028/moe-numerics-stable-long7168.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/moe-numerics-stable-long7168.json",
       "sha256": "75596492e03c110171eeb61dd637f49e6e6b71aa37fe7e8a97273aa8f07d45e7",
       "bytes": 8053
     }
@@ -547,7 +547,7 @@
           151645
         ],
         "data": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/DAPO/train.parquet",
-        "out": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-reference",
+        "out": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-reference",
         "layout": "colocated",
         "gpus": 4,
         "batch": 64,
@@ -627,7 +627,7 @@
           151645
         ],
         "data": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/DAPO/train.parquet",
-        "out": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-optimized",
+        "out": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/g7-stable-v2-20261028/dense-base-optimized",
         "layout": "colocated",
         "gpus": 4,
         "batch": 64,

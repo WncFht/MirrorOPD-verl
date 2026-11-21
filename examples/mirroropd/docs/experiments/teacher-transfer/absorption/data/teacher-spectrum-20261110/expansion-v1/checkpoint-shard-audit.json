@@ -100,78 +100,78 @@
   {
     "job_id": 14,
     "run_id": "controlled-RAW",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/RAW/step0256",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/RAW/step0256",
     "shards": 1,
     "missing": []
   },
   {
     "job_id": 15,
     "run_id": "controlled-CCS-rho0",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256",
     "shards": 1,
     "missing": []
   },
   {
     "job_id": 16,
     "run_id": "controlled-CCS-rho1",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256",
     "shards": 1,
     "missing": []
   },
   {
     "job_id": 17,
     "run_id": "MiMo-SFT",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
     "shards": 6,
     "missing": [
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
     ]
   },
   {
     "job_id": 18,
     "run_id": "MiMo-RL",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface",
     "shards": 6,
     "missing": [
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
     ]
   },
   {
     "job_id": 19,
     "run_id": "MiMo-RL-from-SFT",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface",
     "shards": 6,
     "missing": []
   },
   {
     "job_id": 20,
     "run_id": "MiMo-Zero-from-SFT",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface",
     "shards": 6,
     "missing": []
   },
   {
     "job_id": 21,
     "run_id": "MiMo-Zero",
-    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
+    "checkpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
     "shards": 6,
     "missing": [
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
-      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00001-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00002-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00003-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00004-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00005-of-00006.safetensors",
+      "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface/model-00006-of-00006.safetensors"
     ]
   }
 ]

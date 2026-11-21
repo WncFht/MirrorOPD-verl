@@ -38,7 +38,7 @@ PCA 与质心只在指定 reference-source 的 60% rollout 上拟合一次；全
 ```bash
 python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage extract \
   --input /path/to/full-data-trajectories \
-  --output runs/state-coverage/full-data \
+  --output ./rebuild/state-coverage/full-data \
   --model /path/to/frozen-teacher \
   --source full-data \
   --positions 8 \
@@ -50,8 +50,8 @@ python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage extr
 
 ```bash
 python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage fit \
-  --extractions runs/state-coverage/full-data \
-  --output runs/state-coverage/codebook \
+  --extractions ./rebuild/state-coverage/full-data \
+  --output ./rebuild/state-coverage/codebook \
   --reference-source full-data \
   --split-field step \
   --pca-dim 50 \
@@ -63,10 +63,10 @@ python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage fit 
 
 ```bash
 python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage score \
-  --extractions runs/state-coverage/full-data runs/state-coverage/one-shot \
-    runs/state-coverage/four-shot runs/state-coverage/sixteen-shot \
-  --fit runs/state-coverage/codebook \
-  --output runs/state-coverage/results \
+  --extractions ./rebuild/state-coverage/full-data ./rebuild/state-coverage/one-shot \
+    ./rebuild/state-coverage/four-shot ./rebuild/state-coverage/sixteen-shot \
+  --fit ./rebuild/state-coverage/codebook \
+  --output ./rebuild/state-coverage/results \
   --step-field step \
   --rollouts-per-step 2 \
   --repeats 30 \
@@ -78,7 +78,7 @@ python -m examples.mirroropd.research.state_analysis.oneshot_state_coverage scor
 
 仓库 trajectory Parquet 的字段包括 `outer`、`prompt_ids`、`response_ids` 和 `response_mask`；该 schema 不声明 `step`。`outer` 表示采集/评估外循环编号，只有经具体 run 元数据确认它与训练 step 一一对应时，才可将它传给 `--split-field` 或 `--step-field`。训练更新号也不能由 `min_global_steps` / `max_global_steps` 区间任意取值代替。应在提取源数据前建立 `trajectory_id -> optimizer_step` 对照，并保留来源 manifest、teacher checkpoint/revision、prompt 集、解码参数与 rollout seed。
 
-现存 `runs/evaluation-parquet-implementation/roundtrip-d670f78b/trajectories/` 和 Qwen source/initial/teacher banks 可用于验证 Parquet 读取与样本字段，但它们没有论文所需的 500 step full-data OPD rollout 及已核实的 optimizer-step 映射。它们不能直接复现 71.5% 或 98.9%。现有数据读取 smoke 和 NumPy CPU 测试只验证接口、位置采样、PCA、K-means、切分和 coverage 算法；teacher 前向、真实维度 1536、71.9% 方差以及论文 coverage 曲线仍待模型与完整数据可用后验证。
+现存 `examples/mirroropd/research-evidence/evaluation-inputs/evaluation-parquet-implementation/roundtrip-d670f78b/trajectories/` 和 Qwen source/initial/teacher banks 可用于验证 Parquet 读取与样本字段，但它们没有论文所需的 500 step full-data OPD rollout 及已核实的 optimizer-step 映射。它们不能直接复现 71.5% 或 98.9%。现有数据读取 smoke 和 NumPy CPU 测试只验证接口、位置采样、PCA、K-means、切分和 coverage 算法；teacher 前向、真实维度 1536、71.9% 方差以及论文 coverage 曲线仍待模型与完整数据可用后验证。
 
 复现差异至少应检查 teacher checkpoint/tokenizer、prompt 组成、temperature/top-p、response 截断、有效 token mask、step 到 rollout 的映射、相对位置采样、PCA 方差占比、K-means 初始化和 coverage 重采样预算。论文对 $K=50,100,200,500$ 的排序稳定性以及 10-NN 距离诊断可作为下一阶段敏感性分析；当前最小管线暂不实现近邻距离或语义分层占用，以优先复现核心 coverage 指标。
 

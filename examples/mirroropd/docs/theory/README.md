@@ -16,3 +16,5 @@
 | 数值误差怎样影响 KL 观测                           | [误差模型](numerical-effects/error-model.md)，推导与原验算范围明确                                                       |
 
 各正文保留所用论文版本、验算脚本及输入。CPU 小词表恒等式不是 GPU 或长程任务验收；当前代码映射从[架构](../infra/architecture/README.md)进入，研究结论从[五个 RQ](../experiments/README.md)进入。
+
+[Prefix IS 与状态分布](prefix-is.md)区分条件 KL 梯度、访问分布校正及长前缀重要性权重的方差界。

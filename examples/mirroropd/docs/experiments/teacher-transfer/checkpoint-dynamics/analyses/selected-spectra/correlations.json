@@ -1,0 +1,522 @@
+{
+  "spearman": [
+    {
+      "feature": "initial_rkl",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": 0.8181818181818182,
+      "spearman_relative_remaining": 0.7181818181818183,
+      "leave_one_out_min": 0.7575757575757575,
+      "leave_one_out_max": 0.8787878787878788
+    },
+    {
+      "feature": "initial_rkl",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": 0.9636363636363637,
+      "spearman_relative_remaining": 0.8727272727272729,
+      "leave_one_out_min": 0.9515151515151514,
+      "leave_one_out_max": 0.9878787878787878
+    },
+    {
+      "feature": "initial_rkl",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": 0.9181818181818183,
+      "spearman_relative_remaining": 0.7636363636363637,
+      "leave_one_out_min": 0.8909090909090909,
+      "leave_one_out_max": 0.9393939393939393
+    },
+    {
+      "feature": "initial_rkl",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": 0.9181818181818183,
+      "spearman_relative_remaining": 0.6545454545454547,
+      "leave_one_out_min": 0.8909090909090909,
+      "leave_one_out_max": 0.9636363636363635
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.8909090909090911,
+      "spearman_relative_remaining": -0.9090909090909091,
+      "leave_one_out_min": -0.9757575757575757,
+      "leave_one_out_max": -0.8545454545454544
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.8363636363636365,
+      "spearman_relative_remaining": -0.8090909090909091,
+      "leave_one_out_min": -0.9030303030303028,
+      "leave_one_out_max": -0.7818181818181817
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.9727272727272729,
+      "spearman_relative_remaining": -0.8545454545454546,
+      "leave_one_out_min": -0.9757575757575757,
+      "leave_one_out_max": -0.9636363636363635
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.8363636363636365,
+      "spearman_relative_remaining": -0.6000000000000001,
+      "leave_one_out_min": -0.8909090909090909,
+      "leave_one_out_max": -0.7818181818181817
+    },
+    {
+      "feature": "early_capture",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.8636363636363636,
+      "spearman_relative_remaining": -0.8636363636363636,
+      "leave_one_out_min": -0.9393939393939393,
+      "leave_one_out_max": -0.8181818181818182
+    },
+    {
+      "feature": "early_capture",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.8090909090909091,
+      "spearman_relative_remaining": -0.7636363636363637,
+      "leave_one_out_min": -0.9393939393939393,
+      "leave_one_out_max": -0.7454545454545454
+    },
+    {
+      "feature": "early_capture",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.9454545454545454,
+      "spearman_relative_remaining": -0.8000000000000002,
+      "leave_one_out_min": -0.9636363636363635,
+      "leave_one_out_max": -0.9272727272727272
+    },
+    {
+      "feature": "early_capture",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.8272727272727273,
+      "spearman_relative_remaining": -0.5545454545454546,
+      "leave_one_out_min": -0.9272727272727272,
+      "leave_one_out_max": -0.7696969696969697
+    },
+    {
+      "feature": "early_progress",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.46363636363636374,
+      "spearman_relative_remaining": -0.46363636363636374,
+      "leave_one_out_min": -0.709090909090909,
+      "leave_one_out_max": -0.3696969696969697
+    },
+    {
+      "feature": "early_progress",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.6727272727272727,
+      "spearman_relative_remaining": -0.6090909090909091,
+      "leave_one_out_min": -0.7454545454545454,
+      "leave_one_out_max": -0.6242424242424242
+    },
+    {
+      "feature": "early_progress",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.7090909090909092,
+      "spearman_relative_remaining": -0.7818181818181819,
+      "leave_one_out_min": -0.7696969696969697,
+      "leave_one_out_max": -0.6363636363636362
+    },
+    {
+      "feature": "early_progress",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.6363636363636364,
+      "spearman_relative_remaining": -0.6181818181818182,
+      "leave_one_out_min": -0.7212121212121211,
+      "leave_one_out_max": -0.5757575757575757
+    },
+    {
+      "feature": "late_overlap",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.4909090909090909,
+      "spearman_relative_remaining": -0.5363636363636364,
+      "leave_one_out_min": -0.6606060606060605,
+      "leave_one_out_max": -0.32121212121212117
+    },
+    {
+      "feature": "late_overlap",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.27272727272727276,
+      "spearman_relative_remaining": -0.3545454545454546,
+      "leave_one_out_min": -0.3696969696969697,
+      "leave_one_out_max": -0.0303030303030303
+    },
+    {
+      "feature": "late_overlap",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.43636363636363645,
+      "spearman_relative_remaining": -0.4272727272727273,
+      "leave_one_out_min": -0.5878787878787878,
+      "leave_one_out_max": -0.24848484848484845
+    },
+    {
+      "feature": "late_overlap",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.27272727272727276,
+      "spearman_relative_remaining": -0.09090909090909091,
+      "leave_one_out_min": -0.3696969696969697,
+      "leave_one_out_max": -0.0303030303030303
+    },
+    {
+      "feature": "rank90_fraction",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.5636363636363637,
+      "spearman_relative_remaining": -0.3727272727272728,
+      "leave_one_out_min": -0.709090909090909,
+      "leave_one_out_max": -0.49090909090909085
+    },
+    {
+      "feature": "rank90_fraction",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.3545454545454546,
+      "spearman_relative_remaining": -0.20909090909090913,
+      "leave_one_out_min": -0.5151515151515151,
+      "leave_one_out_max": -0.2606060606060606
+    },
+    {
+      "feature": "rank90_fraction",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": -0.4000000000000001,
+      "spearman_relative_remaining": -0.10000000000000002,
+      "leave_one_out_min": -0.5757575757575757,
+      "leave_one_out_max": -0.2727272727272727
+    },
+    {
+      "feature": "rank90_fraction",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": -0.4000000000000001,
+      "spearman_relative_remaining": -0.02727272727272728,
+      "leave_one_out_min": -0.5636363636363636,
+      "leave_one_out_max": -0.309090909090909
+    },
+    {
+      "feature": "weight_sd",
+      "bank": "initial",
+      "domain": "math",
+      "n": 11,
+      "spearman": 0.5090909090909091,
+      "spearman_relative_remaining": 0.5181818181818182,
+      "leave_one_out_min": 0.43030303030303024,
+      "leave_one_out_max": 0.7575757575757575
+    },
+    {
+      "feature": "weight_sd",
+      "bank": "initial",
+      "domain": "all",
+      "n": 11,
+      "spearman": 0.690909090909091,
+      "spearman_relative_remaining": 0.6454545454545455,
+      "leave_one_out_min": 0.6484848484848483,
+      "leave_one_out_max": 0.7696969696969697
+    },
+    {
+      "feature": "weight_sd",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 11,
+      "spearman": 0.7545454545454545,
+      "spearman_relative_remaining": 0.8272727272727273,
+      "leave_one_out_min": 0.6848484848484848,
+      "leave_one_out_max": 0.7939393939393938
+    },
+    {
+      "feature": "weight_sd",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 11,
+      "spearman": 0.6636363636363638,
+      "spearman_relative_remaining": 0.6000000000000001,
+      "leave_one_out_min": 0.6121212121212121,
+      "leave_one_out_max": 0.7575757575757575
+    },
+    {
+      "feature": "teacher_amplitude",
+      "bank": "initial",
+      "domain": "math",
+      "n": 10,
+      "spearman": 0.709090909090909,
+      "spearman_relative_remaining": 0.7939393939393938,
+      "leave_one_out_min": 0.6,
+      "leave_one_out_max": 0.9
+    },
+    {
+      "feature": "teacher_amplitude",
+      "bank": "initial",
+      "domain": "all",
+      "n": 10,
+      "spearman": 0.7212121212121211,
+      "spearman_relative_remaining": 0.7333333333333332,
+      "leave_one_out_min": 0.6166666666666666,
+      "leave_one_out_max": 0.7666666666666667
+    },
+    {
+      "feature": "teacher_amplitude",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 10,
+      "spearman": 0.9030303030303028,
+      "spearman_relative_remaining": 0.8545454545454544,
+      "leave_one_out_min": 0.8666666666666667,
+      "leave_one_out_max": 0.9666666666666667
+    },
+    {
+      "feature": "teacher_amplitude",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 10,
+      "spearman": 0.7212121212121211,
+      "spearman_relative_remaining": 0.5030303030303029,
+      "leave_one_out_min": 0.6166666666666666,
+      "leave_one_out_max": 0.7833333333333333
+    },
+    {
+      "feature": "teacher_rank90_fraction",
+      "bank": "initial",
+      "domain": "math",
+      "n": 10,
+      "spearman": 0.17575757575757575,
+      "spearman_relative_remaining": 0.2727272727272727,
+      "leave_one_out_min": 0.0,
+      "leave_one_out_max": 0.5333333333333333
+    },
+    {
+      "feature": "teacher_rank90_fraction",
+      "bank": "initial",
+      "domain": "all",
+      "n": 10,
+      "spearman": 0.43030303030303024,
+      "spearman_relative_remaining": 0.5272727272727272,
+      "leave_one_out_min": 0.2833333333333333,
+      "leave_one_out_max": 0.5833333333333334
+    },
+    {
+      "feature": "teacher_rank90_fraction",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 10,
+      "spearman": 0.19999999999999998,
+      "spearman_relative_remaining": 0.29696969696969694,
+      "leave_one_out_min": 0.03333333333333333,
+      "leave_one_out_max": 0.5666666666666667
+    },
+    {
+      "feature": "teacher_rank90_fraction",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 10,
+      "spearman": 0.309090909090909,
+      "spearman_relative_remaining": 0.6242424242424242,
+      "leave_one_out_min": 0.13333333333333333,
+      "leave_one_out_max": 0.43333333333333335
+    },
+    {
+      "feature": "teacher_overlap",
+      "bank": "initial",
+      "domain": "math",
+      "n": 10,
+      "spearman": -0.32121212121212117,
+      "spearman_relative_remaining": -0.38181818181818183,
+      "leave_one_out_min": -0.6,
+      "leave_one_out_max": -0.11666666666666665
+    },
+    {
+      "feature": "teacher_overlap",
+      "bank": "initial",
+      "domain": "all",
+      "n": 10,
+      "spearman": -0.406060606060606,
+      "spearman_relative_remaining": -0.309090909090909,
+      "leave_one_out_min": -0.5833333333333334,
+      "leave_one_out_max": -0.2333333333333333
+    },
+    {
+      "feature": "teacher_overlap",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 10,
+      "spearman": -0.5515151515151515,
+      "spearman_relative_remaining": -0.6848484848484848,
+      "leave_one_out_min": -0.7,
+      "leave_one_out_max": -0.41666666666666663
+    },
+    {
+      "feature": "teacher_overlap",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 10,
+      "spearman": -0.33333333333333326,
+      "spearman_relative_remaining": -0.2121212121212121,
+      "leave_one_out_min": -0.48333333333333334,
+      "leave_one_out_max": -0.13333333333333333
+    },
+    {
+      "feature": "parameter_residual",
+      "bank": "initial",
+      "domain": "math",
+      "n": 10,
+      "spearman": -0.5151515151515151,
+      "spearman_relative_remaining": -0.5757575757575757,
+      "leave_one_out_min": -0.6666666666666667,
+      "leave_one_out_max": -0.39999999999999997
+    },
+    {
+      "feature": "parameter_residual",
+      "bank": "initial",
+      "domain": "all",
+      "n": 10,
+      "spearman": -0.6969696969696969,
+      "spearman_relative_remaining": -0.6848484848484848,
+      "leave_one_out_min": -0.7666666666666667,
+      "leave_one_out_max": -0.6333333333333333
+    },
+    {
+      "feature": "parameter_residual",
+      "bank": "teacher",
+      "domain": "math",
+      "n": 10,
+      "spearman": -0.7575757575757575,
+      "spearman_relative_remaining": -0.6969696969696969,
+      "leave_one_out_min": -0.7999999999999999,
+      "leave_one_out_max": -0.6666666666666667
+    },
+    {
+      "feature": "parameter_residual",
+      "bank": "teacher",
+      "domain": "all",
+      "n": 10,
+      "spearman": -0.7696969696969697,
+      "spearman_relative_remaining": -0.6484848484848483,
+      "leave_one_out_min": -0.8166666666666667,
+      "leave_one_out_max": -0.7166666666666667
+    }
+  ],
+  "descriptive_partial": [
+    {
+      "feature": "early_overlap",
+      "bank": "initial",
+      "controls": [
+        "initial_distance"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.6626663826898992
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "initial",
+      "controls": [
+        "initial_distance",
+        "early_progress"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.7517469777305418
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "teacher",
+      "controls": [
+        "initial_distance"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.8306580425941397
+    },
+    {
+      "feature": "early_overlap",
+      "bank": "teacher",
+      "controls": [
+        "initial_distance",
+        "early_progress"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.8177087228137762
+    },
+    {
+      "feature": "early_capture",
+      "bank": "initial",
+      "controls": [
+        "initial_distance"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.5598360483598532
+    },
+    {
+      "feature": "early_capture",
+      "bank": "initial",
+      "controls": [
+        "initial_distance",
+        "early_progress"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.6344877050241557
+    },
+    {
+      "feature": "early_capture",
+      "bank": "teacher",
+      "controls": [
+        "initial_distance"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.6683327302957246
+    },
+    {
+      "feature": "early_capture",
+      "bank": "teacher",
+      "controls": [
+        "initial_distance",
+        "early_progress"
+      ],
+      "n": 11,
+      "rank_residual_correlation": -0.6267668225913875
+    }
+  ]
+}

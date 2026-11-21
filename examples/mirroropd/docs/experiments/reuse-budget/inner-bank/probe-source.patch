@@ -1,0 +1,75 @@
+--- a/verl/trainer/ppo/v1/trainer_base.py
++++ b/verl/trainer/ppo/v1/trainer_base.py
+@@ -2054,6 +2054,8 @@
+         if self.config.actor_rollout_ref.actor.shuffle or self.use_critic:
+             raise ValueError("Inner bank readouts require deterministic full-batch actor-only updates")
+         self._inner_update_records = []
++        if hasattr(callback, "on_inner_start"):
++            callback.on_inner_start(self, batch)
+         seconds = 0.0
+         for inner in range(1, epochs + 1):
+             before = self.actor_optimizer_step
+--- a/verl/workers/engine/fsdp/transformer_impl.py
++++ b/verl/workers/engine/fsdp/transformer_impl.py
+@@ -1312,6 +1312,32 @@
+ 
+         self.full_vocab_readout_space = replace(self.full_vocab_space, termination_ids=())
+ 
++    def _prefix_is_output(self, micro_batch, model_inputs):
++        """Read selected response probabilities through a bounded native head callback."""
++        from examples.mirroropd.tools.prefix_is_probe import selected_token_log_probs
++        from verl.workers.utils.padding import prediction_positions
++
++        responses = micro_batch["responses"]
++        ones = torch.nested.as_nested_tensor(
++            [torch.ones_like(r) for r in responses.unbind()], layout=torch.jagged
++        )
++        positions, packed = prediction_positions(micro_batch["input_ids"], ones)
++        actions = responses.values()
++        if not hasattr(self, "_prefix_is_legal_ids"):
++            self._prefix_is_legal_ids = sorted(set(self.model_config.tokenizer.get_vocab().values()))
++
++        def output(hidden, head):
++            selected = hidden.squeeze(0).index_select(0, packed)
++
++            def project(h, w):
++                values = selected_token_log_probs(h, w, actions, self._prefix_is_legal_ids)
++                chunks = values.split([len(p) for p in positions])
++                return {"prefix_log_probs": torch.nested.as_nested_tensor(list(chunks), layout=torch.jagged)}
++
++            return head(selected, full_vocab_callback=project)
++
++        return self.module(**model_inputs, use_cache=False, full_vocab_callback=output)
++
+     def _full_vocab_output(self, micro_batch, model_inputs, teacher):
+         from verl.trainer.distillation.profiling import full_kl_range
+         from verl.workers.utils.padding import prediction_positions
+@@ -1761,6 +1787,15 @@
+                 # With TP, logits are DTensors sharded on vocab dim; gather for log_softmax.
+                 if isinstance(logits_rmpad, DTensor):
+                     logits_rmpad = logits_rmpad.full_tensor()
++                if tu.get_non_tensor_data(micro_batch, "prefix_is_score", default=False):
++                    if not hasattr(self, "_prefix_is_invalid_ids"):
++                        from transformers import AutoTokenizer
++
++                        tokenizer = AutoTokenizer.from_pretrained(self.model_config.path, local_files_only=True)
++                        valid = set(tokenizer.get_vocab().values())
++                        self._prefix_is_invalid_ids = sorted(set(range(logits_rmpad.shape[-1])) - valid)
++                    if self._prefix_is_invalid_ids:
++                        logits_rmpad[..., self._prefix_is_invalid_ids] = -torch.inf
+                 logits_rmpad = _scale_logits_by_temperature(
+                     logits_rmpad,
+                     temperature_rmpad.unsqueeze(-1),
+@@ -1960,7 +1995,11 @@
+             full_score = tu.get_non_tensor_data(micro_batch, "full_vocab_score", default=False)
+             if full_score and (not forward_only or loss_function is not None):
+                 raise ValueError("RKL readout requires forward_only and compute_loss=False")
+-            if (
++            if tu.get_non_tensor_data(micro_batch, "prefix_is_score", default=False):
++                if not forward_only or loss_function is not None:
++                    raise ValueError("Prefix probability probes must be forward-only")
++                model_output = self._prefix_is_output(micro_batch, model_inputs)
++            elif (
+                 full_teacher
+                 or full_train
+                 or full_score

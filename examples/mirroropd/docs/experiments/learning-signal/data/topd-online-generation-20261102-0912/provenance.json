@@ -1,6 +1,6 @@
 {
   "checked_at": "2026-11-02T09:12:51.699879+08:00",
-  "raw_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/topd-data-kappa-20261101",
+  "raw_root": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/topd-data-kappa-20261101",
   "scope": "Exploratory generations before scheduled training outer2/3/4, not held-out benchmarks.",
   "source_hashes": {
     "source/verl/utils/reward_score/__init__.py": "1b7281fa32b0de6bff68b6f358e0493562baeab5de771c1cd3fa6a16653ad7ce",
@@ -52,8 +52,8 @@
     "outer04/scores.jsonl": "89c4cc418b47a3f6aa7feceec8d27884e7a873b06e78732ec9b8680965c7ca3c"
   },
   "commands": [
-    "env CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 ../envs/mirroropd-fusion/bin/python runs/topd-data-kappa-20261101/score_online_bank.py --outer N --out NEW_DIRECTORY",
-    "env CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 ../envs/mirroropd-fusion/bin/python runs/topd-data-kappa-20261101/audit_online_scoring.py"
+    "env CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 ../envs/mirroropd-fusion/bin/python examples/mirroropd/research-evidence/topd-data-kappa-20261101/score_online_bank.py --outer N --out NEW_DIRECTORY",
+    "env CUDA_VISIBLE_DEVICES= OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 ../envs/mirroropd-fusion/bin/python examples/mirroropd/research-evidence/topd-data-kappa-20261101/audit_online_scoring.py"
   ],
   "copies_are_identity_evidence": "Run original scripts in raw_root; copied scripts resolve ROOT relative to their own location.",
   "cpu_only": true

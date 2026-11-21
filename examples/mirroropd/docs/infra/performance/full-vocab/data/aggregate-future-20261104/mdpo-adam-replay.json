@@ -1,5 +1,5 @@
 {
-  "diagnostic_dir": "runs/p0-p1-20261104/ab-head",
+  "diagnostic_dir": "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-head",
   "strict_ab_passed": false,
   "optimizer_formula": "FP64 AdamW with recorded before-state and post-clip gradient; checked atol=2e-8 rtol=2e-6 against individual FP32 updates, not the backend gate",
   "steps": [

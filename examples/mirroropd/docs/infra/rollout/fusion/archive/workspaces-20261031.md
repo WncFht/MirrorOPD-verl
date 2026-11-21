@@ -4,7 +4,7 @@
 
 本页区分开发、执行和历史存档。核对日期为 2026-10-31。新工作树统一放在仓库内 `.worktrees/`，新运行产物和清理归档放在仓库内 `runs/`；历史运行按原 manifest 解释。
 
-统一接口与后续八个架构重构提交已随 `c8b14ffb` 合入 main，同时保留 main 的 RKL 读出、性能对照和研究文档。合并前后代码树一致，相关 CPU 回归 276 项通过；不把代码整合当成新的性能验收。旧开发现场与逐文件比较保存在仓库内 `runs/rollout-maintenance-20261031/`。
+统一接口与后续八个架构重构提交已随 `c8b14ffb` 合入 main，同时保留 main 的 RKL 读出、性能对照和研究文档。合并前后代码树一致，相关 CPU 回归 276 项通过；不把代码整合当成新的性能验收。旧开发现场与逐文件比较保存在仓库内 `examples/mirroropd/research-evidence/engineering-evidence/rollout-maintenance-20261031/`。
 
 ## 保留的 Git 工作区
 
@@ -22,7 +22,7 @@
 
 ## 历史源码与运行产物
 
-历史源码集中在 `runs/source-archives/20261031/`，每份包含原 commit、恢复标签、逐文件校验和说明。下列目录不再是 Git worktree：
+历史代码见各工作树对应的 Git 提交和恢复标签。下列目录已退出工作树列表：
 
 | 原目录后缀            | 原代码     | 保留内容                           |
 | --------------------- | ---------- | ---------------------------------- |
@@ -36,16 +36,16 @@
 
 原位置的 outputs 保持原路径、文件和 inode，避免已有审计和研究报告因路径迁移失效。源码兼容链接和生成缓存已移除；原目录仅保留 outputs 与存档说明，源码和恢复标签统一位于集中存档。需要重跑或修改历史版本时，从标签建立新的明确工作树，不把兼容目录当作开发目录。
 
-旧开发别名 `-vllm-probability` 已删除；`-fixed-state-engine` 的空目录也已删除。日常开发使用仓库内 `.worktrees/rollout-maintenance`，历史源码直接从集中存档或 Git 标签读取。清理回执见 `runs/rollout-composition-20261031/compatibility-cleanup.json`。
+旧开发别名 `-vllm-probability` 已删除；`-fixed-state-engine` 的空目录也已删除。日常开发使用仓库内 `.worktrees/rollout-maintenance`，历史源码直接从集中存档或 Git 标签读取。清理回执见 `examples/mirroropd/research-evidence/rollout-composition-20261031/compatibility-cleanup.json`。
 
 ## 占位与冻结执行的独立性
 
-GPU 占位守护使用 `runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py` 的固定工具副本，不再依赖整个工程 checkout。迁移前后核对了文件哈希、进程身份、GPU 锁与科学任务租用记录；占位程序经正常交接重新启动，科学训练进程没有停止。
+GPU 占位守护使用 `examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py` 的固定工具副本，不再依赖整个工程 checkout。迁移前后核对了文件哈希、进程身份、GPU 锁与科学任务租用记录；占位程序经正常交接重新启动，科学训练进程没有停止。
 
 实验源码、配置和运行产物的身份仍由各自 manifest 记录。归档只整理代码位置和 Git 登记，不把失败结果改成通过，也不删除未通过候选。
 
 ## 未完成工作与后续开发
 
-原驻留超时草稿已以[历史 patch](../../../../../../../../runs/rollout-organization-20261031/parked-residency/manifest.json)封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，且对应代码已被统一接口与生命周期修复替代，不再作为待合并开发项。当前通过范围以[实施计划](2026-10-31-Rollout统一接口实施计划.md)为准。
+原驻留超时草稿已以历史 patch（原始资料缺失）封存，包含原基点、文件哈希和已有 CPU 测试证据；它未完成 GPU 验证，且对应代码已被统一接口与生命周期修复替代，不再作为待合并开发项。当前通过范围以[实施计划](2026-10-31-Rollout统一接口实施计划.md)为准。
 
 后续代码走读和处理顺序见[实施计划](2026-10-31-Rollout统一接口实施计划.md)。公共接口保持 model/left/right，内部职责与恢复合同见[统一语义](../semantics.md)。新的优化候选先保留在维护分支，经过对应回归再合入 main；冻结科学实验不跟随 main 切换。

@@ -544,7 +544,7 @@ data:
   tokenizer: null
   use_shm: false
   train_files:
-  - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kappa1-setting-study-20261101/train-deduplicated.parquet
+  - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kappa1-setting-study-20261101/train-deduplicated.parquet
   val_files:
   - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/MATH-500/test.parquet
   - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/data/math/AMC23/test.parquet
@@ -1073,7 +1073,7 @@ trainer:
   eval_metrics_resamples: 256
   log_val_generations: 0
   rollout_data_dir: null
-  validation_data_dir: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/validation
+  validation_data_dir: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/validation
   nnodes: 1
   n_gpus_per_node: 4
   save_freq: -1
@@ -1087,7 +1087,7 @@ trainer:
   critic_warmup: 0
   default_hdfs_dir: null
   del_local_ckpt_after_load: false
-  default_local_dir: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/checkpoints
+  default_local_dir: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/checkpoints
   max_actor_ckpt_to_keep: null
   max_critic_ckpt_to_keep: null
   ray_wait_register_center_timeout: 300
@@ -1181,13 +1181,13 @@ ray_kwargs:
     runtime_env:
       py_executable: /root/.local/share/mirroropd/venvs/profile-cu128/bin/python
       env_vars:
-        WANDB_DIR: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101
+        WANDB_DIR: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101
         WANDB_MODE: offline
-        VERL_FILE_LOGGER_PATH: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/metrics.jsonl
+        VERL_FILE_LOGGER_PATH: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/metrics.jsonl
         VERL_ROLLOUT_IPC_NAMESPACE: kappa1-formal-preview
         MIRROROPD_WORKSPACE: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data
         LD_LIBRARY_PATH: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/cache/fusion-runtime/cuda-compat-12-9/usr/local/cuda-12.9/compat
-        VERL_E2E_TIMELINE_DIR: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/timeline
+        VERL_E2E_TIMELINE_DIR: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/math-opd-E61-p256-n4-traj1024-r32-o50-tuned-20261101/timeline
     num_gpus: 4
     include_dashboard: false
     object_store_memory: 137438953472

@@ -54,16 +54,16 @@ V4 限制单步位移后，远 SFT 与组合目标的下降有所改善，终点
 
 ### 产物与复算
 
-训练脚本为 [run_local_stage_probe.py](../../../research/studies/fixed_transfer/run_local_stage_probe.py)，[汇总脚本](../../../research/studies/fixed_transfer/summarize_local_stage_probe.py)从原始日志重算端点。V2 的[原始记录](../../../../../runs/opd-theory-20261101/llm-local-stages-v2/metrics.jsonl)和[执行源码](../../../../../runs/opd-theory-20261101/run_local_stage_probe-v2.py)、V3 的[完整设置](../../../../../runs/opd-theory-20261101/llm-local-stages-v3/manifest.json)与[原始记录](../../../../../runs/opd-theory-20261101/llm-local-stages-v3/metrics.jsonl)、V4 的[完整设置](../../../../../runs/opd-theory-20261101/llm-local-stages-v4/manifest.json)分别保存。V3/V4 目录中的 `source.py` 是执行时的源码，`teacher-logprobs.pt` 保留完整教师概率；大型共享预训练权重保持原位。
+训练脚本为 [run_local_stage_probe.py](../../../research/studies/fixed_transfer/run_local_stage_probe.py)，[汇总脚本](../../../research/studies/fixed_transfer/summarize_local_stage_probe.py)从原始日志重算端点。V2 的[原始记录](../../../research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v2/metrics.jsonl)和[执行源码](../../../research-evidence/post-training-stages/opd-theory-20261101/run_local_stage_probe-v2.py)、V3 的[完整设置](../../../research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v3/manifest.json)与[原始记录](../../../research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v3/metrics.jsonl)、V4 的[完整设置](../../../research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v4/manifest.json)分别保存。V3/V4 目录中的 `source.py` 是执行时的源码，`teacher-logprobs.pt` 保留完整教师概率；大型共享预训练权重保持原位。
 
-全部九个端点比较见[汇总 JSON](../../../../../runs/opd-theory-20261101/summary.json)。从仓库根目录复算三组：
+全部九个端点比较见[汇总 JSON](../../../research-evidence/post-training-stages/opd-theory-20261101/summary.json)。从仓库根目录复算三组：
 
 ```bash
 python examples/mirroropd/research/studies/fixed_transfer/summarize_local_stage_probe.py \
-  runs/opd-theory-20261101/llm-local-stages-v2 \
-  runs/opd-theory-20261101/llm-local-stages-v3 \
-  runs/opd-theory-20261101/llm-local-stages-v4 \
-  --output runs/opd-theory-20261101/summary.json
+  examples/mirroropd/research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v2 \
+  examples/mirroropd/research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v3 \
+  examples/mirroropd/research-evidence/post-training-stages/opd-theory-20261101/llm-local-stages-v4 \
+  --output examples/mirroropd/research-evidence/post-training-stages/opd-theory-20261101/summary.json
 ```
 
 <a id="fixed-stage"></a>
@@ -203,7 +203,7 @@ E93 与 E91 共用 `MiMo-7B-SFT` student、题序、rollout、优化器和 OPD �
 | 优化器与长度 | AdamW，LR `1e-6`，weight decay `0.01`，clip `1`；prompt `2048`、response `7168`、context `32768`       |
 | 停止规则     | 三个 repetition-detection 入口均为 `{min_pattern_size: 16, max_pattern_size: 128, min_count: 8}`       |
 
-E93 已于 2026-11-09 完成 20 outer／320 次有效更新，outer0／1／2／5／10／15／20 固定银行读出、终点八项 accuracy 均完整发布，训练完成标记与 supervisor returncode0 一致。训练 RKL 从首次观测的 0.037863 降至最后一次更新前的 0.000464；末批 first→last 为 0.001378→0.000464。运行详情与实际配置保留在 `runs/e93-mimo-rl-sft-20261108/`。
+E93 已于 2026-11-09 完成 20 outer／320 次有效更新，outer0／1／2／5／10／15／20 固定银行读出、终点八项 accuracy 均完整发布，训练完成标记与 supervisor returncode0 一致。训练 RKL 从首次观测的 0.037863 降至最后一次更新前的 0.000464；末批 first→last 为 0.001378→0.000464。运行详情与实际配置保留在 `examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108/`。
 
 固定 teacher-bank 四域平均 RKL 从 0.042049 降至 0.004198，下降 90.02%；Math／Code／Science／IF 终点分别为 0.001794／0.004474／0.004058／0.006465。固定 initial-SFT bank 四域均值从 0.043775 降至 0.004055。逐题重算结果与 E91、Base-student 分支一同列在下方[终点比较](#mimo-e71-early)；[位置曲线](cases/mimo-position-kl.md)包含 E91/E93 的 first／last 观测。
 
@@ -263,7 +263,7 @@ E91 测试已完成 SFT 的 student 对同源 direct-RL teacher 的吸收；`SFT
 
 E91 已并入下方[MiMo 终点结果](#mimo-e71-early)的 RKL 表、accuracy 表及五分支对比图。E72 与 E91 使用同一 direct-RL teacher，分别从 Base 和 SFT 初始化；二者均训练 320 次更新、2560 道题。E91 独立生成评估轨迹并开启重复停止，比较时保留这一协议差异。
 
-E91 的实际配置、源码合同和队列状态保留在 `runs/e91-mimo-rlzero-sft-20261107/`；绘图与复算入口为 `examples/mirroropd/research/studies/pipeline/report_e91_snapshot.py`。E72/E73 是对应的 Base-student 对照。
+E91 的实际配置、源码合同和队列状态保留在 `examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107/`；绘图与复算入口为 `examples/mirroropd/research/studies/pipeline/report_e91_snapshot.py`。E72/E73 是对应的 Base-student 对照。
 
 <a id="mimo-2-共同训练设置"></a>
 
@@ -340,7 +340,7 @@ E71 的训练终点由 50 outer 缩短为 25，已经执行的 reuse32 更新保
 
 三个终点的 optimizer updates 和训练题数不同，结果表同时列出这两个维度；前 22 轮曲线保留原始截点。
 
-修订后的完整配置为 [E71](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E71.yaml)、[E72](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E72.yaml)、[E73](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E73.yaml)，[配置差异与终点计划检查](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/config-check.json)限定了变化范围。原始 formal-configs 与源码快照保留；实际进程和接续情况由[正式队列状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)及[预算接续状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)记录。公共 E71–E73 预设同步采用上述新预算，E74–E77 的 Olmo3／Light-R1 预算保持原样。
+修订后的完整配置为 [E71](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E71.yaml)、[E72](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E72.yaml)、[E73](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/configs/E73.yaml)，[配置差异与终点计划检查](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/config-check.json)限定了变化范围。原始 formal-configs 与源码快照保留；实际进程和接续情况由[正式队列状态](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal-queue-state.json)及[预算接续状态](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)记录。公共 E71–E73 预设同步采用上述新预算，E74–E77 的 Olmo3／Light-R1 预算保持原样。
 
 <a id="mimo-e71-early"></a>
 
@@ -416,7 +416,7 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E73
 
 四份固定版本权重已落地，[原生 MiMo 工程验收](../../infra/model-compatibility/mimo/2026-11-01-MiMo原生下一token接入验收.md)已通过更新、公共读出、32K 上下文、终点原生重载及独立 HF 加载检查。短程验收使用独立的小样本、长度和更新预算；正式结果按本页预算统计。
 
-三组已按 E71→E72→E73 提交持久队列并完成：E71 为 25 outer／800 次更新，E72／E73 均为 20 outer／320 次更新。配置、运行状态和预算接续记录见[原始计划](../../../../../runs/mimo-stage-transfer-20261101/formal-plan.json)、[运行状态](../../../../../runs/mimo-stage-transfer-20261101/formal-queue-state.json)和[预算状态](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)。调整后的执行顺序见[冻结队列](../../../../../runs/mimo-stage-transfer-20261101/budget-amendment-20261102/run_queue.py)；队列于 2026-11-04 02:12 结束，GPU1–4 已释放。Olmo3 的 E74→E75 见下节，Light-R1 的 E76／E77 仍为预设。
+三组已按 E71→E72→E73 提交持久队列并完成：E71 为 25 outer／800 次更新，E72／E73 均为 20 outer／320 次更新。配置、运行状态和预算接续记录见[原始计划](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal-plan.json)、[运行状态](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal-queue-state.json)和[预算状态](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/state.json)。调整后的执行顺序见[冻结队列](../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/budget-amendment-20261102/run_queue.py)；队列于 2026-11-04 02:12 结束，GPU1–4 已释放。Olmo3 的 E74→E75 见下节，Light-R1 的 E76／E77 仍为预设。
 
 <a id="mimo-参考文献"></a>
 
@@ -462,7 +462,7 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E73
 
 这里沿用 MiMo 的公共长度，不增加上下文外推。Olmo3 的模型配置为 65536，Light-R1 链的模型配置为 131072。R1 与 Light 原版 tokenizer 的长度元数据分别为 16384、20000，共同协议继续保留 SFT 的元数据；实际生成与评分按显式 32K 预算执行并验收。长序列工程检查不代替长推理准确率评估。
 
-完整题集已做模板长度审计：Olmo3／R1 协议的 6400 道训练题最长分别为 1381／1374 token，公共题最长分别为 2856／2788 token，均在既定上限内；[审计数据](../../../../../runs/stage-chain-adaptation-20261101/prompt-lengths.json)。
+完整题集已做模板长度审计：Olmo3／R1 协议的 6400 道训练题最长分别为 1381／1374 token，公共题最长分别为 2856／2788 token，均在既定上限内；[审计数据](../../../research-evidence/olmo-stage-transfer/stage-chain-adaptation-20261101/prompt-lengths.json)。
 
 ### Olmo3 正式队列
 
@@ -470,7 +470,7 @@ DRY_RUN=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E73
 
 E74 先生成 initial 与 teacher 银行、绑定并训练；E75 核对后复用完全相同的 initial 产物，独立生成其 teacher 银行再训练。固定银行在 outer0／1／2 及每 5 outer 读出，current RKL 与全量 accuracy 在 outer0／25／50 读出；终点完成 HF 导出及重载检查后才计为完成。两组顺序执行，E74 成功结束才进入 E75，E76／E77 未加入。
 
-[冻结计划](../../../../../runs/olmo3-stage-transfer-20261103/plan.json)记录提交前配置，[实际提交回执](../../../../../runs/olmo3-stage-transfer-20261103/submitted.json)记录已提交状态；[E74 配置](../../../../../runs/olmo3-stage-transfer-20261103/configs/E74.yaml)、[E75 配置](../../../../../runs/olmo3-stage-transfer-20261103/configs/E75.yaml)及[源码／配置合同](../../../../../runs/olmo3-stage-transfer-20261103/source-contract.json)固定运行身份。2026-11-04 11:07 核对时，E74 已完成 800/1600 次有效更新，正在执行 outer25 全量公共读出，生成进度为 3776/6703 个回答；该节点尚未完成，accuracy 不作为中期结果发布。更新记录的 loss、梯度均有限，无跳过更新。E75 排在 E74 之后，尚未启动。动态进度见[队列状态](../../../../../runs/olmo3-stage-transfer-20261103/queue-state.json)和[训练日志](../../../../../runs/olmo3-stage-transfer-20261103/logs/E74-train.log)。MiMo 队列已经结束；Olmo3 队列在 E75 成功完成后结束，E76／E77 只有预设，未排队。
+[冻结计划](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/plan.json)记录提交前配置，[实际提交回执](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/submitted.json)记录已提交状态；[E74 配置](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/configs/E74.yaml)、[E75 配置](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/configs/E75.yaml)及[源码／配置合同](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/source-contract.json)固定运行身份。2026-11-04 11:07 核对时，E74 已完成 800/1600 次有效更新，正在执行 outer25 全量公共读出，生成进度为 3776/6703 个回答；该节点尚未完成，accuracy 不作为中期结果发布。更新记录的 loss、梯度均有限，无跳过更新。E75 排在 E74 之后，尚未启动。动态进度见[队列状态](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/queue-state.json)和[训练日志](../../../research-evidence/olmo-stage-transfer/olmo3-stage-transfer-20261103/logs/E74-train.log)。MiMo 队列已经结束；Olmo3 队列在 E75 成功完成后结束，E76／E77 只有预设，未排队。
 
 ![Olmo3 E74 已完成 outer1–24 的训练曲线](figures/olmo3-e74-20261104-outer24/training.png)
 

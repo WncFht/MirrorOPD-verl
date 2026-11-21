@@ -198,9 +198,9 @@ python -m examples.mirroropd.research.studies.spectral score \
 CPU 验证入口：
 
 ```bash
-mkdir -p runs/spectral-implementation-20261109
+mkdir -p examples/mirroropd/research-evidence/engineering-evidence/spectral-implementation-20261109
 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest tests/research/test_spectral.py -q \
-  --basetemp=runs/spectral-implementation-20261109/pytest
+  --basetemp=examples/mirroropd/research-evidence/engineering-evidence/spectral-implementation-20261109/pytest
 ```
 
 测试覆盖正交分解、方阵 null、ISO 缩放、top-rank/范数恢复、随机框架、分片导出与只读输入、输出完整性、SVD 对标、heldout 隔离、额外 teacher 支持、head 恒等式和小模型预测位置。32 题 GPU 提取和单矩阵精确 SVD 已完成；跨模型科学结果与任务读出见谱实验报告。Activation oracle、合成 band teacher 的训练接入、早期子空间约束训练与自动绘图不在此实现中；它们按实验设计中的功能证据条件再接入。

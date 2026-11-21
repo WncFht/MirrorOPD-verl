@@ -39,7 +39,7 @@ fv = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = fv
 spec.loader.exec_module(fv)
 DOCS = ROOT / "examples/mirroropd/docs/experiments/teacher-transfer"
-RUNS = ROOT / "runs/mimo-stage-transfer-20261101/formal"
+RUNS = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal"
 OUT = DOCS / "figures/mimo-position-kl-20261106"
 POUT = DOCS / "figures/polaris-position-kl-20261106"
 DATA_OUT = DOCS / "data/mimo-position-kl-20261106"

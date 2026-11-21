@@ -735,7 +735,7 @@ $$
 CPU/FP64脚本 [absorption_predictor_checks.py](../../research/studies/fixed_transfer/absorption_predictor_checks.py)验证同散度反例、谱递推、RL 一步绝对风险界、相对慢收敛反例，以及 PSD 曲率下的跨分布负迁移。命令在仓库根目录执行，输出目录必须尚不存在：
 
 ```bash
-OPENBLAS_NUM_THREADS=1 python -m examples.mirroropd.research.studies.fixed_transfer.absorption_predictor_checks --output runs/absorption-predictor-recheck
+OPENBLAS_NUM_THREADS=1 python -m examples.mirroropd.research.studies.fixed_transfer.absorption_predictor_checks --output ./rebuild/absorption-predictor-recheck
 ```
 
 两个非线性二动作 teacher 的实测值如下；所有指标在同一固定前缀测度上计算，训练使用完整动作 RKL，不含采样噪声。

@@ -5,7 +5,7 @@
       "pid": 3022234,
       "command": [
         "python",
-        "../runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "../../../../../../research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         ".",
@@ -28,14 +28,14 @@
         "bf16_fp32",
         "--gradient-checkpointing",
         "--output",
-        "runs/p0-p1-20261104/aa-fused.json"
+        "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/aa-fused.json"
       ]
     },
     "ab-diagnostic": {
       "pid": 3030882,
       "command": [
         "python",
-        "../runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "../../../../../../research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         ".",
@@ -58,16 +58,16 @@
         "bf16_fp32",
         "--gradient-checkpointing",
         "--diagnostic-dir",
-        "runs/p0-p1-20261104/ab-diagnostic",
+        "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-diagnostic",
         "--output",
-        "runs/p0-p1-20261104/ab-diagnostic.json"
+        "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-diagnostic.json"
       ]
     },
     "ab-head": {
       "pid": 3043763,
       "command": [
         "python",
-        "../runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "../../../../../../research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         ".",
@@ -90,16 +90,16 @@
         "bf16_fp32",
         "--gradient-checkpointing",
         "--diagnostic-dir",
-        "runs/p0-p1-20261104/ab-head",
+        "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-head",
         "--output",
-        "runs/p0-p1-20261104/ab-head.json"
+        "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-head.json"
       ]
     }
   },
   "sha256": {
     "tests/special_distributed/test_mirror_fsdp2.py": "c3e6ec1a9b249c4dd81775a3a6301e3d3d9dcf5ca1bc105186ffeacd9bde2544",
     "examples/mirroropd/benchmarks/full_vocab/analyze_optimizer_drift.py": "8e35ba70c69736e61b31c7e51b85c2edf5b5d5f0701cf94caf14d8fe37fbbc8a",
-    "runs/p0-p1-20261104/ab-head/rank0.pt": "15bd78d512e4e3dfdf9ddd6412a049cbca7816907c0cbe6bba5d7ab00fb47b03",
-    "runs/p0-p1-20261104/ab-head/rank1.pt": "5a3d31764fc5d10c7330a56b8cd13c77c1a9913ea35dc286537ceadb4519c073"
+    "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-head/rank0.pt": "15bd78d512e4e3dfdf9ddd6412a049cbca7816907c0cbe6bba5d7ab00fb47b03",
+    "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/ab-head/rank1.pt": "5a3d31764fc5d10c7330a56b8cd13c77c1a9913ea35dc286537ceadb4519c073"
   }
 }

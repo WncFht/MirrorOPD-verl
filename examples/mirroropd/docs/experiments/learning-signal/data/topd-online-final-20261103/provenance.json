@@ -1,8 +1,8 @@
 {
   "checked_at": "2026-11-03T14:44:21.475252+08:00",
-  "source_root": "runs/topd-data-kappa-20261101",
-  "analysis_command": "python runs/topd-data-kappa-20261101/analyze_task_controls.py --out <new-path>/task-controls.json",
-  "budget_command": "python runs/topd-data-kappa-20261101/audit_online_budgets.py --out <new-path>/budgets.json",
+  "source_root": "examples/mirroropd/research-evidence/topd-data-kappa-20261101",
+  "analysis_command": "python examples/mirroropd/research-evidence/topd-data-kappa-20261101/analyze_task_controls.py --out <new-path>/task-controls.json",
+  "budget_command": "python examples/mirroropd/research-evidence/topd-data-kappa-20261101/audit_online_budgets.py --out <new-path>/budgets.json",
   "frozen_scripts_note": "Source snapshots retained; their ROOT resolves relative to original run directory. Execute originals in source_root for a fresh audit.",
   "files": {
     "analyze_task_controls.py": "391566aac2db46681dd9b5b9c516dce7d2d656db0805f5e0e50c727a8fc0fba9",

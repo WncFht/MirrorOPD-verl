@@ -117,7 +117,7 @@ python -m examples.mirroropd.research.studies.teacher_difference prefix \
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference.analyze_transfer \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --history ../wandb-logs/MirrorOPD-verl/analysis/twenty-batch-pass-20261027
 ```
 
@@ -131,14 +131,14 @@ python -m examples.mirroropd.research.studies.teacher_difference.analyze_transfe
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference logit \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --branch justrl --stages 0 80 240 \
-  --request-cache runs/teacher-difference-stages-20261109/point-probe/r1-justrl \
-  --out runs/teacher-difference-logit-20261109/main \
+  --request-cache examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/point-probe/r1-justrl \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/main \
   --max-sites 8 --iterations 24
 
 python -m examples.mirroropd.research.studies.teacher_difference.report_logit \
-  --root runs/teacher-difference-logit-20261109/main
+  --root examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/main
 ```
 
 测量命令在已分配 GPU 的 worker 中执行。默认从原 prefix 面板中选择 Math 的中间位置，交替抽取 train/heldout，最多 8 个位置；`--positions all` 可纳入已有首、中、末位置；`--positions pressure` 取每题两个 teacher 初始压力最大候选位置的并集，选择结果在所有阶段与 branch 间固定。后者是高压力对照，不代表均匀 token 分布。同一目录内保持抽样、迭代次数与请求身份一致。输出 JSON 保存标量与完整跨位置响应表，PT 保存特征向量和原始请求，报告读取两者并校验身份，生成 CSV、PNG/PDF 与输入哈希。
@@ -161,13 +161,13 @@ python -m examples.mirroropd.research.studies.teacher_difference.report_logit \
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference groups \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --branch justrl --stages 0 80 240 \
-  --out runs/teacher-difference-logit-20261109/large \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/large \
   --spectra-per-split 40 --iterations 24
 
 python -m examples.mirroropd.research.studies.teacher_difference report-groups \
-  --root runs/teacher-difference-logit-20261109/large
+  --root examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/large
 ```
 
 在共同初始化测两个 target，后续参数点测各自 native target。所有题目测局部请求、梯度范数；确定性抽取 train/heldout 各 40 题测主要谱。跨题部分按原始 B8 组构造平均梯度，保存全部组间精确 Gram。`prefix_batch_logits` 使用右侧 padding、attention mask 和逐行最后真实 hidden state；批量 VJP 与逐 prefix 梯度均值通过 CPU 显式对照。Gram 流式保留两个组方向，避免保存全体题目的参数梯度和逐位置二次方数量的 JVP。
@@ -178,8 +178,8 @@ python -m examples.mirroropd.research.studies.teacher_difference report-groups \
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference.compare_sampling \
-  --roots runs/teacher-difference-logit-20261109/large runs/teacher-difference-logit-20261109/large-replicate \
-  --out runs/teacher-difference-logit-20261109/analysis
+  --roots examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/large examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/large-replicate \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/analysis
 ```
 
 ### 完整轨迹 live/frozen 传播
@@ -188,11 +188,11 @@ python -m examples.mirroropd.research.studies.teacher_difference.compare_samplin
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference.trajectory_probe \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --branch justrl --stages 0 80 240 320 \
-  --out runs/teacher-difference-logit-20261109/trajectory
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/trajectory
 python -m examples.mirroropd.research.studies.teacher_difference.report_trajectory \
-  --root runs/teacher-difference-logit-20261109/trajectory
+  --root examples/mirroropd/research-evidence/teacher-difference/teacher-difference-logit-20261109/trajectory
 ```
 
 `--max-groups 1` 用于性能与数值试跑，必须使用独立输出目录。`--token-chunk` 控制词表投影的 token 块大小，默认 128。完整面板共 256 道 Math 题、32 个 B8；每条件 64 个 FP32 参数向量约占 455 GB CPU RAM，四任务并行需约 1.9 TB 可用内存。Gram 在 CUDA 上按参数块以 FP64 累积，输出包含跨字段内积，不写完整梯度到共享文件系统。
@@ -207,13 +207,13 @@ python -m examples.mirroropd.research.studies.teacher_difference.report_trajecto
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference responses \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --branch polaris --stages 0 80 240 \
-  --out runs/teacher-difference-response-20261109/main \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-response-20261109/main \
   --probes 16 --bundle 4
 
 python -m examples.mirroropd.research.studies.teacher_difference report-responses \
-  --root runs/teacher-difference-response-20261109/main
+  --root examples/mirroropd/research-evidence/teacher-difference/teacher-difference-response-20261109/main
 ```
 
 这些入口使用原 manifest 的 R1 Math 面板。`--max-groups 1` 在独立目录试跑；`--probes` 是每题独立随机符号次数，`--bundle` 控制同时常驻的 hidden/head cotangent 数。所有位置沿用固定 H；随机种子由全局 seed 与 row ID 决定，各 teacher/阶段配对。同一题的多次 probe 不作为额外样本。
@@ -228,14 +228,14 @@ python -m examples.mirroropd.research.studies.teacher_difference report-response
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference updates \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --branch polaris --stages 240 \
-  --out runs/teacher-difference-response-20261109/updates \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-response-20261109/updates \
   --source-indices 15 17 19 --displacements 0.003 0.01 0.03
 
 python -m examples.mirroropd.research.studies.teacher_difference report-updates \
-  --root runs/teacher-difference-response-20261109/updates \
-  --geometry runs/teacher-difference-response-20261109/main
+  --root examples/mirroropd/research-evidence/teacher-difference/teacher-difference-response-20261109/updates \
+  --geometry examples/mirroropd/research-evidence/teacher-difference/teacher-difference-response-20261109/main
 ```
 
 每个 trial 完成即保存，续跑跳过已完成评分。分析核对候选方向范数与完整面板 Gram，分别输出等位移比较和 calibration 选择后的 test 结果，保留实际收益与一阶预测的偏差。该探针研究原始分量方向的小步作用，不等同于恢复历史 Adam 状态后继续训练。
@@ -246,16 +246,16 @@ python -m examples.mirroropd.research.studies.teacher_difference report-updates 
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference norms \
-  --manifest runs/teacher-difference-stages-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-stages-20261109/manifest.json \
   --branch polaris --stages 240 \
-  --out runs/teacher-difference-response-20261109/frozen-norms --probes 8
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-response-20261109/frozen-norms --probes 8
 ```
 
 逐题统计可续跑。`report-responses` 在结果根目录的同级 `frozen-norms/` 查找身份匹配的结果，补充 `frozen-factors.csv`；面板或 task 不匹配时不混用。若改目录布局，先把范数结果放入对应 study 的同级目录再生成联合分析。
 
 Response 分析另外保存逐题能量份额和 leave-one-question-out 因子，原始全题统计保持不变。正因子和配对正比值用 percentile 题组区间，有符号传播及方向差值用 basic 区间；区间方法记录在产物中。真实更新分析输出相同 source/test 的方向配对差，零更新候选沿用真实 test baseline。
 
-R1-1.5B、H1024 的已测开销：256 题、16 probes、两个字段的完整联合 Gram 每条件约 18–20 分钟，峰值分配显存约 49–50 GB，CPU 瞬态向量约 455 GB；norm-only 的 8 probes 约 6–7 分钟，约 31–33 GB 显存。该数字包含已命中缓存的测量，不是不同硬件或模型的预算保证。详细回执见 [response study](../../../../../runs/teacher-difference-response-20261109/README.md)。
+R1-1.5B、H1024 的已测开销：256 题、16 probes、两个字段的完整联合 Gram 每条件约 18–20 分钟，峰值分配显存约 49–50 GB，CPU 瞬态向量约 455 GB；norm-only 的 8 probes 约 6–7 分钟，约 31–33 GB 显存。该数字包含已命中缓存的测量，不是不同硬件或模型的预算保证。详细回执见 [response study](../../../research-evidence/teacher-difference/teacher-difference-response-20261109/README.md)。
 
 ### Teacher × student 交叉与历史 AdamW
 
@@ -263,18 +263,18 @@ R1-1.5B、H1024 的已测开销：256 题、16 probes、两个字段的完整联
 
 ```bash
 python -m examples.mirroropd.research.studies.teacher_difference analyze-matrix \
-  --cells runs/teacher-difference-crossed-20261109/cells.json \
-  --out runs/teacher-difference-crossed-20261109/analysis
+  --cells examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/cells.json \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/analysis
 
 python -m examples.mirroropd.research.studies.teacher_difference adam \
-  --manifest runs/teacher-difference-crossed-20261109/manifest.json \
+  --manifest examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/manifest.json \
   --branch polaris --stages 240 \
-  --out runs/teacher-difference-crossed-20261109/adam
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/adam
 
 python -m examples.mirroropd.research.studies.teacher_difference report-crossed \
-  --cells runs/teacher-difference-crossed-20261109/cells.json \
-  --adam runs/teacher-difference-crossed-20261109/adam \
-  --out runs/teacher-difference-crossed-20261109/update-analysis
+  --cells examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/cells.json \
+  --adam examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/adam \
+  --out examples/mirroropd/research-evidence/teacher-difference/teacher-difference-crossed-20261109/update-analysis
 ```
 
 `adam` 在分配的 GPU 上运行，读取 student 目录的 `optimizer.pt`，核对参数数量、形状和历史 step；恢复全部参数组超参数、动量与二阶矩，clip=1，执行一次 PyTorch AdamW。Source 固定为未来 P/R/T 三个 B8；不是原 B16 训练步的重放。记录实际位移及每个 receiver 的一阶预测，分别评分位移的 0.25/0.5/1 倍；缩放位移不等于改变 Adam 学习率。每个 trial 从相同 FP32 参数恢复，保存后可续跑。Cal/test 继续使用原 48/48 题。

@@ -11,14 +11,14 @@
     "passed": 255,
     "gpu_tests_skipped": 15,
     "source": {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-cpu-tests.log",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-cpu-tests.log",
       "sha256": "671ab33b411c01f2f75872006869a99924d8a1a6ea18a408cdf17143e70d1593"
     }
   },
   "gpu_tests": {
     "passed": 15,
     "source": {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-gpu-tests.log",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-gpu-tests.log",
       "sha256": "54ec2cd373b8bc680668345c46f5ad6e18ec69c36c97314a50e4313ebb30b3cb"
     }
   },
@@ -29,26 +29,26 @@
     "tensors_consumed_each_case": 13,
     "sources": [
       {
-        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-0.json",
+        "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-four-rank-refit/rank-0.json",
         "sha256": "e6319514a09c63fdc6a07080aac4bc3d5ace76af3eb1baaa6e6e9125e82c9ad1"
       },
       {
-        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-1.json",
+        "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-four-rank-refit/rank-1.json",
         "sha256": "ffb42fd62c1c7dbc3431ac41329057637e718a9dd02269d91f3187ae1451fa4a"
       },
       {
-        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-2.json",
+        "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-four-rank-refit/rank-2.json",
         "sha256": "6d6d9d132d2461542354f86abc6749ff187140f39896651e866272eba157f690"
       },
       {
-        "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-four-rank-refit/rank-3.json",
+        "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-four-rank-refit/rank-3.json",
         "sha256": "f6aa0d6ec352ac532f962402a893d5ce8681c8d130ae14585ae1df92737c0b33"
       }
     ]
   },
   "dense_history": {
     "summary": {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/dense-history-probe/summary.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/g7-stable-v2-20261028/dense-history-probe/summary.json",
       "sha256": "5a8559cbe16b58be2d65ab9a20e6252539805a365d35f980e0c5437d563ae9f8"
     },
     "checks": 637,
@@ -66,7 +66,7 @@
   },
   "moe_history": {
     "summary": {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/g7-stable-v2-20261028/moe-history-invariant-probe/summary.json",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/g7-stable-v2-20261028/moe-history-invariant-probe/summary.json",
       "sha256": "be786be634615217917c2ceb516de6d86dc40b02c952df85b7478fbc73c4b198"
     },
     "checks": 598,
@@ -137,7 +137,7 @@
       ],
       "median_effective_tokens_per_second": 1327.0390587924,
       "max_allocated_bytes": 51497351680,
-      "raw_directory": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/rollout-fusion-20261028/release-d56e081/dense-base-optimized",
+      "raw_directory": "examples/mirroropd/research-evidence/engineering-evidence/rollout-fusion-20261028/release-d56e081/dense-base-optimized",
       "scope": "optimized path only; reference and full G7 audit still pending"
     }
   }

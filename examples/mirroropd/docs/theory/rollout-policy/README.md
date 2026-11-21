@@ -27,7 +27,7 @@
 ```bash
 python -m examples.mirroropd.research.checks.rollout_policy.audit_centers --out /tmp/centers-recheck.json
 python -m examples.mirroropd.research.checks.rollout_policy.audit_aggregation --out /tmp/aggregation-recheck.json
-python -m examples.mirroropd.research.checks.rollout_policy.audit_source_weights --out runs/rollout-policy-is-20261106/verification.json
+python -m examples.mirroropd.research.checks.rollout_policy.audit_source_weights --out ./rebuild/rollout-policy-is-20261106/verification.json
 ```
 
 ## 完整检索记录

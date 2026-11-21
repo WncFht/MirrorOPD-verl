@@ -102,7 +102,7 @@ vLLM 日志中可见的 KV 使用率峰值分别为 16.5% 与 20.2%；这是离�
 
 32 序列／窗口 64 是两张 GPU 上独立评估的已验证候选。这批子集不足以覆盖完整评估的稳态 KV 压力，也未验证所有 student checkpoint 或另外两组 model pair；通用 MiMo 训练／评估默认值保留 16 序列。正式队列继续使用既有配置与冻结源码，下一次完整评估可优先比较此候选。
 
-配置、题目 ID、源码 hash、日志、判分及分析结果位于[`runs/eval-scheduler-20261101`](../../../../../../runs/eval-scheduler-20261101)，汇总为[`analysis.json`](../../../../../../runs/eval-scheduler-20261101/analysis.json)。原有 MiMo 正式队列继续使用其冻结源码。后续按请求窗口与引擎序列上限的组合、KV 使用率、waiting／running 与 preemption 计数选点；生成上限、采样次数和训练批量不作为吞吐调参项。
+配置、题目 ID、源码 hash、日志、判分及分析结果位于[`examples/mirroropd/research-evidence/engineering-evidence/eval-scheduler-20261101`](../../../../research-evidence/engineering-evidence/eval-scheduler-20261101)，汇总为[`analysis.json`](../../../../research-evidence/engineering-evidence/eval-scheduler-20261101/analysis.json)。原有 MiMo 正式队列继续使用其冻结源码。后续按请求窗口与引擎序列上限的组合、KV 使用率、waiting／running 与 preemption 计数选点；生成上限、采样次数和训练批量不作为吞吐调参项。
 
 <a id="estimated"></a>
 

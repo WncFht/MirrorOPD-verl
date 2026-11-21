@@ -62,11 +62,11 @@ def main():
             )
             if r["run_id"] == "MiMo-RL-from-SFT":
                 row["checkpoints"] = {
-                    "320": str(REPO / "runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface")
+                    "320": str(REPO / "examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface")
                 }
             if r["run_id"] == "MiMo-Zero-from-SFT":
                 row["checkpoints"] = {
-                    "320": str(REPO / "runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface")
+                    "320": str(REPO / "examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface")
                 }
         conditions.append(row)
     # Merge repeated input modes for weight work, retaining all output conditions.

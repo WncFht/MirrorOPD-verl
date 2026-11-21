@@ -347,7 +347,7 @@ outer7 中，κ=1 相对κ=0 的自动判对率差为−10.94 个百分点，题
 ```bash
 python -m examples.mirroropd.research.studies.weighted_targets.plot_online_endpoints \
   --data examples/mirroropd/docs/experiments/learning-signal/data/topd-online-final-20261103/task-controls.json \
-  --out runs/topd-online-final-replot-20261103
+  --out ./rebuild/topd-online-final-replot-20261103
 ```
 
 ### κ 的局部梯度与任务读出

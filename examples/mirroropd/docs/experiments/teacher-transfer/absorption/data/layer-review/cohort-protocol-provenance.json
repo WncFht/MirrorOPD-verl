@@ -1317,7 +1317,7 @@
       "data": {
         "tokenizer": null,
         "use_shm": false,
-        "train_files": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/questions/train.parquet",
+        "train_files": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/questions/train.parquet",
         "val_files": [],
         "train_max_samples": -1,
         "val_max_samples": -1,
@@ -1912,7 +1912,7 @@
         "eval_metrics_resamples": 256,
         "log_val_generations": 0,
         "rollout_data_dir": null,
-        "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E63/validation",
+        "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E63/validation",
         "nnodes": 1,
         "n_gpus_per_node": 4,
         "save_freq": -1,
@@ -1926,7 +1926,7 @@
         "critic_warmup": 0,
         "default_hdfs_dir": null,
         "del_local_ckpt_after_load": false,
-        "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E63/runtime",
+        "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E63/runtime",
         "max_actor_ckpt_to_keep": null,
         "max_critic_ckpt_to_keep": null,
         "ray_wait_register_center_timeout": 300,
@@ -1965,9 +1965,9 @@
         },
         "evaluation": {
           "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
-          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E63/evaluation",
-          "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/questions/source.parquet",
-          "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/bootstrap",
+          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E63/evaluation",
+          "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/questions/source.parquet",
+          "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/bootstrap",
           "training_domain": "math",
           "source_enabled": false,
           "history_enabled": false,
@@ -2025,7 +2025,7 @@
             {
               "name": "MATH-500",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/MATH-500.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/MATH-500.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -2034,7 +2034,7 @@
             {
               "name": "AMC23",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AMC23.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AMC23.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -2043,7 +2043,7 @@
             {
               "name": "AIME24",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME24.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME24.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -2052,7 +2052,7 @@
             {
               "name": "AIME25",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME25.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME25.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -2061,7 +2061,7 @@
             {
               "name": "AIME26",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME26.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME26.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -2108,8 +2108,8 @@
           "final_export": true,
           "verify_export": true,
           "fixed_banks": {
-            "public_initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/S0",
-            "public_teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/Q"
+            "public_initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/S0",
+            "public_teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/Q"
           },
           "export_outers": [
             1,
@@ -2198,10 +2198,10 @@
           "runtime_env": {
             "py_executable": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
             "env_vars": {
-              "WANDB_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E63",
+              "WANDB_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E63",
               "WANDB_MODE": "offline",
               "VERL_ROLLOUT_IPC_NAMESPACE": "${oc.env:VERL_ROLLOUT_IPC_NAMESPACE}",
-              "VERL_FILE_LOGGER_PATH": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E63/metrics.jsonl"
+              "VERL_FILE_LOGGER_PATH": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E63/metrics.jsonl"
             }
           },
           "num_gpus": 4,
@@ -2829,7 +2829,7 @@
       "data": {
         "tokenizer": null,
         "use_shm": false,
-        "train_files": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/questions/train.parquet",
+        "train_files": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/questions/train.parquet",
         "val_files": [],
         "train_max_samples": -1,
         "val_max_samples": -1,
@@ -3424,7 +3424,7 @@
         "eval_metrics_resamples": 256,
         "log_val_generations": 0,
         "rollout_data_dir": null,
-        "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E64/validation",
+        "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E64/validation",
         "nnodes": 1,
         "n_gpus_per_node": 4,
         "save_freq": -1,
@@ -3438,7 +3438,7 @@
         "critic_warmup": 0,
         "default_hdfs_dir": null,
         "del_local_ckpt_after_load": false,
-        "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E64/runtime",
+        "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E64/runtime",
         "max_actor_ckpt_to_keep": null,
         "max_critic_ckpt_to_keep": null,
         "ray_wait_register_center_timeout": 300,
@@ -3477,9 +3477,9 @@
         },
         "evaluation": {
           "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
-          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E64/evaluation",
-          "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/questions/source.parquet",
-          "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/bootstrap",
+          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E64/evaluation",
+          "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/questions/source.parquet",
+          "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/bootstrap",
           "training_domain": "math",
           "source_enabled": false,
           "history_enabled": false,
@@ -3537,7 +3537,7 @@
             {
               "name": "MATH-500",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/MATH-500.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/MATH-500.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -3546,7 +3546,7 @@
             {
               "name": "AMC23",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AMC23.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AMC23.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -3555,7 +3555,7 @@
             {
               "name": "AIME24",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME24.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME24.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -3564,7 +3564,7 @@
             {
               "name": "AIME25",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME25.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME25.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -3573,7 +3573,7 @@
             {
               "name": "AIME26",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME26.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME26.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -3620,8 +3620,8 @@
           "final_export": true,
           "verify_export": true,
           "fixed_banks": {
-            "public_initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/S0",
-            "public_teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/Q"
+            "public_initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/S0",
+            "public_teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/Q"
           },
           "export_outers": [
             1,
@@ -3710,10 +3710,10 @@
           "runtime_env": {
             "py_executable": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
             "env_vars": {
-              "WANDB_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E64",
+              "WANDB_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E64",
               "WANDB_MODE": "offline",
               "VERL_ROLLOUT_IPC_NAMESPACE": "${oc.env:VERL_ROLLOUT_IPC_NAMESPACE}",
-              "VERL_FILE_LOGGER_PATH": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E64/metrics.jsonl"
+              "VERL_FILE_LOGGER_PATH": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E64/metrics.jsonl"
             }
           },
           "num_gpus": 4,
@@ -4341,7 +4341,7 @@
       "data": {
         "tokenizer": null,
         "use_shm": false,
-        "train_files": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/questions/train.parquet",
+        "train_files": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/questions/train.parquet",
         "val_files": [],
         "train_max_samples": -1,
         "val_max_samples": -1,
@@ -4936,7 +4936,7 @@
         "eval_metrics_resamples": 256,
         "log_val_generations": 0,
         "rollout_data_dir": null,
-        "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E65/validation",
+        "validation_data_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E65/validation",
         "nnodes": 1,
         "n_gpus_per_node": 4,
         "save_freq": -1,
@@ -4950,7 +4950,7 @@
         "critic_warmup": 0,
         "default_hdfs_dir": null,
         "del_local_ckpt_after_load": false,
-        "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E65/runtime",
+        "default_local_dir": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E65/runtime",
         "max_actor_ckpt_to_keep": null,
         "max_critic_ckpt_to_keep": null,
         "ray_wait_register_center_timeout": 300,
@@ -4989,9 +4989,9 @@
         },
         "evaluation": {
           "_target_": "verl.trainer.evaluation.coordinator.EvaluationCoordinator",
-          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E65/evaluation",
-          "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/questions/source.parquet",
-          "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/bootstrap",
+          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E65/evaluation",
+          "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/questions/source.parquet",
+          "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/bootstrap",
           "training_domain": "math",
           "source_enabled": false,
           "history_enabled": false,
@@ -5049,7 +5049,7 @@
             {
               "name": "MATH-500",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/MATH-500.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/MATH-500.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -5058,7 +5058,7 @@
             {
               "name": "AMC23",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AMC23.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AMC23.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -5067,7 +5067,7 @@
             {
               "name": "AIME24",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME24.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME24.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -5076,7 +5076,7 @@
             {
               "name": "AIME25",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME25.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME25.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -5085,7 +5085,7 @@
             {
               "name": "AIME26",
               "domain": "math",
-              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/questions/AIME26.parquet",
+              "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/questions/AIME26.parquet",
               "verifier": "math",
               "n": 4,
               "protocol": "public",
@@ -5132,8 +5132,8 @@
           "final_export": true,
           "verify_export": true,
           "fixed_banks": {
-            "public_initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/S0",
-            "public_teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/Q"
+            "public_initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/S0",
+            "public_teacher": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/Q"
           },
           "export_outers": [
             1,
@@ -5222,10 +5222,10 @@
           "runtime_env": {
             "py_executable": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
             "env_vars": {
-              "WANDB_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E65",
+              "WANDB_DIR": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E65",
               "WANDB_MODE": "offline",
               "VERL_ROLLOUT_IPC_NAMESPACE": "${oc.env:VERL_ROLLOUT_IPC_NAMESPACE}",
-              "VERL_FILE_LOGGER_PATH": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/training/E65/metrics.jsonl"
+              "VERL_FILE_LOGGER_PATH": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/training/E65/metrics.jsonl"
             }
           },
           "num_gpus": 4,

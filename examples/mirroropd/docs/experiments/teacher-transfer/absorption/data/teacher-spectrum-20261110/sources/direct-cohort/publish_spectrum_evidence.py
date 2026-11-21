@@ -12,7 +12,7 @@ import shutil
 from pathlib import Path
 
 REPO = Path.cwd()
-RUN = REPO / "runs/teacher-spectrum-followup-20261110"
+RUN = REPO / "examples/mirroropd/research-evidence/teacher-spectrum/teacher-spectrum-followup-20261110"
 DOC = REPO / "examples/mirroropd/docs/experiments/teacher-transfer"
 PAGE = DOC / "2026-11-09-教师变化与OPD吸收的谱实验设计.md"
 DATA = DOC / "data/teacher-spectrum-20261110"

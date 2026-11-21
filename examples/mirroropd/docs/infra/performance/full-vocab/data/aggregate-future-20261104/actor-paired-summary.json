@@ -9,7 +9,7 @@
   "conditions": {
     "short": {
       "input": {
-        "source": "runs/actor-settings-20261101/teacher-cache128.pt",
+        "source": "examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
         "source_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
         "selected_indices": [
           1,
@@ -44,14 +44,14 @@
         "derived_cache_sha256": "82080f742c6221effc1b3dc49b1746a3aec6e7409c7dd0cce3ae15d740755564",
         "scope": "Unmodified saved response prefixes and exact teacher hidden slices; engineering timing only"
       },
-      "raw_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-short.json",
+      "raw_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-short.json",
       "raw_sha256": "4a1324c6cfc1f1a1c616b1645064894f1c91b1b9694cb67fce82f4b2e0779792",
       "metadata": {
         "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
         "arguments": {
           "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-          "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-short.pt",
-          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-short.json",
+          "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-short.pt",
+          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-short.json",
           "repeat_input": 1,
           "reuse": 1,
           "samples": 3,
@@ -61,7 +61,7 @@
           "loss_agg_mode": "token-mean",
           "future_mode": "none",
           "gamma": 1.0,
-          "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-cases.json",
+          "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-cases.json",
           "warmups": 2,
           "checkpoint": true,
           "diagnostics": true,
@@ -1803,7 +1803,7 @@
     },
     "long": {
       "input": {
-        "source": "runs/actor-settings-20261101/teacher-cache128.pt",
+        "source": "examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
         "source_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
         "selected_indices": [
           1,
@@ -1838,14 +1838,14 @@
         "derived_cache_sha256": "fbf5f80bbf7fa3026f097e816f6622150c1b0b1e64e5d5ef5070952b8f44c9db",
         "scope": "Unmodified saved response prefixes and exact teacher hidden slices; engineering timing only"
       },
-      "raw_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-long.json",
+      "raw_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-long.json",
       "raw_sha256": "a874ed83006a1e9e6b8922cb567a677e2642fcb5c6aa728bbc38891a586de08f",
       "metadata": {
         "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
         "arguments": {
           "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-          "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-long.pt",
-          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-long.json",
+          "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-long.pt",
+          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-long.json",
           "repeat_input": 1,
           "reuse": 1,
           "samples": 3,
@@ -1855,7 +1855,7 @@
           "loss_agg_mode": "token-mean",
           "future_mode": "none",
           "gamma": 1.0,
-          "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-cases.json",
+          "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-cases.json",
           "warmups": 2,
           "checkpoint": true,
           "diagnostics": true,
@@ -3597,7 +3597,7 @@
     },
     "mixed": {
       "input": {
-        "source": "runs/actor-settings-20261101/teacher-cache128.pt",
+        "source": "examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
         "source_sha256": "fdcd4c4b9810e262e949f54f0a3edf0149b818335230da4bedf26031d4845916",
         "selected_indices": [
           1,
@@ -3632,14 +3632,14 @@
         "derived_cache_sha256": "be11bcedb8725296d2151700f358d110709db2e6661130ea424bcbd0b127c77a",
         "scope": "Unmodified saved response prefixes and exact teacher hidden slices; engineering timing only"
       },
-      "raw_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-mixed.json",
+      "raw_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-mixed.json",
       "raw_sha256": "957b6f20bd44c8224f1ea9a4b9154b0f3e43ba5722ee44d1bf14db0da9806c23",
       "metadata": {
         "scope": "Fixed-token actor settings probe; excludes teacher preparation, Ray/TQ and rollout.\n\nUse original cached teacher states and actual production objective/optimizer paths.\nRepeated inputs scale per-rank work only; they are not fresh scientific samples.\nLR is zero, but AdamW, clipping, backward and model/optimizer transfers execute.\n",
         "arguments": {
           "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-          "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-mixed.pt",
-          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-paired-mixed.json",
+          "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-mixed.pt",
+          "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-paired-mixed.json",
           "repeat_input": 1,
           "reuse": 1,
           "samples": 3,
@@ -3649,7 +3649,7 @@
           "loss_agg_mode": "token-mean",
           "future_mode": "none",
           "gamma": 1.0,
-          "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/actor-cases.json",
+          "paired_cases": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/actor-cases.json",
           "warmups": 2,
           "checkpoint": true,
           "diagnostics": true,

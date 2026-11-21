@@ -88,7 +88,7 @@ GEMM 包含 student/teacher 投影与 dH/dW；每个连续块为四次，四块�
 
 ## R1 配对的算子开发测量
 
-2026-10-30，在物理 GPU 6 的独占开发队列中复测当前 precompute 与 fused 实现。Learner head 为 vocab151936、hidden1536，BF16 输入与 FP32 归约；先通过 79 项 CUDA 数值测试，覆盖近目标、小梯度、BF16、非整齐词表和额外 teacher 输出行等案例。运行证据位于工作区 `runs/vllm-fusion-20261029/r1-fused-operator-checks-01/` 与 `r1-fused-shapes-02/`。
+2026-10-30，在物理 GPU 6 的独占开发队列中复测当前 precompute 与 fused 实现。Learner head 为 vocab151936、hidden1536，BF16 输入与 FP32 归约；先通过 79 项 CUDA 数值测试，覆盖近目标、小梯度、BF16、非整齐词表和额外 teacher 输出行等案例。运行证据位于工作区 `examples/mirroropd/research-evidence/vllm-fusion-20261029/r1-fused-operator-checks-01/` 与 `r1-fused-shapes-02/`。
 
 4096 位置的一次性 dense autograd 参考在 80GB H800 上 OOM，原始失败保留。后续用 512 位置的 dense autograd 检查 loss/VJP，大规模以普通 precompute 检查系统一致性；后者共享部分实现，不能单独充当独立数学 oracle。原误差门槛保持不变。
 

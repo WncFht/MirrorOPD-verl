@@ -3,14 +3,14 @@
     "status": "complete",
     "optimizer_steps": 4,
     "config": {
-      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/code-integration-a01/evaluation",
-      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/questions-v2/source/code.parquet",
-      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/code-integration-a01/bootstrap",
+      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/code-integration-a01/evaluation",
+      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/questions-v2/source/code.parquet",
+      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/code-integration-a01/bootstrap",
       "datasets": [
         {
           "name": "MATH-500",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
           "verifier": "math",
           "n": 1,
           "protocol": "public",
@@ -22,7 +22,7 @@
         {
           "name": "AMC23",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
           "verifier": "math",
           "n": 2,
           "protocol": "public",
@@ -34,7 +34,7 @@
         {
           "name": "LCBv5",
           "domain": "code",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
           "verifier": "lcb",
           "n": 2,
           "protocol": "public",
@@ -46,7 +46,7 @@
         {
           "name": "GPQA-Diamond",
           "domain": "science",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
           "verifier": "gpqa",
           "n": 2,
           "protocol": "public",
@@ -58,7 +58,7 @@
         {
           "name": "IFEval",
           "domain": "if",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
           "verifier": "ifeval",
           "n": 1,
           "protocol": "public",
@@ -831,14 +831,14 @@
     "status": "complete",
     "optimizer_steps": 4,
     "config": {
-      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/science-integration-a01/evaluation",
-      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/questions-v2/source/science.parquet",
-      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/science-integration-a01/bootstrap",
+      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/science-integration-a01/evaluation",
+      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/questions-v2/source/science.parquet",
+      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/science-integration-a01/bootstrap",
       "datasets": [
         {
           "name": "MATH-500",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
           "verifier": "math",
           "n": 1,
           "protocol": "public",
@@ -850,7 +850,7 @@
         {
           "name": "AMC23",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
           "verifier": "math",
           "n": 2,
           "protocol": "public",
@@ -862,7 +862,7 @@
         {
           "name": "LCBv5",
           "domain": "code",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
           "verifier": "lcb",
           "n": 2,
           "protocol": "public",
@@ -874,7 +874,7 @@
         {
           "name": "GPQA-Diamond",
           "domain": "science",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
           "verifier": "gpqa",
           "n": 2,
           "protocol": "public",
@@ -886,7 +886,7 @@
         {
           "name": "IFEval",
           "domain": "if",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
           "verifier": "ifeval",
           "n": 1,
           "protocol": "public",
@@ -1659,14 +1659,14 @@
     "status": "complete",
     "optimizer_steps": 4,
     "config": {
-      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/if-integration-a01/evaluation",
-      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/questions-v2/source/if.parquet",
-      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/if-integration-a01/bootstrap",
+      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/if-integration-a01/evaluation",
+      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/questions-v2/source/if.parquet",
+      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/if-integration-a01/bootstrap",
       "datasets": [
         {
           "name": "MATH-500",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
           "verifier": "math",
           "n": 1,
           "protocol": "public",
@@ -1678,7 +1678,7 @@
         {
           "name": "AMC23",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
           "verifier": "math",
           "n": 2,
           "protocol": "public",
@@ -1690,7 +1690,7 @@
         {
           "name": "LCBv5",
           "domain": "code",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
           "verifier": "lcb",
           "n": 2,
           "protocol": "public",
@@ -1702,7 +1702,7 @@
         {
           "name": "GPQA-Diamond",
           "domain": "science",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
           "verifier": "gpqa",
           "n": 2,
           "protocol": "public",
@@ -1714,7 +1714,7 @@
         {
           "name": "IFEval",
           "domain": "if",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
           "verifier": "ifeval",
           "n": 1,
           "protocol": "public",
@@ -2487,14 +2487,14 @@
     "status": "complete",
     "optimizer_steps": 32,
     "config": {
-      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/sixcard-a01/evaluation",
-      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/questions-v2/source/math.parquet",
-      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/sixcard-a01/bootstrap",
+      "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/sixcard-a01/evaluation",
+      "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/questions-v2/source/math.parquet",
+      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/sixcard-a01/bootstrap",
       "datasets": [
         {
           "name": "MATH-500",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet",
           "verifier": "math",
           "n": 1,
           "protocol": "public",
@@ -2506,7 +2506,7 @@
         {
           "name": "AMC23",
           "domain": "math",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet",
           "verifier": "math",
           "n": 2,
           "protocol": "public",
@@ -2518,7 +2518,7 @@
         {
           "name": "LCBv5",
           "domain": "code",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet",
           "verifier": "lcb",
           "n": 2,
           "protocol": "public",
@@ -2530,7 +2530,7 @@
         {
           "name": "GPQA-Diamond",
           "domain": "science",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet",
           "verifier": "gpqa",
           "n": 2,
           "protocol": "public",
@@ -2542,7 +2542,7 @@
         {
           "name": "IFEval",
           "domain": "if",
-          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
+          "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet",
           "verifier": "ifeval",
           "n": 1,
           "protocol": "public",
@@ -3125,7 +3125,7 @@
     }
   },
   "self-rkl-7b-a01": {
-    "bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/long-prefix-probe-v2",
+    "bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/long-prefix-probe-v2",
     "bank_sha256": "025ec8cd250d4f0f3f49ccd9b92360f731a66533aab891f08c4cf394565da6b5",
     "purpose": "infrastructure_only",
     "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",
@@ -3215,7 +3215,7 @@
     "teacher_copy": true
   },
   "large-rkl-a01": {
-    "bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/long-prefix-probe-v2",
+    "bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/long-prefix-probe-v2",
     "bank_sha256": "025ec8cd250d4f0f3f49ccd9b92360f731a66533aab891f08c4cf394565da6b5",
     "purpose": "infrastructure_only",
     "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/deepseek-ai--DeepSeek-R1-Distill-Qwen-7B/916b56a44061fd5cd7d6a8fb632557ed4f724f60",

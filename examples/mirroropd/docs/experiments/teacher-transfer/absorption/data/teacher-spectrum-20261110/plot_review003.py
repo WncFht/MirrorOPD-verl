@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 REPO = next(p for p in Path(__file__).resolve().parents if (p / "examples/mirroropd").is_dir())
-ROOT = REPO / "runs/teacher-spectrum-followup-20261110"
+ROOT = REPO / "examples/mirroropd/research-evidence/teacher-spectrum/teacher-spectrum-followup-20261110"
 sys.path.insert(0, str(REPO.parent / "dotfiles/.agents/skills/figure-viz/assets/mpl"))
 import fvstyle as fv  # noqa: E402
 

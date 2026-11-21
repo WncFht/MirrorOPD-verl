@@ -2,14 +2,11 @@
 
 2026-11-01 核对。运行合同与动作空间整合以`1d4ef0ee`为代码基线；已完成的 actor 设置 benchmark 现已通过`e48ed77f`归并到 main。冻结实验仍按各自 source commit 解释，清理不改变运行中的源码，也不自动启动训练。
 
-## 保留的工作区
+## 当前工作区与恢复
 
-下表记录合并清理后的目录及保留理由。运行状态会变化，当前登记用 `git worktree list --porcelain` 核对，未提交成果用对应目录的 `git status --short` 核对。
+主工作区用于日常开发。2026-11-18 退役的工作树保留本地恢复 tag，命名为 `archive/20261118/<工作树名>`。独有的未提交补丁和未跟踪源码见[恢复材料](../../../research-evidence/engineering-evidence/recovery/)。
 
-| 位置（相对仓库）               | 版本或分支                           | 保留理由                                                                          |
-| ------------------------------ | ------------------------------------ | --------------------------------------------------------------------------------- |
-| 仓库根目录                     | `main`，包含`e48ed77f`               | 后续开发入口；其他进行中的模型、评估及研究文档修改仍保留为未提交内容              |
-| `.worktrees/qwen-prefix-study` | `feat/qwen-prefix-study`，`462e3f3a` | 仍有训练、生成及评分进程；分支有 3 个独有提交，合并预览存在冲突，继续保留冻结源码 |
+用 `git worktree add --detach .worktrees/<工作树名> archive/20261118/<工作树名>` 检出基线，然后应用对应的 `<工作树名>-working.patch`。有对应的 `<工作树名>-untracked.tar` 时，将它解包到该工作树。
 
 新工作树放仓库内 `.worktrees/`，运行产物放 `runs/`。分支名、目录年龄、相同 HEAD 或 GPU 暂时空闲都不能证明目录可删除。冻结目录不原地切换代码。
 
@@ -25,13 +22,11 @@
 | `.worktrees/qwen-native`           | 队列为`baseline_ready`，initial／teacher／finalize 全部 exit0，active_gpus 为空、无活进程、未开启自动训练，确认后解除旧锁并移除 | tag `archive/qwen-native-20261101`         |
 | `../MirrorOPD-verl-vllm-expanded`  | 无活进程；3 个分支提交的 patch 均已被 main 包含；约 403GiB 产物单独保留                                                         | tag `archive/vllm-expanded-20261101`       |
 
-此前已完成整合的开发分支已移除，恢复 tag 保留；当前仍保留运行中的`feat/qwen-prefix-study`。原始交接文件、worktree 清理回执和运行日志在 [`runs/merge-runtime-20261101`](../../../../../runs/merge-runtime-20261101)。合并前 main 的完整工作区另存 `refs/archive/main-before-runtime-merge-1793514879`；相关实现的原始快照保存在 `refs/archive/model-evaluation-handoff-final-20261101`。两者是恢复快照，不是经过验证的开发提交。
+此前已完成整合的开发分支已移除，恢复 tag 保留。合并前 main 的完整工作区另存 `refs/archive/main-before-runtime-merge-1793514879`；相关实现的原始快照保存在 `refs/archive/model-evaluation-handoff-final-20261101`。两者是恢复快照，不是经过验证的开发提交。
 
 先前运行合同整合时，切换前后 SHA256 核对确认 85 个未纳入整合提交的工作区文件状态保持一致，包括删除状态和未跟踪材料。没有删除这些成果，也没有停止冻结实验。
 
-旧 expanded 的`outputs/`通过同文件系统原子 rename 迁入`runs/retired-worktrees-20261101/vllm-expanded/outputs/`，目录 inode 保持一致；旧`../MirrorOPD-verl-vllm-expanded/outputs`改为兼容 symlink。没有复制或删除 403GiB 实验产物，旧绝对路径仍可读取。
-
-清理前的 source commit、tracked patch、未跟踪文件 tar 和逐文件 SHA256 保存在`runs/worktree-audit-20261101/`。四份源码在临时 Git index 中重建并通过哈希核对；`restore.py --verify-only`可重验，`restore.py --name <name>`可按 tag 加补丁重新建立原工作树，不启动 GPU 任务。使用 Python3.12 及以上执行。
+Expanded 的评测明细直接从[正式证据目录](../../../research-evidence/prefix-expanded/retired-worktrees-20261101/vllm-expanded/outputs/)读取。六个旧 vLLM 同级目录和原路径的符号链接均已删除。
 
 待运行的κ=1／η=0.1 正式计划与配置预览已改为主仓库入口；实际启动前仍需冻结选定的已提交版本。历史运行命令及冻结配置保留原路径和版本，不随清理重写。
 

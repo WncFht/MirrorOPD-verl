@@ -1,0 +1,338 @@
+{
+  "initial/final": {
+    "n": 17,
+    "stage": {
+      "pooled": 0.8529411764705884,
+      "within_global_rank_correlation": 0.49769598567247864,
+      "between_covariance_fraction": 0.8367816091954023
+    },
+    "family": {
+      "pooled": 0.8529411764705884,
+      "within_global_rank_correlation": 0.9049604605226048,
+      "between_covariance_fraction": 0.29118773946360155
+    },
+    "student": {
+      "pooled": 0.8529411764705884,
+      "within_global_rank_correlation": 0.91414183147556,
+      "between_covariance_fraction": 0.33333333333333337
+    },
+    "rl_sft_only": {
+      "pooled": 0.807142857142857,
+      "within_global_rank_correlation": 0.4619442574321998,
+      "between_covariance_fraction": 0.7964601769911503
+    },
+    "groups": {
+      "Instruct/mixed": {
+        "n": 1,
+        "amplitude_median": 0.1806175785168814,
+        "outcome_median": 0.08442644612652822,
+        "spearman": null,
+        "pairs": [
+          "E113"
+        ]
+      },
+      "RL": {
+        "n": 10,
+        "amplitude_median": 0.0018462695320237315,
+        "outcome_median": 0.0013312130397001773,
+        "spearman": 0.5636363636363636,
+        "pairs": [
+          "E94",
+          "E95",
+          "E97",
+          "E98",
+          "E99",
+          "E100",
+          "E103",
+          "E106",
+          "E107",
+          "E110"
+        ]
+      },
+      "SFT": {
+        "n": 5,
+        "amplitude_median": 0.015000549039642399,
+        "outcome_median": 0.01709867171853256,
+        "spearman": 0.3,
+        "pairs": [
+          "E96",
+          "E101",
+          "E105",
+          "E111",
+          "E117"
+        ]
+      },
+      "SFT?": {
+        "n": 1,
+        "amplitude_median": 0.0484682460558728,
+        "outcome_median": 0.1355388995253083,
+        "spearman": null,
+        "pairs": [
+          "E104"
+        ]
+      }
+    },
+    "stage_family": {
+      "rank": 8,
+      "residual_df": 9,
+      "correlation": 0.8571808756020025
+    },
+    "stage_student": {
+      "rank": 10,
+      "residual_df": 7,
+      "correlation": 0.9384080894828739
+    }
+  },
+  "initial/relative": {
+    "n": 17,
+    "stage": {
+      "pooled": -0.8431372549019609,
+      "within_global_rank_correlation": -0.3624666954983054,
+      "between_covariance_fraction": 0.8968023255813954
+    },
+    "family": {
+      "pooled": -0.8431372549019609,
+      "within_global_rank_correlation": -0.8589491653493356,
+      "between_covariance_fraction": 0.3352713178294574
+    },
+    "student": {
+      "pooled": -0.8431372549019609,
+      "within_global_rank_correlation": -0.9632665540122812,
+      "between_covariance_fraction": 0.3352713178294573
+    },
+    "rl_sft_only": {
+      "pooled": -0.7892857142857141,
+      "within_global_rank_correlation": -0.3621621621621622,
+      "between_covariance_fraction": 0.8484162895927602
+    },
+    "groups": {
+      "Instruct/mixed": {
+        "n": 1,
+        "amplitude_median": 0.1806175785168814,
+        "outcome_median": 0.6895249077511829,
+        "spearman": null,
+        "pairs": [
+          "E113"
+        ]
+      },
+      "RL": {
+        "n": 10,
+        "amplitude_median": 0.0018462695320237315,
+        "outcome_median": 0.9834829415782728,
+        "spearman": -0.406060606060606,
+        "pairs": [
+          "E94",
+          "E95",
+          "E97",
+          "E98",
+          "E99",
+          "E100",
+          "E103",
+          "E106",
+          "E107",
+          "E110"
+        ]
+      },
+      "SFT": {
+        "n": 5,
+        "amplitude_median": 0.015000549039642399,
+        "outcome_median": 0.8468757892158314,
+        "spearman": 0.0,
+        "pairs": [
+          "E96",
+          "E101",
+          "E105",
+          "E111",
+          "E117"
+        ]
+      },
+      "SFT?": {
+        "n": 1,
+        "amplitude_median": 0.0484682460558728,
+        "outcome_median": 0.6988694250165389,
+        "spearman": null,
+        "pairs": [
+          "E104"
+        ]
+      }
+    },
+    "stage_family": {
+      "rank": 8,
+      "residual_df": 9,
+      "correlation": -0.39106634745046004
+    },
+    "stage_student": {
+      "rank": 10,
+      "residual_df": 7,
+      "correlation": -0.9363618157628726
+    }
+  },
+  "teacher/final": {
+    "n": 17,
+    "stage": {
+      "pooled": 0.9681372549019608,
+      "within_global_rank_correlation": 0.8746383799421412,
+      "between_covariance_fraction": 0.770379746835443
+    },
+    "family": {
+      "pooled": 0.9681372549019608,
+      "within_global_rank_correlation": 0.9692620934197406,
+      "between_covariance_fraction": 0.2877637130801687
+    },
+    "student": {
+      "pooled": 0.9681372549019608,
+      "within_global_rank_correlation": 0.9751943345372576,
+      "between_covariance_fraction": 0.31476793248945156
+    },
+    "rl_sft_only": {
+      "pooled": 0.9535714285714283,
+      "within_global_rank_correlation": 0.8594594594594595,
+      "between_covariance_fraction": 0.7022471910112359
+    },
+    "groups": {
+      "Instruct/mixed": {
+        "n": 1,
+        "amplitude_median": 0.1806175785168814,
+        "outcome_median": 0.08992889677559299,
+        "spearman": null,
+        "pairs": [
+          "E113"
+        ]
+      },
+      "RL": {
+        "n": 10,
+        "amplitude_median": 0.0018462695320237315,
+        "outcome_median": 0.0006572190024755611,
+        "spearman": 0.9151515151515152,
+        "pairs": [
+          "E94",
+          "E95",
+          "E97",
+          "E98",
+          "E99",
+          "E100",
+          "E103",
+          "E106",
+          "E107",
+          "E110"
+        ]
+      },
+      "SFT": {
+        "n": 5,
+        "amplitude_median": 0.015000549039642399,
+        "outcome_median": 0.025333177739736115,
+        "spearman": 0.39999999999999997,
+        "pairs": [
+          "E96",
+          "E101",
+          "E105",
+          "E111",
+          "E117"
+        ]
+      },
+      "SFT?": {
+        "n": 1,
+        "amplitude_median": 0.0484682460558728,
+        "outcome_median": 0.08773959944208816,
+        "spearman": null,
+        "pairs": [
+          "E104"
+        ]
+      }
+    },
+    "stage_family": {
+      "rank": 8,
+      "residual_df": 9,
+      "correlation": 0.8820928691730953
+    },
+    "stage_student": {
+      "rank": 10,
+      "residual_df": 7,
+      "correlation": 0.9436824310963446
+    }
+  },
+  "teacher/relative": {
+    "n": 17,
+    "stage": {
+      "pooled": -0.9019607843137255,
+      "within_global_rank_correlation": -0.7045391059926245,
+      "between_covariance_fraction": 0.7625
+    },
+    "family": {
+      "pooled": -0.9019607843137255,
+      "within_global_rank_correlation": -0.896552375068787,
+      "between_covariance_fraction": 0.3179347826086957
+    },
+    "student": {
+      "pooled": -0.9019607843137255,
+      "within_global_rank_correlation": -0.9126429328953821,
+      "between_covariance_fraction": 0.3215579710144928
+    },
+    "rl_sft_only": {
+      "pooled": -0.8571428571428571,
+      "within_global_rank_correlation": -0.6716537609221818,
+      "between_covariance_fraction": 0.6875
+    },
+    "groups": {
+      "Instruct/mixed": {
+        "n": 1,
+        "amplitude_median": 0.1806175785168814,
+        "outcome_median": 0.6833481126105798,
+        "spearman": null,
+        "pairs": [
+          "E113"
+        ]
+      },
+      "RL": {
+        "n": 10,
+        "amplitude_median": 0.0018462695320237315,
+        "outcome_median": 0.9916604655533924,
+        "spearman": -0.6363636363636362,
+        "pairs": [
+          "E94",
+          "E95",
+          "E97",
+          "E98",
+          "E99",
+          "E100",
+          "E103",
+          "E106",
+          "E107",
+          "E110"
+        ]
+      },
+      "SFT": {
+        "n": 5,
+        "amplitude_median": 0.015000549039642399,
+        "outcome_median": 0.9099211422108556,
+        "spearman": -0.7,
+        "pairs": [
+          "E96",
+          "E101",
+          "E105",
+          "E111",
+          "E117"
+        ]
+      },
+      "SFT?": {
+        "n": 1,
+        "amplitude_median": 0.0484682460558728,
+        "outcome_median": 0.875016489123779,
+        "spearman": null,
+        "pairs": [
+          "E104"
+        ]
+      }
+    },
+    "stage_family": {
+      "rank": 8,
+      "residual_df": 9,
+      "correlation": -0.6271254356052159
+    },
+    "stage_student": {
+      "rank": 10,
+      "residual_df": 7,
+      "correlation": -0.5647771534743629
+    }
+  }
+}

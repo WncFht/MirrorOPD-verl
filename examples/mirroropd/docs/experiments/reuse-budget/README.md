@@ -9,3 +9,5 @@ RQ2 研究新增轨迹、批内更新与回答长度如何影响学习收益和�
 | E35/短窗参照 | 回答 cap 与完整推理覆盖；硬件、代码和自然长度分别保留 |
 
 [Sampled/Full联合分析](../learning-signal/sampled-full.md)提供历史共享参照；[当前运行表](../运行记录.md)和[评测表](../验证结果汇总.md)负责识别实际末点。历史共同窗口不随新日志回写。学习速度、同预算收益和成本各自声明比较轴，同一 run 的 checkpoint 不能视作独立 seed。
+
+[逐 inner bank 诊断](inner-bank/README.md)研究平台期同批更新的收益回吐、training loss 与泛化的关系，以及 prefix IS 的适用范围。

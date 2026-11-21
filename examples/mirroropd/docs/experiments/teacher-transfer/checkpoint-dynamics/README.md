@@ -8,6 +8,16 @@
 
 后续实验的假设、对照和分阶段设置见[机制探测与干预设计](2026-11-13-机制探测与干预设计.md)，当前为讨论稿，尚未启动。
 
+## 跨 pair 指标筛查与扩大样本分析
+
+| 分析                                                                                                                                               | 覆盖与用途                                                                                 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [吸收好坏与更新谱对照](analyses/selected-spectra/2026-11-16-吸收好坏与更新谱对照.md)                                                               | 从 E94–E104 中选择同 student 的好坏对照；保留来源、选择条件和完整图                        |
+| [全指标关联筛查](analyses/metric-screening/2026-11-16-全指标关联筛查.md)与[相对下降排序](analyses/metric-screening/2026-11-16-相对下降指标排序.md) | 旧 11 组的探索性筛查；提供全部字段、模块、深度和两套 bank 的排序与交互图                   |
+| [扩大样本、拟合与跨尺寸边界](analyses/expanded-lightweight/2026-11-16-扩大样本轻量分析.md)                                                         | 22 组 RKL 与完整轻量测量；正文直接展示拟合、残差、整组留出预测及 cross-size 固定 bank 对照 |
+
+报告、图、汇总表与可视化页面归属本专题；逐矩阵测量和仍可用的 checkpoint 见[研究证据](../../../../research-evidence/README.md)。扩大样本的轻量覆盖与本页 E94–E104 的完整 SVD 覆盖分别报告。参数几何仅对坐标兼容的 pair 定义，跨尺寸缺失项不补零。
+
 ## 交互式 HTML 对比
 
 在当前目录打开本地生成页面 `explorer.html`。页面内嵌 E94–E104 的矩阵级标量轨迹和绘图库，可下载后用现代 Chrome、Edge 或 Firefox 直接打开；无需服务器、网络或 GPU。它是已有测量的离线快照，新 checkpoint 需要重新构建才会出现。原始图模式读取相邻 `figures` 目录，分享这个模式时一并保留图片。
@@ -34,6 +44,8 @@ python -m examples.mirroropd.research.studies.absorption_dynamics.build_explorer
   --synthesis examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/metric-synthesis-20261113.json \
   --output examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/explorer.html
 ```
+
+分析图统一使用 student family／Qwen thinking 模式、teacher 来源和 cross-size 三类标识，完整身份表见[扩大样本分析的图例](analyses/expanded-lightweight/2026-11-16-扩大样本轻量分析.md#pair-身份与统一图例)。Qwen thinking、non-thinking 与 Base 初始化分别展示。
 
 ## 实验设置
 
@@ -144,7 +156,7 @@ Qwen Base 缺少的定义是 `<tool_response>`、`</tool_response>`、`<think>`�
 
 ### 接入与开训前检查
 
-公共入口仍是 `run_math_opd_ablation_fsdp2.sh E112` 至 `E123`，需要已准备的题单和完成的对应双 bank；登记编号不会自动提交训练。配对表、长度、预算与停止协议统一由 [absorption launcher](../../../../launchers/absorption.py) 提供；[队列](../../../../research/studies/absorption_dynamics/queue.py) 按实际 prepared manifest 分组，兼容原 18 组、全 30 组与子集，不重排历史组的分配。`queue prepare --pairs E105 ... E123` 只准备显式选中的未完成组；未指定 `--pairs` 时保留完整面板入口。
+公共入口仍是 `run_math_opd_ablation_fsdp2.sh E112` 至 `E123`，需要已准备的题单和完成的对应双 bank；登记编号不会自动提交训练。配对表、长度、预算与停止协议统一由 [absorption launcher](../../../../launchers/absorption.py) 提供；[队列](../../../../tools/absorption_queue.py) 按实际 prepared manifest 分组，兼容原 18 组、全 30 组与子集，不重排历史组的分配。`queue prepare --pairs E105 ... E123` 只准备显式选中的未完成组；未指定 `--pairs` 时保留完整面板入口。
 
 [CPU 接入工具](../../../../research/studies/absorption_dynamics/acceptance.py) 接受 `--questions`、`--experiments` 与新的 `--output`，可用于后续增补；只读本地模型和题单，不分配 GPU，不接受覆盖已有验收记录。Base 协议资产由 `python -m examples.mirroropd.assets.stage_protocols --models Qwen3-Base-AbsorptionProtocol` 构建，原始资产不被修改。
 
@@ -678,9 +690,83 @@ python -m examples.mirroropd.research.studies.absorption_dynamics.metric_synthes
 
 重画前按仓库绘图约定设置 `FIGURE_VIZ_MPL`。teacher 来源、Math-vs-all 与全层散点三图由现有[cohort_comparison.py](../../../../research/studies/absorption_dynamics/cohort_comparison.py)读取`data/cohort-comparison-20261113.json`复算。原有逐 pair 全部指标图仍见[图集](图集.md)。
 
+## 已保存 rollout 的状态对照
+
+[交互报告](latent-state.html)以完整训练 student rollout 建立固定参考空间，比较 E100、E102、E109 的训练阶段和 initial／teacher 回答。代码位于 [research/studies/latent_state](../../../../research/studies/latent_state/README.md)，运行证据位于 `examples/mirroropd/research-evidence/latent-state/state-training-reference-e100-e102-e109/`。以下主结果替代六来源 pooled 首版；旧结果和协议单独保留，簇编号及数值不能混用。
+
+### 实际设置与参考构造
+
+三个 pair 分别为 Qwen3-1.7B → CMU-AIRe/e3-1.7B（E100）、Qwen3-1.7B → Qwen3-4B-Instruct-2507（E102）、DeepSeek-R1-Distill-Qwen-1.5B → Polaris-7B-Preview（E109）。训练均为 DAPO Math、current-student rollout、batch64、reuse16、40 outer／640 updates、AdamW LR1e−6 constant、wd.01、β=(.9,.999)、clip1、seed42。E100 启用 thinking，E102 关闭，E109 使用 DeepSeek 原模板。RKL 仍来自已有 41 个 checkpoint 节点对两套固定 Math 回答的逐题平均 KL(student ‖ teacher)，不是 accuracy。
+
+每 pair 使用全部 2,560 条训练回答，加已有 initial／teacher 各 128 条 Math 回答，共 2,816 条；没有生成新回答。固定 teacher 重放保存的 token，每回答最多取八个 final-norm hidden，action0 仅展示，最多七点进入拟合和指标。训练 prompt 按完整 token 哈希约 60/40 划分，跨 outer 同题保持同侧；PCA50 与 K50／100／200 只在训练 reference 拟合。所有 bank 回答都是查询，不影响参考空间。这接近 One-Shot OPD 使用 full-data student 训练历史作参考的构造，但训练条件、整题划分、七个指标位置与 128 条等预算查询均不同。
+
+| Pair | 训练 reference 回答 / 状态 | 训练 test 回答 | PCA50 解释方差 | K200 平均参考状态 / 簇 |
+| ---- | -------------------------: | -------------: | -------------: | ---------------------: |
+| E100 |             1,527 / 10,689 |          1,033 |         71.77% |                   53.4 |
+| E102 |             1,534 / 10,738 |          1,026 |         71.73% |                   53.7 |
+| E109 |             1,561 / 10,927 |            999 |         70.57% |                   54.6 |
+
+每条回答都达到八个展示位置，每 pair 共 22,528 点；这些点不是独立样本。训练 test 与训练 held-out Math 分开：前者只留出几何拟合，后者的 128 道题与 16,986 道训练候选按完整解析消息精确比较重叠为 0，不判断语义改写重复。各训练阶段题目不同；outer31–40 是更新前 rollout 的汇总，不是最终 step640 同题采样。
+
+### 结果与解释
+
+JS 的目标是全部训练 test 的状态占用分布，单位 bits。每次抽取 128 条来源回答和 128 条训练 test 目标回答，两侧回答 ID 不相交，重复 30 次；基线用两组不相交的训练 test。± 为子集抽样标准差，不是总体置信区间。
+
+| Pair | Math initial / teacher RKL 降低，step640 | K50 JS：initial → 训练 test | K50 JS：末段 → 训练 test | K50 JS：teacher → 训练 test | K50 训练 test 基线 |
+| ---- | ---------------------------------------: | --------------------------: | -----------------------: | --------------------------: | -----------------: |
+| E100 |                          99.28% / 99.17% |             0.0199 ± 0.0029 |          0.0218 ± 0.0043 |             0.0207 ± 0.0043 |    0.0207 ± 0.0041 |
+| E102 |                          39.85% / 34.72% |             0.0625 ± 0.0064 |          0.0250 ± 0.0054 |             0.0474 ± 0.0060 |    0.0216 ± 0.0046 |
+| E109 |                           8.69% / 51.02% |             0.3825 ± 0.0232 |          0.0260 ± 0.0059 |             0.1071 ± 0.0080 |    0.0223 ± 0.0052 |
+
+E100 的各来源占用接近训练 test 基线。E102 的 initial 和 teacher 都与训练访问分布有差别，末段更接近训练 test；这个目标包含四个训练阶段，不能把接近它解释为接近 teacher。E109 的 initial 占用集中在更少的参考簇，teacher 与训练分布也有明显差别；末段接近训练 test 同时伴随 initial 固定 bank RKL 仅降低 8.69%，仍体现状态访问与逐 token 输出匹配是两个测量。
+
+K200、128 条回答的等预算 coverage，E100 initial／末段／teacher 为 94.5%／96.3%／93.5%，E102 为 83.0%／93.5%／92.5%，E109 为 46.0%／97.8%／89.0%。E109 teacher 状态中 17.3% 超过训练 test 的原空间 10NN 距离 p95，initial 为 2.1%，训练 test 自身约 5%。Initial 可以集中在少量已覆盖的局部区域，所以低邻域距离不能替代全局占用比较。K-means 总会分配最近簇，只有覆盖率不能判断是否在参考支持范围之内。
+
+报告新增有序轨迹查看器：选择来源／回答、按题目搜索、切换状态、滑块播放、查看每步簇编号及已读取回答片段，并联动地图。Which clusters each set fills 显示各来源全部查询状态的占比，支持簇排序、稀有簇色阶、选簇高亮与示例轨迹选择。所有悬停信息放在图外，K 切换同步真实 K50／100／200 标签；t-SNE 位置和线长仅用于探索。
+
+全局趋势另外使用等预算 JS → Teacher：各阶段和 Teacher 每次各抽 64 条回答，重复 30 次。Teacher 基线比较两个不相交的 64 条子集，Initial 与目标 Teacher 按题配对；这与上表 JS → 训练 test 的目标和 128 条预算均不同。K200 的首段／末段／Teacher 基线，E100 为 0.1969／0.1887／0.1860，E102 为 0.2392／0.2339／0.1924，E109 为 0.3556／0.2893／0.1762。E109 的训练访问分布向 Teacher 靠近，但末段仍高于有限样本基线。曲线按四个阶段汇总，未做同题 checkpoint 的因果比较。首页同时展示同预算 coverage 和全部簇相对 Teacher 的占比差热图，点击后进入簇明细。
+
+### 提取成本与复算
+
+三 pair 各租用一张前四卡中的空闲 H800 并行，只重放保存的 token。bf16 decoder-only SDPA、padded-token budget65536、最大 batch8，分片原子缓存并验证输入身份与因果 prefix 对齐。各 pair 实测有效 tokens/s 为 37,478／18,456／20,731，分片前向总耗时约 497／778／889 秒，峰值已分配显存为 6.99／12.89／22.40 GiB。速度不含加载、读取和 CPU 几何分析；与首版的数据预算和并发条件不同，不能作为同配置加速比。三张卡的租约均有归还验证记录。
+
+参考状态规模已由首版约 1,400–1,700 增至约 10,700，等预算查询由 25–27 增至 128 条。K50 coverage 接近饱和，K200 仍能区分访问范围；增加训练回答不能消除单 seed、bank 各 128 条、状态相关性和题目／长度混杂。更密的单回答取点不增加同等数量的独立证据。
+
+<a id="已保存-rollout-的-pooled-状态对照"></a>
+
+### 旧六来源 pooled 首版
+
+E100 为 Qwen3-1.7B → CMU-AIRe/e3-1.7B，E102 为 Qwen3-1.7B → Qwen3-4B-Instruct-2507，E109 为 DeepSeek-R1-Distill-Qwen-1.5B → Polaris-7B-Preview。训练均使用 DAPO Math、current-student rollout、batch64、reuse16、AdamW LR1e−6 constant、wd.01、β=(.9,.999)、clip1、seed42；40 outer 共 640 次更新。E100 的模板启用 thinking，E102 关闭，E109 使用 DeepSeek 原模板。
+
+E100／E102／E109 的状态对照复用原始 token 轨迹，无新增回答采样。每 pair 覆盖全部 40 个 outer，每 outer 按固定哈希选 8 条回答，四个阶段各 80 条；另加 initial／teacher 固定 Math bank 各 128 条，共 576 条。由各 pair 自己的 teacher 编码 final-norm hidden，每回答最多八个相对位置；共享 prompt 末尾状态仅展示。训练轨迹来自每 outer 更新前，末轮不是最终 step640 的新采样。训练阶段间题目不同，结果同时包含 prompt、长度与策略差异。
+
+RKL 来自 128 道训练 held-out Math 题，每题由 initial／teacher 各生成一条固定回答，41 个 checkpoint 节点对回答的全部有效 prefix 计算 KL(student ‖ teacher)，先按 token 平均，再对题等权平均。按解析后的完整消息精确比较，128 道评估题与 16986 道训练候选题的 prompt 重叠为 0；这项检查不判断语义改写重复。状态几何的 test 是另一个划分：训练阶段回答的 prompt 仍来自训练题，仅不进入几何拟合，不等同训练 held-out。
+
+同一 prompt 在所有来源保持 reference／test 同侧，按哈希约 60/40 划分；reference 六来源等状态数，分别为 E100 1638、E102 1680、E109 1428 个。各 pair 单独拟合 PCA50，其解释方差为 73.0%／72.5%／73.7%；K=50／100／200 共用 PCA，测试点只分配。JS 使用等回答数的 30 次子集抽样，E100 每组 25 条，另两组各 27 条；initial 与 teacher 同题抽取，训练阶段独立抽取。teacher 基线比较两个不相交测试子集。表中的 outer31–40 是训练末段的汇总。
+
+| Pair | Math initial bank RKL 降低，step640 | Math teacher bank RKL 降低，step640 | K50 JS：initial → teacher | K50 JS：outer31–40 → teacher | K50 teacher 拆半基线 |
+| ---- | ----------------------------------: | ----------------------------------: | ------------------------: | ---------------------------: | -------------------: |
+| E100 |                              99.28% |                              99.17% |             0.104 ± 0.016 |                0.103 ± 0.014 |        0.120 ± 0.026 |
+| E102 |                              39.85% |                              34.72% |             0.181 ± 0.015 |                0.162 ± 0.016 |        0.108 ± 0.022 |
+| E109 |                               8.69% |                              51.02% |             0.714 ± 0.044 |                0.194 ± 0.021 |        0.103 ± 0.017 |
+
+JS 单位为 bits；标准差描述抽样波动，不是总体置信区间。RKL 来自原有固定 bank 评估，状态指标来自所选回答的测试 prompt，二者统计单位不同。完整 K=50／100／200 表、独立 pair 地图和平均回答长度见[旧 pooled 报告](latent-state-pooled.html)，复算入口与字段约定见[状态分析模块](../../../../research/studies/latent_state/README.md)。
+
+E100 的等预算 JS 接近 teacher 拆半基线；K100 的 initial／末段／teacher 分别为 0.241／0.245／0.242，没有状态占用明显偏离的证据。E102 的 K50 和 K100 仍有部分分布差异，但 K200 的末段 JS 为 0.383，teacher 基线为 0.381；增加簇数放大了有限样本误差，不能直接把更高 JS 解释为吸收更差。E102 的 initial 平均回答长 1744 tokens，teacher 为 3679，四个训练阶段约 5038–5561，长度也是状态分布比较的混杂因素。
+
+E109 的 initial 与 teacher 状态占用差异最大；训练轨迹明显改变，K50 JS 从 initial 的 0.714 降到末段的 0.194，K100 为 0.755 → 0.281，K200 为 0.828 → 0.479，但末段仍高于相应 teacher 拆半基线。这个观察支持“训练改变了所访问的 prefix 分布”；它与 initial 固定 bank RKL 仅降低 8.69% 同时成立，说明 rollout 状态分布变化与原始轨迹上的逐 token 分布匹配是不同测量，不能互相替代。训练阶段 prompt 不同，仍不能据此给出同题 checkpoint 的因果判断。
+
+K200 等预算 coverage，E100 initial／末段／teacher 为 0.517／0.533／0.528，E102 为 0.487／0.501／0.515，E109 为 0.256／0.535／0.491。E109 训练末段访问范围增大，但 coverage 超过 teacher 不表示更接近 teacher。原空间 10NN cosine 距离同样不能单独排序：E109 initial 距离为 0.265，teacher 测试为 0.447，尽管前者的簇占用 JS 明显更高；局部近邻与全局占用回答不同问题。
+
+输入身份、完整指标和 PCA／簇中心保存在 `examples/mirroropd/research-evidence/latent-state/state-pooled-e100-e102-e109/`；可执行代码位于 `research/studies/latent_state/`，上游冻结来源随包保存。提取使用同一 H800 单卡、bf16 decoder-only SDPA，按长度在 padded-token budget16384 内组批、最大 batch8；记录分片缓存和因果 prefix 对齐检查。报告中 t-SNE 仅用于展示，不参与 JS、coverage 或原空间距离。
+
+首版取点适合初步识别 E109 这样的大差异，尚不足以确认细小变化。每 pair 现用 4608 个展示点，其中最多 4032 个进入指标候选；均衡 reference 仅 1428–1680 状态，K200 平均每簇约 7–8 个，且同回答的状态相关。全部训练回答可从现有 320 条扩到 2560 条，但 initial／teacher Math bank 仍各只有 128 条；只扩训练来源，无法消除 teacher 测试集 50–54 条与等预算 JS 每次 25–27 条的限制。后续优先讨论增加独立回答／题目、固定 reference 与整题重采样稳定性，再决定是否加密每回答位置；旧报告保持原取点。
+
 ## 分析方法与判断
 
 优先按两套固定 bank 的绝对 RKL 和剩余比例评价吸收，Math 与三域平均分别展示。当前实验测量输出分布匹配，不将其直接写成任务 accuracy 或能力完全恢复。
+
+跨 pair 的 Spearman 衡量单调排序关系；Pearson 衡量指定数值尺度下的线性相关。散点使用对数坐标并不等于已经拟合对数回归；对正数取 log 保持排序，因此 Spearman 不变，Pearson 通常改变。[扩大样本分析的方法说明](analyses/expanded-lightweight/2026-11-16-扩大样本轻量分析.md#相关对数坐标与回归的区别)区分原有相关筛查与新增的 log-linear 探索性回归。后者在相同兼容 pair 上比较初始 RKL baseline 与加入 teacher 位移的模型，验证时整组留出同 student 的 pair。
 
 完整权重谱稳定与累计更新谱稳定分开判断。前者受预训练权重占主导的影响；后者直接描述 OPD 更新的组织方式。重点检查 RKL 快速下降与变缓的阶段，谱变化速度、frame 与终点的相似度以及后续更新的能量捕获是否同步改变。
 
@@ -876,7 +962,7 @@ a 比较更新范数，R 比较残差能量，两者不是同一个量。R=1 表
 
 ## 数据与复算
 
-源码提交保留[结果摘要](data/result-summary.json)、正式图表、分析与页面生成代码。[本地数据清单](data/artifact-inventory.json)记录大型明细、原始 readout、下载论文源码与生成 HTML 的路径、字节数和 SHA256。这些文件按仓库源文件体积规则留在本地，未删除或迁移；交互页面和完整复画依赖其中的对应数据。结果摘要保留十一组的矩阵指标汇总、完整层覆盖及双 bank RKL 轨迹，便于仅凭源码提交复核正文总表。
+源码提交保留[结果摘要](data/result-summary.json)、正式图表、分析与页面生成代码。[本地数据清单](data/artifact-inventory.json)记录大型明细、原始 readout、下载论文源码与生成 HTML 的路径。这些文件按仓库源文件体积规则留在本地，未删除或迁移；交互页面和完整复画依赖其中的对应数据。结果摘要保留十一组的矩阵指标汇总、完整层覆盖及双 bank RKL 轨迹，便于仅凭源码提交复核正文总表。
 
 [完整 readout](data/readout.json.gz) 保存每个矩阵的归一化谱向量、核范数、Frobenius 范数、SD/Hellinger 距离、所有 checkpoint 对、ISO 指标、角度摘要、能量捕获、参数残差、输入 tensor 哈希及全部 RKL 事件。[覆盖表](data/coverage.json) 标明哪些 pair、哪些层已齐。图以 PNG 与 PDF 同时输出，并附审计结果。
 
@@ -920,3 +1006,7 @@ python -m examples.mirroropd.research.studies.absorption_dynamics.geometry_reado
 [^panel-tulu-final]: allenai/Llama-3.1-Tulu-3-8B. 固定版本 666943798adbde0b1aff34626007e26986a3c107 的公开模型卡与配置；2026-11-12 核查。[Hugging Face](https://huggingface.co/allenai/Llama-3.1-Tulu-3-8B/tree/666943798adbde0b1aff34626007e26986a3c107).
 
 [^panel-mimo]: XiaomiMiMo/MiMo-7B-RL. 固定版本 7c7707596b0ef1032ef82970d7a4a484ca457c4d 的公开模型卡与配置；2026-11-12 核查。[Hugging Face](https://huggingface.co/XiaomiMiMo/MiMo-7B-RL/tree/7c7707596b0ef1032ef82970d7a4a484ca457c4d).
+
+## 优化器与学习率的权重动力学
+
+[SGD 与 Muon 的九时刻对比](optimizer-comparison/README.md)复用本页的精确 SVD 与 frame 协议，覆盖 E124–E129，比较更新谱、方向随时间的变化及 held-out RKL；页面保留实时覆盖范围。E123 缺少训练产物，未纳入测量。

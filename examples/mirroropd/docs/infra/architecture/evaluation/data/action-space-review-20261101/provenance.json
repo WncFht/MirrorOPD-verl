@@ -50,7 +50,7 @@
     "ee056a71ad9266edcd1d63de760bbd2f8fe0f794 test(distillation): cover accumulated EOS updates",
     "86d2f87186cf510bb9756aea2f0d2b2c183fe4e2 feat(experiments): register validated fused EOS presets E59-E62"
   ],
-  "command": "CUDA_VISIBLE_DEVICES='' python -m examples.mirroropd.research.checks.objectives.verify_distribution_spaces --output runs/action-space-review-20261101/oracle.json",
+  "command": "CUDA_VISIBLE_DEVICES='' python -m examples.mirroropd.research.checks.objectives.verify_distribution_spaces --output examples/mirroropd/research-evidence/action-space-review-20261101/oracle.json",
   "initial_review_head": "2b372ea5",
   "followup_head": "2408c8e8f75e9ba21972f52a36c6db23e754ddad",
   "oracle_rerun_after_eos_merge": "identical numeric results"

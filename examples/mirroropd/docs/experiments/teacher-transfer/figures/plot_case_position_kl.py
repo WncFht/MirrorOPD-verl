@@ -381,20 +381,31 @@ def main() -> None:
     parser.add_argument(
         "--qwen-only", action="store_true", help="Render Qwen experiments separately; keep other families."
     )
-    parser.add_argument("--mimo-sft-only", action="store_true", help="Render completed E91/E93 SFT-student position curves.")
+    parser.add_argument("--mimo-sft-only", action="store_true", help="Render E91/E93 SFT-student position curves.")
     args = parser.parse_args()
     fv.apply_rc("paper", fontsize=10)
+    evidence = ROOT / "research-evidence"
     if args.mimo_sft_only:
-        paths = [ROOT / f"runs/{run}/formal/{arm}/metrics.jsonl" for arm, run in (
-            ("E91", "e91-mimo-rlzero-sft-20261107"), ("E93", "e93-mimo-rl-sft-20261108"))]
+        paths = [
+            evidence / f"{run}/formal/{arm}/metrics.jsonl"
+            for arm, run in (("E91", "e91-mimo-rlzero-sft-20261107"), ("E93", "e93-mimo-rl-sft-20261108"))
+        ]
         data = {arm: from_history(path, True, 16, 20) for arm, path in zip(("E91", "E93"), paths, strict=True)}
         out = DOCS / "figures/mimo-position-kl-20261107/sft-students"
         render_group("MiMo SFT students", data, out, "mimo-sft")
-        (out / "provenance.json").write_text(json.dumps({
-            "source_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
-            "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            "selection": "first/last pre-update observations; reuse16; 20 outer; E91/E93 start from SFT",
-        }, indent=2) + "\n")
+        (out / "provenance.json").write_text(
+            json.dumps(
+                {
+                    "source_sha256": {
+                        str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths
+                    },
+                    "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                    "selection": "first/last pre-update observations; reuse16; 20 outer; E91/E93 start from SFT",
+                },
+                indent=2,
+            )
+            + "\n"
+        )
         return
     qwen, e35, paths = collect()
     qout = DOCS / "figures/qwen-position-kl-20261107"
@@ -416,7 +427,7 @@ def main() -> None:
     eout = DOCS / "figures/r1-1.5b-position-kl-20261107"
     mout = DOCS / "figures/mimo-position-kl-20261107"
     mimo_paths = [
-        ROOT / f"runs/mimo-stage-transfer-20261101/formal/{arm}/metrics.jsonl" for arm in ("E71", "E72", "E73")
+        evidence / f"mimo-stage-transfer-20261101/formal/{arm}/metrics.jsonl" for arm in ("E71", "E72", "E73")
     ]
     mimo = {
         arm: from_history(path, True, reuse, count)

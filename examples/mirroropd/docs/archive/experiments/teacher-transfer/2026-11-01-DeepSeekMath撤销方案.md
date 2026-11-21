@@ -39,7 +39,7 @@ DeepSeekMath 的公开阶段链为 Base → SFT/Instruct → GRPO/RL。[^deepsee
 | 推理与计算预算 | rollout TP1、每副本并发 16、prefill token budget16384；actor／teacher token budget32768     |
 | 保存           | `save_freq=-1`；统一评估器在终点导出一个 HF 模型并做重载校验，无 optimizer／中途 checkpoint |
 
-`DEEPSEEK_MATH_QUESTIONS` 默认指向仓库 `runs/unified-evaluation-20261031/questions-v2`，可改为等价的完整 prepared artifact。入口读取真实 panel IDs、采样次数和训练清单，并记录 manifest SHA256；覆盖不足以支撑预算或任一公共领域缺少 128 道 panel 题时直接失败。旧 source parquet 可留在 prepared artifact 中，两个新实验不会生成 source bank 或评分该文件。
+`DEEPSEEK_MATH_QUESTIONS` 默认指向仓库 `examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/questions-v2`，可改为等价的完整 prepared artifact。入口读取真实 panel IDs、采样次数和训练清单，并记录 manifest SHA256；覆盖不足以支撑预算或任一公共领域缺少 128 道 panel 题时直接失败。旧 source parquet 可留在 prepared artifact 中，两个新实验不会生成 source bank 或评分该文件。
 
 已用固定 Instruct tokenizer 对现有题池做 CPU 长度检查：6400 道训练题最长 1436 tokens；公共 Math 最长 870、Code1818、Science2747、IF363。以下长度容纳全部公共题目，保留原生 4K 上下文，不静默裁题。
 

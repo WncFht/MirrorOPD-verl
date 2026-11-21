@@ -14,7 +14,7 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /root/.local/share/mirroropd/venvs/plot
 /root/.local/share/mirroropd/venvs/plotting/bin/python -m examples.mirroropd.research.studies.fixed_transfer.clean_publish
 ```
 
-`--run grpo-kl` 可单独复算一个 teacher；`--run <run_id>` 指定输入实例。局部复算会重写输出目录的索引，需保持完整图集入口时使用 `--output runs/clean-diagnostics-smoke`。全量命令恢复完整索引；`--force` 强制重画。
+`--run grpo-kl` 可单独复算一个 teacher；`--run <run_id>` 指定输入实例。局部复算会重写输出目录的索引，需保持完整图集入口时使用 `--output ./rebuild/clean-diagnostics-smoke`。全量命令恢复完整索引；`--force` 强制重画。
 
 `clean_diagnostics.py` 读取与验证、聚合每个快照并输出逐 run 图；`clean_comparisons.py` 输出跨 teacher 热图、同尺寸重点配对折线及端点 CSV；`clean_publish.py` 原样提取 19 张正文精选图及其审计、端点和来源哈希。完整图集在忽略的 `appendix/data/clean-diagnostics/` 下，正文精选在[figures/fixed-state-clean-20261107](figures/fixed-state-clean-20261107/provenance.json)。复算需要本地原始日志与 figure-viz 环境，不加载模型、不使用 GPU。
 

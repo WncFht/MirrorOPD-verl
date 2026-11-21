@@ -13,7 +13,7 @@
     7
   ],
   "old_STOP_preserved": true,
-  "new_stop": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-spectrum-expansion-20261110-v1/STOP",
+  "new_stop": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-spectrum/teacher-spectrum-expansion-20261110-v1/STOP",
   "jobs": [
     {
       "job_id": 0,
@@ -239,13 +239,13 @@
       "teacher": "controlled-RAW",
       "cohort": "continuous",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/teachers/RAW/step0128",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/RAW/step0256",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/teachers/RAW/step0128",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/RAW/step0256",
       "step": 256,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/RAW/step0256",
-        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/RAW/step0064"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/RAW/step0256",
+        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/RAW/step0064"
       }
     },
     {
@@ -255,13 +255,13 @@
       "teacher": "controlled-CCS-rho0",
       "cohort": "continuous",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/teachers/CCS-rho0/step0128",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/teachers/CCS-rho0/step0128",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256",
       "step": 256,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256",
-        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0064"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0256",
+        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho0/step0064"
       }
     },
     {
@@ -271,13 +271,13 @@
       "teacher": "controlled-CCS-rho1",
       "cohort": "continuous",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/teachers/CCS-rho1/step0128",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256",
+      "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/teachers/CCS-rho1/step0128",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256",
       "step": 256,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-1.7B-Base/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256",
-        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0064"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0256",
+        "step64": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1/opd/CCS-rho1/step0064"
       }
     },
     {
@@ -288,11 +288,11 @@
       "cohort": "continuous",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
       "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface",
       "step": 320,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E73-r16-o20/evaluation/final-model/huggingface"
       }
     },
     {
@@ -303,11 +303,11 @@
       "cohort": "branch_control",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
       "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface",
       "step": 800,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E71/evaluation/final-model/huggingface"
       }
     },
     {
@@ -318,11 +318,11 @@
       "cohort": "continuous",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
       "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL/7c7707596b0ef1032ef82970d7a4a484ca457c4d",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface",
       "step": 320,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108/formal/E93/evaluation/final-model/huggingface"
       }
     },
     {
@@ -333,11 +333,11 @@
       "cohort": "branch_control",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
       "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface",
       "step": 320,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-SFT/0a9f1180d99e686ce56b75fee637db62407ceb1b",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107/formal/E91/evaluation/final-model/huggingface"
       }
     },
     {
@@ -348,11 +348,11 @@
       "cohort": "continuous",
       "base": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
       "teacher_path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-RL-Zero/da0bde6fbbc8d1cb9afad15fab947db628a22014",
-      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
+      "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface",
       "step": 320,
       "gradient_stages": {
         "initial": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/XiaomiMiMo--MiMo-7B-Base/d892dcc601b8a242e7b3e7d3bb9f55abbe72c0ad",
-        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface"
+        "endpoint": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal/E72-r16-o20/evaluation/final-model/huggingface"
       }
     }
   ],

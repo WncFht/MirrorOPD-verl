@@ -40,11 +40,11 @@
     "forward_autocast": "BF16"
   },
   "sources": {
-    "trajectory_script": "runs/mimo-agk-probe-20261107/multi_batch_trajectory.py",
+    "trajectory_script": "examples/mirroropd/research-evidence/mimo-agk-probe-20261107/multi_batch_trajectory.py",
     "trajectory_script_sha256": "047763fe106d624f2c435a1194ac8e96e788cb6f40678938fb6b187bbd02fd9e",
-    "reverse_order_script": "runs/mimo-agk-probe-20261107/multi_batch_order_trajectory.py",
+    "reverse_order_script": "examples/mirroropd/research-evidence/mimo-agk-probe-20261107/multi_batch_order_trajectory.py",
     "reverse_order_script_sha256": "4e2fca76e6d61a4b473916e6a8bc71ee939c1170089f791093fc3a2d142b5386",
-    "probe_script": "runs/mimo-agk-probe-20261107/probe.py",
+    "probe_script": "examples/mirroropd/research-evidence/mimo-agk-probe-20261107/probe.py",
     "probe_script_sha256": "40bdfc98273ec940ba8d16301d7333cbc73853b603108218251b9734dbc10943",
     "raw_results": {
       "rl-math.json": "c6635d536ce81a2a5dd42b2beb66e699f4485a3c37d6f40a5a71cd6e7e016e3f",

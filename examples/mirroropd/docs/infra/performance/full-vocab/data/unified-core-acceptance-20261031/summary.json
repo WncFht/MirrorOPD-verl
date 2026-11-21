@@ -1,6 +1,6 @@
 {
   "purpose": "small native unified pipeline acceptance, not formal50 experiment",
-  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04",
+  "run": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04",
   "setting": {
     "gpus": [
       0,
@@ -721,9 +721,9 @@
     }
   },
   "hf_reload": {
-    "hf_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04/evaluation/final-model/huggingface",
-    "export_audit": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04/evaluation/final-model/export-audit",
-    "reference_event": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04/evaluation/events/outer-002",
+    "hf_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04/evaluation/final-model/huggingface",
+    "export_audit": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04/evaluation/final-model/export-audit",
+    "reference_event": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04/evaluation/events/outer-002",
     "metrics": {
       "eval/checkpoint/hf_reload_verified": 1,
       "eval/checkpoint/hf_reload_max_rkl_error": 0.0
@@ -763,7 +763,7 @@
   },
   "cpu_combined": {
     "passed": 495,
-    "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/cpu-combined.log"
+    "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/cpu-combined.log"
   },
   "verifier_preflight": {
     "status": "passed",

@@ -1,0 +1,21 @@
+{
+  "setting": {
+    "behavior_p_a1": 0.5,
+    "behavior_p_b1": 0.5,
+    "target_p_a1": 0.7,
+    "target_p_b1": 0.8,
+    "reward": "a*b",
+    "parameter": "p",
+    "boundaries": "deterministic after each of two actions"
+  },
+  "true_gradient": 0.8,
+  "segment_only_estimator_expectation": 0.5,
+  "full_sequence_is_estimator_expectation": 0.7999999999999999,
+  "reference": "https://aclanthology.org/2026.emnlp-main.1613.pdf",
+  "locations": [
+    "Eq. (2)",
+    "Theorem 1",
+    "Appendix A"
+  ],
+  "method": "exact sum over four outcomes"
+}

@@ -59,10 +59,10 @@ main 在 `402f6353` 相对冻结版新增了 EOS 补偿融合、原生统一评�
 下面先生成 CPU 题表，再解析新配置并生成共用银行。`PYTHON_BIN` 指向已安装项目依赖的 Python 环境，`MODEL_ROOT`、`DATA_ROOT` 按本机资产位置配置；`QWEN_EVAL_ROOT` 放在仓库内。GPU 命令仅在八张卡已分配给该作业时执行，不中断正在运行的旧队列。
 
 ```bash
-export QWEN_EVAL_ROOT="$PWD/runs/qwen-prefix-native"
+export QWEN_EVAL_ROOT="$PWD/rebuild/qwen-prefix-native"
 
 "$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.prepare_native questions \
-  --source "$PWD/runs/qwen-prefix-six-20261031/prepared-03" \
+  --source "$PWD/examples/mirroropd/research-evidence/qwen-prefix-six/prepared-03" \
   --out "$QWEN_EVAL_ROOT/questions"
 
 CONFIG_ONLY=1 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E66 \
@@ -84,7 +84,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 STUDENT_GPUS=8 \
 
 准备目录必须是新目录；已完成的银行直接复用，不覆盖。Teacher bootstrap 使用每副本 8 并发/KV40 GiB，initial 使用 16 并发/KV64 GiB；这些资源差异不会改变声明的生成协议。后续运行把 E66 替换为 E63–E68，并保持同一模型、输入与评估协议。缺少完整 native bootstrap 时，公共入口会在启动 Ray 之前报错。
 
-六个编号的八卡配置已完成[解析检查](../../../../../runs/qwen-ablation-20261101/configs/acceptance.json)。两卡短检查完成 2 轮、32 次更新、TP2 融合、原生评估和最终 FP32 导出；原生加载前后 RKL 误差为 0，见[验收回执](../../../../../runs/qwen-ablation-20261101/gpu-acceptance.json)。初次因旧验证题表检查而提前退出的记录保留，修复后复测通过。这些结果不替代八卡完整负载容量和性能验收；版本比较范围见[提交差异清单](../../../../../runs/qwen-ablation-20261101/version-comparison.json)。
+六个编号的八卡配置已完成[解析检查](../../../research-evidence/qwen-prefix-six/qwen-ablation-20261101/configs/acceptance.json)。两卡短检查完成 2 轮、32 次更新、TP2 融合、原生评估和最终 FP32 导出；原生加载前后 RKL 误差为 0，见[验收回执](../../../research-evidence/qwen-prefix-six/qwen-ablation-20261101/gpu-acceptance.json)。初次因旧验证题表检查而提前退出的记录保留，修复后复测通过。这些结果不替代八卡完整负载容量和性能验收；版本比较范围见[提交差异清单](../../../research-evidence/qwen-prefix-six/qwen-ablation-20261101/version-comparison.json)。
 
 <a id="source-b128-v1"></a>
 
@@ -125,7 +125,7 @@ Source held-out 显式开启、128 题；initial/teacher 公共固定银行各 1
 `QWEN_EVAL_ROOT`指定新目录；先完成 CPU 题表准备与原生 bootstrap，再用公开脚本启动。下面只打印 E78 的最终配置，不占用 GPU：
 
 ```bash
-QWEN_EVAL_ROOT="$PWD/runs/qwen-source-b128-v1" \
+QWEN_EVAL_ROOT="$PWD/rebuild/qwen-source-b128-v1" \
 STUDENT_GPUS=2 CUDA_VISIBLE_DEVICES=5,6 CONFIG_ONLY=1 \
 bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E78
 ```
@@ -138,16 +138,18 @@ bash examples/mirroropd/run_math_opd_ablation_fsdp2.sh E78
 
 队列依次执行小规模 bootstrap、三个来源的两轮真实更新/读出/最终导出检查（batch8、reuse1、cap64，不计入正式预算）、正式共用基线，再串行运行 E78/E79/E80。三组保持队列选定的卡数；新增资源可用于之后明确安排的任务，不在一次 FSDP 作业中自动扩容。阶段失败即停止后续派发，保存日志；没有自动重跑或静默降低学习预算。释放后通过已有 broker 恢复占位。
 
-准备与运行分开，`--source`必须指向已提交、保持不变的工作树；所有新产物位于主仓库`runs/`。示例中的工作树由维护者先建立并冻结：
+准备与运行分开，`--source`必须指向已提交、保持不变的工作树；所有新产物位于主仓库`runs/`。需要复现时，从归档 tag 建立冻结工作树：
 
 ```bash
+git worktree add --detach .worktrees/qwen-source-b128 archive/20261118/qwen-source-b128
+
 "$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.native_source_queue prepare \
   --repo "$PWD" --source "$PWD/.worktrees/qwen-source-b128" \
-  --study "$PWD/runs/qwen-source-b128-v1" --python "$PYTHON_BIN" --worlds 2,1
+  --study "$PWD/rebuild/qwen-source-b128-v1" --python "$PYTHON_BIN" --worlds 2,1
 
 "$PYTHON_BIN" -m examples.mirroropd.research.studies.prefix_fusion.native_source_queue run \
   --repo "$PWD" --source "$PWD/.worktrees/qwen-source-b128" \
-  --study "$PWD/runs/qwen-source-b128-v1" --python "$PYTHON_BIN" --worlds 2,1 \
+  --study "$PWD/rebuild/qwen-source-b128-v1" --python "$PYTHON_BIN" --worlds 2,1 \
   --broker "$MIRROROPD_GPU_BROKER"
 ```
 

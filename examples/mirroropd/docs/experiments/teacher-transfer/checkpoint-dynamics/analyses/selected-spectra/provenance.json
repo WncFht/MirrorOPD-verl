@@ -1,0 +1,1374 @@
+{
+  "source": {
+    "synthesis": "examples/mirroropd/docs/experiments/teacher-transfer/checkpoint-dynamics/data/metric-synthesis-20261113.json",
+    "synthesis_sha256": "8c478b65c7ee629747c2650bf57a724dc03c4bf03ff5b116a3ec300f98f90f49",
+    "raw_k_projection_records": [
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00003.json.gz",
+        "sha256": "4a6ebd039eba3fe2da2c7a93e567e4df7953dc7fcf2f7c782c31e0bdba6d176a",
+        "pair": "E94",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00010.json.gz",
+        "sha256": "033328fa26daa9121100024f3f71f546159200c8aa52ecbeb51477d36747fccd",
+        "pair": "E94",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00017.json.gz",
+        "sha256": "51b7f544ec15022e6c4a5344e324ed931774b791a6a2fb007c3282c140949ffd",
+        "pair": "E94",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00024.json.gz",
+        "sha256": "ca64f7c6ba024ebda21a47150b70dadc3fbb3eacda9c37121be607d385f93256",
+        "pair": "E94",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00031.json.gz",
+        "sha256": "a9c3c4b38bc5f8627d1523fe9110fbac3a5a0069bd10abd331ce4bd583c3e7af",
+        "pair": "E94",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00038.json.gz",
+        "sha256": "bbf13f7bcf12775795e94d8630306e054044a2ad5c2e87e637f10d0a8a53a6d5",
+        "pair": "E94",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00045.json.gz",
+        "sha256": "24f38bc49894645d0f76a917f5ef452df68a850cdcd03e1d5488c70057d0df17",
+        "pair": "E94",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00052.json.gz",
+        "sha256": "d99857645f9889ea495272819bcc9f09eef328b5ea9033ed0ce8ee59587a2550",
+        "pair": "E94",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00059.json.gz",
+        "sha256": "95f184bf773c65abd225f533b7e7201417bba691916973e5d03a01515e65ea0e",
+        "pair": "E94",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00066.json.gz",
+        "sha256": "880749eaea74609622bbd48fa29525f9748321f573e7acd9f2eb321bdf546d5c",
+        "pair": "E94",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00073.json.gz",
+        "sha256": "e568556199d082686ee800a90d9a6338aec93c63b15521b4a7572139c475907a",
+        "pair": "E94",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00080.json.gz",
+        "sha256": "2605ebeae455c66686c548d10ad3c81a19f9a9d47a0bd164a92d66ed729f33b0",
+        "pair": "E94",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00087.json.gz",
+        "sha256": "56702f882f40b43b8319467fed3e2e217b6afc7704bdd090a6b921ec7c2947e1",
+        "pair": "E94",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00094.json.gz",
+        "sha256": "91d53ce3f0a8ebd424cb2014c03b5a0dc68e64b5f61bebbb1fddd7ff308b64bd",
+        "pair": "E94",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00101.json.gz",
+        "sha256": "58b99c38ac015cdafd63c644db7baa0b5a5c0c33dc42eda2b021aea240a5db84",
+        "pair": "E94",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00108.json.gz",
+        "sha256": "73096e9b88e509533f83d6e9dfae969d95d5e096ca5f10e0d05a27e5d6e17f7c",
+        "pair": "E94",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00115.json.gz",
+        "sha256": "7124c81dc66c766577a9b36fe1cf1d1a1bc13823d050868dabf6a333acff9702",
+        "pair": "E94",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00122.json.gz",
+        "sha256": "3f890b2b3395ed0db3aefdb5d282e46f8d64b9ee3ad209809d7d13d3ce955a15",
+        "pair": "E94",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00129.json.gz",
+        "sha256": "158ccdb9870142c5f11a3cbde8acf5b8890fffaaa0923d12ba5503b3e67b8167",
+        "pair": "E94",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00136.json.gz",
+        "sha256": "ccb06f72d916ba4f9dfa25e5d52b48f988fd91a436b637617023af46cafa2563",
+        "pair": "E94",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00143.json.gz",
+        "sha256": "63cdd8ed5b2bd122775abd388069a5efd3bbba159bab6f565bbc41edf8cec81d",
+        "pair": "E94",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00150.json.gz",
+        "sha256": "7864455a8c9814cc64677ff3ba8149a2e6d180ea6d711719353565287dfba705",
+        "pair": "E94",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00157.json.gz",
+        "sha256": "e6844433fa5bbf18acd95be01d954390c7f3e413d9ca6e7bba27650d9609235c",
+        "pair": "E94",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00164.json.gz",
+        "sha256": "9c23c546d235d2d7a56d0d07232eed593e05a422f6222bdd41503fd48fc0f656",
+        "pair": "E94",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00171.json.gz",
+        "sha256": "41050f4f9d695989b1b02919f15b2c6d835bd3a7f9153c27a5f5fdb9eab914a3",
+        "pair": "E94",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00178.json.gz",
+        "sha256": "09f7df9323b59fe55d245e065862145edc58a2d12f0c528410cf7adca20149df",
+        "pair": "E94",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00185.json.gz",
+        "sha256": "c91b48c314c68bb0d584eca6392cc4c258e773226903e23d2f6b3122a5c746e4",
+        "pair": "E94",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00192.json.gz",
+        "sha256": "c2e6952bc9ab1fc56ddc3f2704070167f12675d7020fe5f7eb74b1c0d5f6a45f",
+        "pair": "E94",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00199.json.gz",
+        "sha256": "fe271f57694f97278a5bff4bf76e6fb6fde7b2050594f7d22878bbc0e09dee9d",
+        "pair": "E95",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00206.json.gz",
+        "sha256": "9fce2a05df726db58cc6f479c0e4c87780534f5e86cef3c24a8e335f32fd16a2",
+        "pair": "E95",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00213.json.gz",
+        "sha256": "b12b65f8c66d3353b81d518a9dd61e8cff2b11982a05dcd59c045ad2f7c3b722",
+        "pair": "E95",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00220.json.gz",
+        "sha256": "b7afd59fc163f2aa386af085cba2628532bba3eaaea75922d9b47a4239ee532d",
+        "pair": "E95",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00227.json.gz",
+        "sha256": "d0376bf051d85842e7e982bd6f55bfad0c611164de64d020779c658dc3b44fe1",
+        "pair": "E95",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00234.json.gz",
+        "sha256": "2792820f42135e6dd4ed1127443a749a69750e138cb5abbe985b3df15c6428b9",
+        "pair": "E95",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00241.json.gz",
+        "sha256": "fc34a251d408e2b1d73bea49ca9f59288f8b59e010010d612f8ed959eb8cf744",
+        "pair": "E95",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00248.json.gz",
+        "sha256": "1f92b4164e3288fc56cc303a963b373b75b6cc9bbcc0154bac0664608902b491",
+        "pair": "E95",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00255.json.gz",
+        "sha256": "78d02833825622b003cff4116b151317ae64aad7507d4403999284e295df57d6",
+        "pair": "E95",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00262.json.gz",
+        "sha256": "e13577d7dd6b750bacb5462a60e9906b421800a298b8d6f5999906b89a3b0d6b",
+        "pair": "E95",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00269.json.gz",
+        "sha256": "d2f3039b6467ac8c8177ade3e5dc61976b0ec19bfe68ba7aa3ccf8b9ef221e3b",
+        "pair": "E95",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00276.json.gz",
+        "sha256": "895704003568bf4e003609d460a2a545abfcb096694322d459c0c807e99b9336",
+        "pair": "E95",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00283.json.gz",
+        "sha256": "fd30adfa04b84e8796fc94025b956b38d7b80522decd537126d4982ab31b3d2c",
+        "pair": "E95",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00290.json.gz",
+        "sha256": "11ce0c221d5a3be3acfff55df455a1f7abdc4c1323b8a9a2857cd70c1dcbdf0e",
+        "pair": "E95",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00297.json.gz",
+        "sha256": "513aeecaf84d13361efa81bc25d53ea0ba596d5d19b88afdec141685b01c02c7",
+        "pair": "E95",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00304.json.gz",
+        "sha256": "304f201088160ba37d40a1cb9055d8fe15247d5d55b685c2d851f9c709acd09c",
+        "pair": "E95",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00311.json.gz",
+        "sha256": "f15b74200fa4631449701a375a4b597595699a993d3258dd9d3b3eb69da34ab1",
+        "pair": "E95",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00318.json.gz",
+        "sha256": "b2b1c862e2d3624960edea1bb8392a5ce8b6af6a578975ada5c8d8c74acdb014",
+        "pair": "E95",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00325.json.gz",
+        "sha256": "e2c40c7eec97d410b1c1afc19fa04d571e2c66ca628210ccc336fb7eeb82a558",
+        "pair": "E95",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00332.json.gz",
+        "sha256": "2faa548efd427f65e422cc84d1611766f8ba258e0ccf577995880bd81ef3b118",
+        "pair": "E95",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00339.json.gz",
+        "sha256": "49b467a26a4dcc66312b254edd06d2abf44395cbd1b01f5b34ee3406da673f2e",
+        "pair": "E95",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00346.json.gz",
+        "sha256": "722c4205a6f1a936bd284b2193edc1f571b0dd63db8d8f73e59c44728e2d0025",
+        "pair": "E95",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00353.json.gz",
+        "sha256": "60994752c50445e821ac8b66b0d0dec457c3881e120b5663d788230f844bf3d5",
+        "pair": "E95",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00360.json.gz",
+        "sha256": "3de8514cbdd0dca2dea7f71df105301eff1251054150d460bdd06f6c3fd9dfd1",
+        "pair": "E95",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00367.json.gz",
+        "sha256": "2098d8d7bd5e36ddf13250dd65b456aee74030a9399d74bcf32141c57016f2f4",
+        "pair": "E95",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00374.json.gz",
+        "sha256": "b3822bdc264153b5889560b3808fc265217d67b7de6db9d25abcf1d82f8a10e6",
+        "pair": "E95",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00381.json.gz",
+        "sha256": "5f394b1fb00526f3925df167f1a367defe4d11ab7aae051098c1fe3fb782fdcc",
+        "pair": "E95",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00388.json.gz",
+        "sha256": "6ed4d9351f261188cf40b22225e96faf49771f0b60afa235242556b5e0e8f8da",
+        "pair": "E95",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00395.json.gz",
+        "sha256": "42a61aed01dca5ed24cddcbf01be97d54c79201b891730755160f659e5c1fb3c",
+        "pair": "E96",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00402.json.gz",
+        "sha256": "7aeba45f90fe4137e1b105a25295654db652ceeb20812c996e0fd178601e92a7",
+        "pair": "E96",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00409.json.gz",
+        "sha256": "dd26728ef0fcbd96f51bb5ffa96f938a7a0ca161a805e0b8ca17e99e0781de49",
+        "pair": "E96",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00416.json.gz",
+        "sha256": "15447990b1265f8ee0775bdd8b0e0dc04f64e7612d135020b4cb75f26cddfe0c",
+        "pair": "E96",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00423.json.gz",
+        "sha256": "0f79e6b054e5fcbce4f93e77f3750fbd9fb61855eb91df6cb0f193afb4f5c55e",
+        "pair": "E96",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00430.json.gz",
+        "sha256": "264c1d135b5e784ecb3ad4b2e824d2b1f175ae343d74dff22cb013f3949073e9",
+        "pair": "E96",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00437.json.gz",
+        "sha256": "35e179858f24e13c1f6b1581566d2ab31e83eae08cec4c1d92499b9971850bb0",
+        "pair": "E96",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00444.json.gz",
+        "sha256": "2e1f9409d8d9a0437575be2bf0265f8880de6e6de5a9715e0c7fe46c74ca9b66",
+        "pair": "E96",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00451.json.gz",
+        "sha256": "03869faa431e741c7657fdce7671b2e0f2d600447362e7905ae375f28967622a",
+        "pair": "E96",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00458.json.gz",
+        "sha256": "92ef702167c5be913997c1679019cc7dff9d054d8521923e038ecc1db2196b37",
+        "pair": "E96",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00465.json.gz",
+        "sha256": "89f8476ea987beddaaeb8811f3c4ccf2a3ae707757981316900c133ee913e226",
+        "pair": "E96",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00472.json.gz",
+        "sha256": "b2a148542ab915ed41f03983efd0a3d3931bf50b0094b90f4f4cb4c3f4b15969",
+        "pair": "E96",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00479.json.gz",
+        "sha256": "b5e7f12735e27ae3b91d5bed226f50d20a47dce2ab63cc93d10d17e25fa42b7b",
+        "pair": "E96",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00486.json.gz",
+        "sha256": "4441b963a5ad79ff9f60caced42346f90dda23343a7012b708729b31e51278d5",
+        "pair": "E96",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00493.json.gz",
+        "sha256": "99d3ce1a19e5f17bc2d8a8610d813f13e23e2f7709df8f0acd6c0f4014e93aeb",
+        "pair": "E96",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00500.json.gz",
+        "sha256": "9c98c7b2b349e09aba8e7b66c6973f847509aaae45086920e2a004ced588a7b8",
+        "pair": "E96",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00507.json.gz",
+        "sha256": "6cc2c139cdfde06d0d66c707a05023f623325bf083e26fc8a11123da1cebf286",
+        "pair": "E96",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00514.json.gz",
+        "sha256": "05497313993646ad5cc576d50fc3e3299781b63969a7dd51baf279fbb3ba5ca2",
+        "pair": "E96",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00521.json.gz",
+        "sha256": "cba3adc06e5faf6c05ab2d92beb5ef0742a22fd443c4988b22ea04bd1a93df67",
+        "pair": "E96",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00528.json.gz",
+        "sha256": "028ef08ba117bcfe8ec22c2fc6bd0059f90d5c56a1023b1a2dd936aff35e1da3",
+        "pair": "E96",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00535.json.gz",
+        "sha256": "05fafa48cd6dfafa931856a58bd99d2d472297dd177ffd6b3ddd5604fe771ab1",
+        "pair": "E96",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00542.json.gz",
+        "sha256": "18f64d7773156370b119381deb01c1d1f6961eece912d92358dd4b0fda54e7b1",
+        "pair": "E96",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00549.json.gz",
+        "sha256": "9eceb45a51b5e7a22a5deb59ab83f9b9f54596065bf636097f70afe259bef09c",
+        "pair": "E96",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00556.json.gz",
+        "sha256": "20bafb42bbc36d01e9fab8a785db53fa0d882ce6b47cded3c7ea3a93ab9a498b",
+        "pair": "E96",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00563.json.gz",
+        "sha256": "f8b49a47579e496d8e8a7fe91d45ffe0c371993e0b15fcaec13e1bd1799e8fac",
+        "pair": "E96",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00570.json.gz",
+        "sha256": "25d35a7f8d3fc15a5c01c79d3aa61916513caed5eba4ac39f7ffc402cb6ac26f",
+        "pair": "E96",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00577.json.gz",
+        "sha256": "4aac8813cd52607c8aac87ba09a553a2bd9987a2dc80c54b06b54b6c4723d629",
+        "pair": "E96",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-00584.json.gz",
+        "sha256": "3336fbff16ebdfe9da1aeec9d5c226fb9feb88dae7fa50884a79801cdcfeb5b1",
+        "pair": "E96",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01179.json.gz",
+        "sha256": "817ce7b143f9ac0cf7a4dbdd1dcfebd78198f6af4f98e4f4df32ee2920200971",
+        "pair": "E100",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01186.json.gz",
+        "sha256": "e6bf5cbc44a69bfd1731556b2c1faa927952917a3f99ec7943d4543c03ea92ad",
+        "pair": "E100",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01193.json.gz",
+        "sha256": "961cebac835cc327a2cb85bb6a56a2c8d3caf8c22be49a49b1dc66c3734b2426",
+        "pair": "E100",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01200.json.gz",
+        "sha256": "f861aaa64c157ebed8417ec6deef0a63a5b4ab6783936aabe550bdac7a94c710",
+        "pair": "E100",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01207.json.gz",
+        "sha256": "80313fe71b35a0e8a962e9ca8a2243c00400abe74de703adc21206c2118ff0e9",
+        "pair": "E100",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01214.json.gz",
+        "sha256": "b0edfde26e746402a4a5d0c34ab95c85c88cd50ce09b5444670e6c7d5f692644",
+        "pair": "E100",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01221.json.gz",
+        "sha256": "f41b703b254571149eb72b3b0fce30f2f0841e1256424cbda569c4a12a987a6e",
+        "pair": "E100",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01228.json.gz",
+        "sha256": "f650ea5748be57a3dacc1ec6bb583698122358ecbf0438220a5ee0f3357f164f",
+        "pair": "E100",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01235.json.gz",
+        "sha256": "4ec125f4159d80e380d1bd39a9941ff2585ea919838821b27e9e9670a5ebff8b",
+        "pair": "E100",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01242.json.gz",
+        "sha256": "0662e41ccefdb87bee202ff2e4a1a53ec369ddd4c8990b3d530d646f634636c0",
+        "pair": "E100",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01249.json.gz",
+        "sha256": "2ba8b84f75fc566a547548a07baea0fe12864d42e53b68f4ff336406d00323e0",
+        "pair": "E100",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01256.json.gz",
+        "sha256": "19dc665f3322f7dee8c9e10f021e5e580ff688eff10db8a0957d7a02fad4d150",
+        "pair": "E100",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01263.json.gz",
+        "sha256": "2b45c2990ebc44b38e45cbe55f4d06cb06ffbfae124377f9e26a8a409c7fc70f",
+        "pair": "E100",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01270.json.gz",
+        "sha256": "e4c287fb59d7ba201875a61ed354f149fd6249c89d32c85eaf01d382429af52a",
+        "pair": "E100",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01277.json.gz",
+        "sha256": "38d8435e3aeed20fc65900477a3bf90aa0ba6a15a2d117bfa1cf78da0f5643d3",
+        "pair": "E100",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01284.json.gz",
+        "sha256": "585dad15fcbdbc7e72be3edb1914c59d335883d32599ffbe04267dfe84bd7536",
+        "pair": "E100",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01291.json.gz",
+        "sha256": "4163682fdb5f6cf6e3078884319c8338c4821d977ac3025a1037c4dbf8e01191",
+        "pair": "E100",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01298.json.gz",
+        "sha256": "385202e7748e4e22bf2c7877796db28ca2b85466cf91d4d460536c26bdfd69ff",
+        "pair": "E100",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01305.json.gz",
+        "sha256": "62f259c855656f3256eb612cef02717b22d511f65a3ee4ac0d3be2988b7b88ba",
+        "pair": "E100",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01312.json.gz",
+        "sha256": "766632608f9af93b9bd3183114aef3a24162499076ee36aae94a0d8dd0ec435d",
+        "pair": "E100",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01319.json.gz",
+        "sha256": "349ec3f8d25f60622e7fc3fb6805a90e19fa709bd471ca59c87be4d84754313d",
+        "pair": "E100",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01326.json.gz",
+        "sha256": "312d2f3df38af04342247fe05eba8879482b409a8aa75ad376e7d7c1d06d57be",
+        "pair": "E100",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01333.json.gz",
+        "sha256": "08bcf3834fc41f3035706b977e127decca69c5585e2ee755c93e8eabebf97e77",
+        "pair": "E100",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01340.json.gz",
+        "sha256": "728dc0c7553e80f68e937481e420d6ee184b46857e04862b7b8bbd788304d1ad",
+        "pair": "E100",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01347.json.gz",
+        "sha256": "6be2d99ab0cfbfd52812a2035f8819b6c50568e81084264296f43995ebedda7c",
+        "pair": "E100",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01354.json.gz",
+        "sha256": "adce884c316e4427eee1e1ea03df20aee0bdeec4afe15b815568ed27bb6aeed1",
+        "pair": "E100",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01361.json.gz",
+        "sha256": "97bd5bfb2b3728d40773d6031d64390d6e34516fec8c594e68c6c381d95bcc45",
+        "pair": "E100",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01368.json.gz",
+        "sha256": "42d55079483517177e5899480c52cc560f78bb3f33d7d96a03c27adb96cf407c",
+        "pair": "E100",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01375.json.gz",
+        "sha256": "bfb2cdead09463fe3718d645eb8ffb69ac54351f3e105942d028f675602d24f0",
+        "pair": "E101",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01382.json.gz",
+        "sha256": "ef56256cf3c6a91e6bd9b4e68daf2947c873b6acb7cf84fedfb51fb32bd08fec",
+        "pair": "E101",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01389.json.gz",
+        "sha256": "ad081e681381ce827188335f116d8841bc7d16242447f25319f70ecb3beb6971",
+        "pair": "E101",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01396.json.gz",
+        "sha256": "45724cc4d7252b8787f329e4287141276d24e609278aafc8b35140f816f1fed4",
+        "pair": "E101",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01403.json.gz",
+        "sha256": "c0b6ab498b183d7f49bdd7f7a83109d3a95f1ba8ed8843590796c626ce9b5898",
+        "pair": "E101",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01410.json.gz",
+        "sha256": "6c964b51b96b73e53941644bfc8b8eabe971413d05d0183940a6b462a6857600",
+        "pair": "E101",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01417.json.gz",
+        "sha256": "c11cc0e20978915365d89d320380199253db39952824a108197e350dd595e970",
+        "pair": "E101",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01424.json.gz",
+        "sha256": "d4d36d40d77a25f949a11db241adb0d692c2fce9f61fb4bd700b87adf89035ae",
+        "pair": "E101",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01431.json.gz",
+        "sha256": "674509fed183a855ba04a1da64c2d43c1d1c69912463dbc37bc899a3df7a9017",
+        "pair": "E101",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01438.json.gz",
+        "sha256": "2e6fbe47f852f44df96734e9b677a526b6f83e531952febf705de8b14409b04c",
+        "pair": "E101",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01445.json.gz",
+        "sha256": "0f601ddc85aa519118a97c3118f4ce9d9672936d7feb965bd23997d3e04adbe1",
+        "pair": "E101",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01452.json.gz",
+        "sha256": "0001a9c037e1c91172818d75522a449f7579618886317471ab92e453641a697a",
+        "pair": "E101",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01459.json.gz",
+        "sha256": "a0bcb938e4d52059407bf9415c89387051eb0a35e87eb6d90b74613239ca12ab",
+        "pair": "E101",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01466.json.gz",
+        "sha256": "887fa414678fba5c2240427703ed2cd096a62a1c27fba3406807d754bc631a31",
+        "pair": "E101",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01473.json.gz",
+        "sha256": "c525dc9513d8d74f406025b891f470cd257500b37acb66d38ea32d29eccc9bea",
+        "pair": "E101",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01480.json.gz",
+        "sha256": "212dfc33d34ebe938d6df139d18cecf41b693a70385a2eae181d3d91f266baca",
+        "pair": "E101",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01487.json.gz",
+        "sha256": "a8f15597562e3a6993b43e68673383673772333eca1bf94e0c3d23af7805f4b9",
+        "pair": "E101",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01494.json.gz",
+        "sha256": "ee64ca637fcd41dd6e4bfc232fbd575d8117916ce04a497811485795ba9f514c",
+        "pair": "E101",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01501.json.gz",
+        "sha256": "b456fb88129cd01b7d5c223b18d9f8e7c1ad94c1adcf30ca37705b61caec20e0",
+        "pair": "E101",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01508.json.gz",
+        "sha256": "a8a3c914ea55fd6df74c5bcda66a202be5df96f681f30a612cf4325f5fdf9ff4",
+        "pair": "E101",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01515.json.gz",
+        "sha256": "c23e8a46c45c4d4f5b50db42d222618a0788f78de95848a97a158225e7624bf8",
+        "pair": "E101",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01522.json.gz",
+        "sha256": "e9a92fa7a2e982180b6bc325ec77fc6b109f7968857fbadf178432690cfab3f2",
+        "pair": "E101",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01529.json.gz",
+        "sha256": "a321efa3ced868f65850c981366fd032af0e95467ad935603149c6441d502bab",
+        "pair": "E101",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01536.json.gz",
+        "sha256": "dce45291420ffe156f10383b7246a135e197972a90c30c87ea97ad9ab94ce960",
+        "pair": "E101",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01543.json.gz",
+        "sha256": "20445ff007d83325574eb67b18295a072ec4b524a75f804b1fb637a145291086",
+        "pair": "E101",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01550.json.gz",
+        "sha256": "e5e39d4423732c41b552116eec5e10436efcf6e7c291bf731be2589b0887f708",
+        "pair": "E101",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01557.json.gz",
+        "sha256": "7d26a47f2cf0ea18e2df9dac13539f5c4996e1f71921cf39101f8e6d14374d98",
+        "pair": "E101",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01564.json.gz",
+        "sha256": "2059aee73f406d6367dbac9658f6e2cc3f070a38413c3eda4e54ba2f300a9f9c",
+        "pair": "E101",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01571.json.gz",
+        "sha256": "8c9524504506da58e54fd4bb89a2b282b63cf7e4e1c66c6bc1ac5301eb2db2e7",
+        "pair": "E102",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01578.json.gz",
+        "sha256": "7ac442a9201bad96af302ad08894bd4a0454452e652e09d90d65606bb2815da5",
+        "pair": "E102",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01585.json.gz",
+        "sha256": "241bb0522652bd5ae435e5b7bd175252ce8059c8b436538d9f2cf503674d36a0",
+        "pair": "E102",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01592.json.gz",
+        "sha256": "d2319e27bc8b5ae4d35aab820145584a70edb273766c8324786acbd26092fb5a",
+        "pair": "E102",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01599.json.gz",
+        "sha256": "8f68f50a4d8d80ae562c95223b334835f00c24e4997587e22d880c45bffbf5b2",
+        "pair": "E102",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01606.json.gz",
+        "sha256": "1c5ea794df94c77cee7be30d6625331f488a33101ba234ce2fc0ca59905d899e",
+        "pair": "E102",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01613.json.gz",
+        "sha256": "9e5883f6caf79950246501ccdba2ebc48787c9bd25a6a0a2f9c7f79d837dca68",
+        "pair": "E102",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01620.json.gz",
+        "sha256": "a7d5e95a3aee64a2514469d6351e77cddf63203ac8e25942ef0617bc3977fe11",
+        "pair": "E102",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01627.json.gz",
+        "sha256": "586d2e1e28c2b9be87ad2b3c1f0ecfb612a0b8fc59c4c79b181c766ea380b0f5",
+        "pair": "E102",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01634.json.gz",
+        "sha256": "c07d7aa7da0df6d71e9138380618484b3e59dae9be86a888b7ae8828825aee4a",
+        "pair": "E102",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01641.json.gz",
+        "sha256": "e2f853c90f022f0a7f4236b44d1a6ca66d624ca28e31414c4ec1c3fb886aa602",
+        "pair": "E102",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01648.json.gz",
+        "sha256": "ae59ab7e91406838c5b795417fb9efce9d548fde1f550fe900859fafa3aed44e",
+        "pair": "E102",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01655.json.gz",
+        "sha256": "0c57748c070e8e1ef98d62a5c7aa1c0f36502dff6fc9e5c85f3800c59ecd6fce",
+        "pair": "E102",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01662.json.gz",
+        "sha256": "f5223ba03f067d1fef840a2a5e65ef0be7e98d2e75ecc8c8e8d73f2b31bf2fc4",
+        "pair": "E102",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01669.json.gz",
+        "sha256": "9de4b3d2bccabc8b5a92d6912bed931be9a348efafef535af2728053c4c49a0e",
+        "pair": "E102",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01676.json.gz",
+        "sha256": "0a1699be1cae5325761f12de18259243a03f1cec4719051bba92baf4ceda5341",
+        "pair": "E102",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01683.json.gz",
+        "sha256": "bb8f6083c0892195ae5c8b7f72eb30fb86c9a1c16cd04e7238d4e2f7fbeb2ec5",
+        "pair": "E102",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01690.json.gz",
+        "sha256": "d1541192bcba7dd93d0fdc0a8b7efd09d9b12a9fec170b9ebb2288483bcb1e49",
+        "pair": "E102",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01697.json.gz",
+        "sha256": "512b44aecf9483f964ad7df107a675b7ae628b373b444b473dcaebeedf28d6b2",
+        "pair": "E102",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01704.json.gz",
+        "sha256": "376a3b1c21676fd84b309f0b304736a886fa3e77df032e377419c5d0525cbd4f",
+        "pair": "E102",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01711.json.gz",
+        "sha256": "1f48aefb986b00de0569fb7fe86dbe310316f428aff301b5b7e9b39f8174ca32",
+        "pair": "E102",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01718.json.gz",
+        "sha256": "594a14d62208b0ad9b1eff0bb94f66203010d123d4bcd866b78ac398298bdcab",
+        "pair": "E102",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01725.json.gz",
+        "sha256": "7b9e3bc3c25ec9c781c0fd89fcdb8ae3078816a40fc8e9f74c0f1436e6bacdf2",
+        "pair": "E102",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01732.json.gz",
+        "sha256": "606d62f6973dd73ab5dfbb93ac55ae32f79240063a1752f8a66949a478df3903",
+        "pair": "E102",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01739.json.gz",
+        "sha256": "19db2d223f794859d75ee3f503b639fdc4cd7b80bdcc1065862dcede4a42cbac",
+        "pair": "E102",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01746.json.gz",
+        "sha256": "3314e222480836125183c1b3db47c7e6c8561d7ab7d6f8b36d725e21c55cfa0b",
+        "pair": "E102",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01753.json.gz",
+        "sha256": "ca3e7428c9c4c420230c9a88552c9eebe50614093ceded873cda276779b668a2",
+        "pair": "E102",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-back-attempt1/matrix-01760.json.gz",
+        "sha256": "a30ddd98211ed05d9b0ce09175fecd8a880d748a1bd8f745b127b8f4c20f44ad",
+        "pair": "E102",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00003.json.gz",
+        "sha256": "4a42ed6bd29f2e14b109c03144a9ede1ec73baa9fac5ede01b4e24fe2ac4870d",
+        "pair": "E103",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00010.json.gz",
+        "sha256": "a4fabe8226280e6c0617aea08ae89d38224ca4c457b788cfb2643b164c8a503d",
+        "pair": "E103",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00017.json.gz",
+        "sha256": "d089712cfaf7b8ef4c9c202a295495f31d6fe36baeb22652c29145c61df99f45",
+        "pair": "E103",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00024.json.gz",
+        "sha256": "d00115be641051e0de244055e8a6eb8e72cd08e2013d4f8f1b68b964402e46e8",
+        "pair": "E103",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00031.json.gz",
+        "sha256": "a3f6cc59424c0dc060e84da8e4ce0f2e932eebb4fed47eb1a09a8317f91eeebb",
+        "pair": "E103",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00038.json.gz",
+        "sha256": "e416abaa06744dc1404600dc34a7df5a5ed22162bea0a500a6e1547bebcbc0a0",
+        "pair": "E103",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00045.json.gz",
+        "sha256": "5ace77f4f5d3df29e585e0ca9930346fe28b427df588b69f5cd335ae02b09065",
+        "pair": "E103",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00052.json.gz",
+        "sha256": "1700db2552174455f27932bb85e27df0075f20dd89f41b0c8a86bfb7dec712a1",
+        "pair": "E103",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00059.json.gz",
+        "sha256": "a173d4db45796dbd7bc1af787976caaf76a3d0dae11e23c88cf13314a99c37d4",
+        "pair": "E103",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00066.json.gz",
+        "sha256": "7fb0ef466c2ed60dc62c2dd959cf4cdf5006c8a2aedf2d18d9b5245454007137",
+        "pair": "E103",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00073.json.gz",
+        "sha256": "3370ed1b9d7b8577d83d881a9448c5c5755b3e947fed8e5106c99a0086ef7479",
+        "pair": "E103",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00080.json.gz",
+        "sha256": "6f7b6293a8ebd9d11b53b338b5056672094b586a3fc8af02786ad68301f36e96",
+        "pair": "E103",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00087.json.gz",
+        "sha256": "f82b30c212b57c0f0a4b8254becd308f39abcbd3a6f6b5e1e3b9c6438602dd2e",
+        "pair": "E103",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00094.json.gz",
+        "sha256": "0e21374a5d4cf21093fcece992ad0d2e44bc41024400f3bec5ebb896613ab51c",
+        "pair": "E103",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00101.json.gz",
+        "sha256": "51b223f42860f9d22d2529b46bf62e6bf01884a3cc75a18995a16f3819a02b50",
+        "pair": "E103",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00108.json.gz",
+        "sha256": "141e6d9912aa6a2ceca1ef2c4d7a92678e0d92a731ec9e66e5ad3eff2a57bdb2",
+        "pair": "E103",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00115.json.gz",
+        "sha256": "16a2b51211365e49ea5524ca96c83d99744f72aaa0315cce2f8d5386f4d51a71",
+        "pair": "E103",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00122.json.gz",
+        "sha256": "ef4dae28576f1da6fc0b76f3f338b6997546dc3c14c7184ddbcba7fa8a63fe33",
+        "pair": "E103",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00129.json.gz",
+        "sha256": "e6a00fd5e5a41f08eb0a8fb0fdf98a5d8dc7d17d2d3a6a708923fd81ff25335f",
+        "pair": "E103",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00136.json.gz",
+        "sha256": "c739f71317e1b74925821afcc438d297dd089399005ee6e4b13c2ae295592f54",
+        "pair": "E103",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00143.json.gz",
+        "sha256": "0d4bb95140be8b6902374f5aaf6572f360ff29ee4f47412b42eb4f07df558fbd",
+        "pair": "E103",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00150.json.gz",
+        "sha256": "7df62ec3e08dbe2a9357577b10382b95a16db3f559b37de23def16f3d1c9ded4",
+        "pair": "E103",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00157.json.gz",
+        "sha256": "d9e5ea483c4bd2c0cfc82ffb7eac3465d96d4988c355f12a836c6b0a33bcc705",
+        "pair": "E103",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00164.json.gz",
+        "sha256": "aecf86c94a2dfa2dec1766cadb8982ed9c3e3ee49a06763ac674789b23e7cd01",
+        "pair": "E103",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00171.json.gz",
+        "sha256": "85e391d299d0b17a3664e29226626c8f8c74b7b87de638a18369bb996a5dcd43",
+        "pair": "E103",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00178.json.gz",
+        "sha256": "73fdf64cd112b62e4221b660139a1932d7e25072cdb0274a775f9754d1fa8c13",
+        "pair": "E103",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00185.json.gz",
+        "sha256": "a87dc021de67596a59dcecfd42625dfac057e713ad2bb6df8f5b347c3a2d7cc7",
+        "pair": "E103",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00192.json.gz",
+        "sha256": "0953eeefab1dd0f47f6a988447cf8635e88d469ef3bada936a0f0ef85b8167cb",
+        "pair": "E103",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00199.json.gz",
+        "sha256": "0e85ce57fb39c1661dcda045d9cc92cb60a021898081d30d0c3009c6ed4c7b35",
+        "pair": "E104",
+        "tensor": "model.layers.0.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00206.json.gz",
+        "sha256": "9a6822a4dcde98e9bfee37e95071314042c82c2bdc1b9c33fb12592410cc784f",
+        "pair": "E104",
+        "tensor": "model.layers.1.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00213.json.gz",
+        "sha256": "4df137f560148cb0e74d040450b89e5b175c751525f35768c1062670957f5e45",
+        "pair": "E104",
+        "tensor": "model.layers.10.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00220.json.gz",
+        "sha256": "f929ea3d8fa5c18b541b2a1d1a90b30d349767ac2e206300484698746899fe68",
+        "pair": "E104",
+        "tensor": "model.layers.11.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00227.json.gz",
+        "sha256": "9cd6c11f2db97e003e17afe41a64fadf05ec7b0069aa7f62f44b988e28648c6d",
+        "pair": "E104",
+        "tensor": "model.layers.12.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00234.json.gz",
+        "sha256": "684617ae303a37ce8415e4639239c43cc7e02ef8163ca6a9d0143606c0ab6a95",
+        "pair": "E104",
+        "tensor": "model.layers.13.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00241.json.gz",
+        "sha256": "f38dde23c7fae49149969da652ed935eeae96ae7a9d117baf040c54680ef7de0",
+        "pair": "E104",
+        "tensor": "model.layers.14.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00248.json.gz",
+        "sha256": "a0ce239be34ca4ade7b2150a335e1117ec00db92af66b2fcb74777d9475dcb4a",
+        "pair": "E104",
+        "tensor": "model.layers.15.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00255.json.gz",
+        "sha256": "27f19c8e3e2591804be6fc2acb09868238dfb75bf597b8199fddbd6535397f77",
+        "pair": "E104",
+        "tensor": "model.layers.16.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00262.json.gz",
+        "sha256": "88872e47155c473dd9ad11335f7fde5b9d2892d5511e0a407bafeea0edeeb861",
+        "pair": "E104",
+        "tensor": "model.layers.17.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00269.json.gz",
+        "sha256": "22d568b44e142ce1a6f210e2da3a1a94a2e7b3bee0db588fa41785081c5ef515",
+        "pair": "E104",
+        "tensor": "model.layers.18.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00276.json.gz",
+        "sha256": "61bad3d4b738500a4bb79a016c15c293aaed329d8f85fc16fe349fc6596519aa",
+        "pair": "E104",
+        "tensor": "model.layers.19.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00283.json.gz",
+        "sha256": "364e4d93672f569eeb44f47a76ea77bf3402d798f593cab31b7c443ead06d1cb",
+        "pair": "E104",
+        "tensor": "model.layers.2.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00290.json.gz",
+        "sha256": "2565f803dc1371b8bc6b51b83c64d61fde2f713dcb03ac2644e11e00c09eb096",
+        "pair": "E104",
+        "tensor": "model.layers.20.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00297.json.gz",
+        "sha256": "607a05ee90951a077fe190f63d3c420cc8b8f80be4c93dec50a8e9b9fca2ffc6",
+        "pair": "E104",
+        "tensor": "model.layers.21.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00304.json.gz",
+        "sha256": "746fd53b2316353fca939c8bbc5e15f31e9416adc6a132774bce3aec18044b1d",
+        "pair": "E104",
+        "tensor": "model.layers.22.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00311.json.gz",
+        "sha256": "1bc01a478251dea2dc2eaf98780320b5346a4fe697cce9978b6161cca07dc761",
+        "pair": "E104",
+        "tensor": "model.layers.23.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00318.json.gz",
+        "sha256": "a4de533a13d68af8340034c30b35423af4479c42af5b2317ddccfbee130497d8",
+        "pair": "E104",
+        "tensor": "model.layers.24.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00325.json.gz",
+        "sha256": "e389afcf7600a1823984fc3fb8eced3ba6dffe480ecfe8373f10ef2091bfdd9e",
+        "pair": "E104",
+        "tensor": "model.layers.25.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00332.json.gz",
+        "sha256": "00977840f431412e25378aeb85afa039d4d06b274bfcc0a1b0530654096be856",
+        "pair": "E104",
+        "tensor": "model.layers.26.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00339.json.gz",
+        "sha256": "05b8bed7d482dd5ae2a6be417de07f725824291910826a6b62221e3ae2642cd5",
+        "pair": "E104",
+        "tensor": "model.layers.27.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00346.json.gz",
+        "sha256": "a8cd84da387c519d0ef4edcff6d057d8243c534cba14013f1185886d925ba49e",
+        "pair": "E104",
+        "tensor": "model.layers.3.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00353.json.gz",
+        "sha256": "41beb20cbe6eb0c2c22a59bd9f9c1610e3cf6219cf920fe426a84cb6691a0549",
+        "pair": "E104",
+        "tensor": "model.layers.4.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00360.json.gz",
+        "sha256": "89f3e5ee6526f9adf5d9d17c1987d3b1029de3405eb12bf48f9269577cb4645e",
+        "pair": "E104",
+        "tensor": "model.layers.5.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00367.json.gz",
+        "sha256": "afc24157e8f367b13370436b88ba4cf2be192fe46a267fdcc733611759d6de05",
+        "pair": "E104",
+        "tensor": "model.layers.6.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00374.json.gz",
+        "sha256": "5162f6a342ac4c1b16f0209da2eef8cd84c08266fc1cbeacd722b687f4b95c75",
+        "pair": "E104",
+        "tensor": "model.layers.7.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00381.json.gz",
+        "sha256": "c431b4ebfaba12cc9ef7c9d5f736f02ae1e203248e0569fb53c7cf4bd5ac9fa7",
+        "pair": "E104",
+        "tensor": "model.layers.8.self_attn.k_proj.weight"
+      },
+      {
+        "path": "examples/mirroropd/research-evidence/absorption-parallel-20261112-v5/geometry-optimized-front-attempt2/matrix-00388.json.gz",
+        "sha256": "6111eb5abc212d6582b62d1ecbaf7b4eb319e40106eca303c9cf37415607b1ff",
+        "pair": "E104",
+        "tensor": "model.layers.9.self_attn.k_proj.weight"
+      }
+    ],
+    "arithmetic": "existing exact FP64 SVD",
+    "selection": "retrospective, fixed-student comparisons; cross-size is not an isolated origin intervention"
+  },
+  "script_sha256": "b905d0e04507a86b1403781a4e0ef5f773f6162eb5ae97c607a7c4fc24554dd4",
+  "identity_sha256": "3eeadcaf34db18a30d37789036ef243d4ac7ab22d38d344af17e95d0bb8e6cb9",
+  "comparison_data_sha256": "b292b6ff599cd6bafa7545d220b8ce2e2aa6dc997276e166c83388b1954c9432",
+  "numpy": "1.26.4",
+  "selected_pairs": [
+    "E94",
+    "E95",
+    "E96",
+    "E100",
+    "E101",
+    "E102",
+    "E103",
+    "E104"
+  ],
+  "files": {
+    "01-absorption-and-direction.png": "821bb14f530ec0c59809974d8e0385f78d5db5d600ecc60e2a485927fdb5c57b",
+    "02-spectra-and-amplitude.png": "54d78fc18cb5f8cfcd01b9ef8f0201946e3c88f226c6932e4ca47e39bc4690a7",
+    "03-pair-level-associations.png": "7b66cf88f5ffa4ca9168a8cfa2deb2090c4a558a27ce0e1b991b8cfdae564955",
+    "04-spectrum-restoration.png": "b4bdb9b31e3f6485825ee6c02ca671846d8bb4dadf2fc5af858641d477a83d15"
+  }
+}

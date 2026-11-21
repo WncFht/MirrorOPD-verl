@@ -33,7 +33,7 @@ def bands(rows):
 def main():
     plan = json.loads((ROOT / "manifest.json").read_text())
     state = json.loads((ROOT / "status.json").read_text())
-    prior = REPO / "runs/teacher-absorption-spectrum-20261109"
+    prior = REPO / "examples/mirroropd/research-evidence/teacher-spectrum/teacher-absorption-spectrum-20261109"
     report = dict(
         checked_at=time.time(),
         allocation=json.loads((ROOT / "allocation.json").read_text()),

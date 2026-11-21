@@ -14,7 +14,7 @@ $$
 
 E57、E81、E82、E83 使用 κ=1、η=0.1，此时 $m=0.9q+0.1T$，$Z=1$，所以图中数值就是 target RKL 的 10 倍；乘以 0.1 即可得到 target RKL，位置形状不变。E55（κ=0）与 E56（κ=0.5）的 $\log Z$ 随前缀变化，图中同时包含 target RKL 与归一化项，现有 position 日志不能把两者分离。六组均未记录独立的 teacher position RKL。
 
-[冻结运行的 objective 实现](../../../../../runs/topd-large-batch-20261105/source/verl/trainer/distillation/objectives.py)与[输出缩放、分桶实现](../../../../../runs/topd-large-batch-20261105/source/verl/trainer/distillation/output.py)说明上述关系。每次有效更新均核对全局 `objective=(target_kl-target_log_z)/0.1`，并按桶内 token 数加权复算 position 均值；误差见[来源核验](figures/mdpo-position-20261107/provenance.json)。
+冻结运行的 objective 实现（原始资料缺失）与输出缩放、分桶实现（原始资料缺失）说明上述关系。每次有效更新均核对全局 `objective=(target_kl-target_log_z)/0.1`，并按桶内 token 数加权复算 position 均值；误差见[来源核验](figures/mdpo-position-20261107/provenance.json)。
 
 | 实验 | κ / η     | batch / reuse | 聚合                | 日志覆盖 outer / update |
 | ---- | --------- | ------------- | ------------------- | ----------------------- |

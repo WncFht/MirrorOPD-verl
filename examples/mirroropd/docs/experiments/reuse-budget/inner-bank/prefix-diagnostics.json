@@ -1,0 +1,40 @@
+{
+  "snapshot_sha256": "227877fcdca24c33fcc14a6cf4252a7149f4a1e75ea335cd3d39b3755ec3d76b",
+  "measured_is_variance": null,
+  "measured_current_behavior_kl": null,
+  "reason": "Saved metrics contain teacher KL and length bins; bank parquet contains KL sums; generation parquet contains token IDs but neither behavior nor current sampled-token log-probabilities.",
+  "training_length_estimator": "Sum ten teacher_rkl_position token_count bins / batch64, first inner of each outer starting>=208; loss-mask valid tokens, not necessarily all generated tokens.",
+  "batches": 22,
+  "mean_valid_tokens": 4779.972301136364,
+  "min_batch_mean": 4295.015625,
+  "max_batch_mean": 5254.046875,
+  "bank_conditional_teacher_rkl": [
+    {
+      "update": 0,
+      "initial_math": 0.41169840299463106,
+      "teacher_math": 0.42230944682701277
+    },
+    {
+      "update": 208,
+      "initial_math": 0.26375974790452306,
+      "teacher_math": 0.29673908042024505
+    },
+    {
+      "update": 320,
+      "initial_math": 0.25380839768844077,
+      "teacher_math": 0.28796186583247013
+    },
+    {
+      "update": 480,
+      "initial_math": 0.24826892274636764,
+      "teacher_math": 0.28036592634080365
+    },
+    {
+      "update": 560,
+      "initial_math": 0.24621936853689455,
+      "teacher_math": 0.27824078072431535
+    }
+  ],
+  "uniform_conditional_d2_required_for_ess50_at4096": 0.0001692253858788929,
+  "uniform_conditional_d2_required_for_ess90_at4096": 2.5722782143023994e-05
+}

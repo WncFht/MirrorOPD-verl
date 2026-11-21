@@ -293,7 +293,7 @@ DAPO 原文件 17,917 行，按 prompt 精确去重得到 17,255 道题；使用
 
 后续工程优先级是：先对 budget65536＋关闭诊断的标准配置补四卡完整 outer、长回答与权重同步验收；再沿 trace 优化目标／诊断的重复行归约，并检查 norm／MLP 的高频逐元素算子。Frozen q/T 的逐 token 稳定归一化标量可考虑有界跨 reuse 缓存，需绑定 sample／position、anchor version 和 EOS 协议；完整 FP32 target 在原批量下约 690GiB，不直接缓存。reshard／预取策略和完整 TQ 路径仍未在这组对照中测量。
 
-可复用入口为[固定 token 配置 probe](../../../../benchmarks/profile/benchmark_actor_settings.py)、[选择性 checkpoint probe](../../../../benchmarks/profile/benchmark_partial_checkpoint.py)和[allocator probe](../../../../benchmarks/profile/benchmark_expandable_checkpoint.py)。完整日志、退出码、缓存哈希、源码快照、参数哈希及复算脚本位于仓库`runs/actor-settings-20261101/`。[候选正式配置](data/actor-settings-20261101/candidate-config.yaml)保留 256 题×n4、reuse32、outer50 及仅终点 accuracy，使用全部 checkpoint、actor budget65536、diagnostics 关闭、chunk512、no-sync 关闭；该 50 轮实验尚未启动。
+可复用入口为[固定 token 配置 probe](../../../../benchmarks/profile/benchmark_actor_settings.py)、[选择性 checkpoint probe](../../../../benchmarks/profile/benchmark_partial_checkpoint.py)和[allocator probe](../../../../benchmarks/profile/benchmark_expandable_checkpoint.py)。完整日志、退出码、缓存哈希、源码快照、参数哈希及复算脚本位于仓库`examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/`。[候选正式配置](data/actor-settings-20261101/candidate-config.yaml)保留 256 题×n4、reuse32、outer50 及仅终点 accuracy，使用全部 checkpoint、actor budget65536、diagnostics 关闭、chunk512、no-sync 关闭；该 50 轮实验尚未启动。
 
 ### Rollout 并发扫描
 
@@ -310,7 +310,7 @@ DAPO 原文件 17,917 行，按 prompt 精确去重得到 17,255 道题；使用
 
 正式计划保留上述训练设置，仅将 `total_training_steps=50`、`test_freq=50`、`val_before_train=False`，并关闭 RKL 银行与额外 readout。终点运行 MATH-500、AMC23、AIME24／25／26 全集 accuracy，每题 16 次、T=1、top_p=0.7、response cap16,384。关闭 checkpoint，避免额外保存成本。此全量终点评估尚未执行。[已解析的正式配置](data/kappa1-batch-acceptance-20261101/formal-config.yaml)是待运行计划，不是 50 轮完成证据。
 
-完整单轮配置、32 次更新指标、末次验证、源码补丁和各扫描原始记录位于仓库 `runs/kappa1-setting-study-20261101/`；`formal-plan.json` 为 50 轮计划，`preview_formal.py` 仅解析配置，不启动 GPU。训练采用已验证的 `profile-cu128/bin/python` 入口；直接调用其符号链接目标会选中另一套环境，不能据路径相似替换。
+完整单轮配置、32 次更新指标、末次验证、源码补丁和各扫描原始记录位于仓库 `examples/mirroropd/research-evidence/engineering-evidence/kappa1-setting-study-20261101/`；`formal-plan.json` 为 50 轮计划，`preview_formal.py` 仅解析配置，不启动 GPU。训练采用已验证的 `profile-cu128/bin/python` 入口；直接调用其符号链接目标会选中另一套环境，不能据路径相似替换。
 
 ## IO 与模型驻留
 
@@ -549,7 +549,7 @@ AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight deca
 
 首个实际训练尝试在初始银行阶段暴露`KVBatchMeta.fields=None`兼容问题，当时尚无参数更新。修复后将回调测试改用真实 KVBatchMeta，15 项相关 CPU 回归通过，再从原始权重重新运行本次成功验收。失败尝试保留为工程证据，不混入上述指标。
 
-[完整验收摘要](data/parquet-gpu-acceptance-20261031/summary.json)、[逐阶段验收](data/parquet-gpu-acceptance-20261031/acceptance-audit.json)与[checkpoint 读回检查](data/parquet-gpu-acceptance-20261031/checkpoint-inspection.json)对应仓库`runs/parquet-gpu-acceptance-20261031/native-a03/`。运行期间源码 hash 无变化。GPU0–3 已确认恢复为 gpu-occupy，其他实际任务未停止；[恢复记录](data/parquet-gpu-acceptance-20261031/occupancy-restored.json)保留物理映射及进程状态。
+[完整验收摘要](data/parquet-gpu-acceptance-20261031/summary.json)、[逐阶段验收](data/parquet-gpu-acceptance-20261031/acceptance-audit.json)与[checkpoint 读回检查](data/parquet-gpu-acceptance-20261031/checkpoint-inspection.json)对应仓库`examples/mirroropd/research-evidence/engineering-evidence/parquet-gpu-acceptance-20261031/native-a03/`。运行期间源码 hash 无变化。GPU0–3 已确认恢复为 gpu-occupy，其他实际任务未停止；[恢复记录](data/parquet-gpu-acceptance-20261031/occupancy-restored.json)保留物理映射及进程状态。
 
 未覆盖：公共 benchmark 全集 accuracy、公共 initial／teacher／current 银行、32K 评分窗口、推理专用 padding、四域数据清单与 50outer 预算。已有基础链路通过不代表这些功能已实现。
 
@@ -575,7 +575,7 @@ AdamW 使用 LR=$10^{-6}$、constant scheduler、betas=(0.9,0.999)、weight deca
 
 最终保存 FP32 master 权重，不保存 Adam。原生 model-only 重载的固定输入 RKL 最大误差为 0，之后删除临时 FSDP 分片；独立新进程从 HF 权重初始化，再评分原 8 条 source 轨迹，最大误差同样为 0。完整运行墙钟 660.94 秒，包含模型启动、训练、公共生成、判分、评分与导出；不能将它当作单轮训练吞吐。
 
-[验收摘要](data/unified-core-acceptance-20261031/summary.json)、[实际配置](data/unified-core-acceptance-20261031/config.yaml)和[启动时源码 hash](data/unified-core-acceptance-20261031/source-hashes.json)保留了条件与证据。原始轨迹、日志和逐 run 图表位于仓库`runs/unified-evaluation-20261031/`；后续规模验收状态由[实施页](../../../archive/engineering/evaluation/2026-11-01-分阶段代码走读与验收.md#8-统一评估实现与待验收边界)维护。
+[验收摘要](data/unified-core-acceptance-20261031/summary.json)、[实际配置](data/unified-core-acceptance-20261031/config.yaml)和[启动时源码 hash](data/unified-core-acceptance-20261031/source-hashes.json)保留了条件与证据。原始轨迹、日志和逐 run 图表位于仓库`examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/`；后续规模验收状态由[实施页](../../../archive/engineering/evaluation/2026-11-01-分阶段代码走读与验收.md#8-统一评估实现与待验收边界)维护。
 
 ### 规模与六卡检查
 
@@ -691,7 +691,7 @@ MiMo 普通轮平均 21.45 分钟，其中 actor 占 87.84%。比历史 1.5B act
 
 运行中普通轮的模型 FLOPs 利用率估计均值为 32.19%，actor allocated 峰值均值为 47.86 GiB，负载均衡后的输入 token max/min 均值为 1.0036。GPU utilization=100% 表示持续忙碌，不等于全部计算单元达到峰值；上述日志估计也不能分离 backbone、输出头、通信或 CPU hidden 等待的耗时。
 
-已核对实际冻结源码与配置：full-vocab fused 后端、异步 hidden 运输／预取、动态 token 分批和 activation checkpointing 均开启；无 EOS 合并、无 anchor、无额外 mirror diagnostics。优化后的评估调度已经接入，但它不改变每批 32 次 actor 更新的预算。[原生 worker](../../../../../../runs/mimo-stage-transfer-20261101/optimized-handoff-20261102/source/verl/workers/engine_workers.py)的 train-mode 覆盖整个 reuse 循环，内层设置`disable_auto_offload=True`；不能把耗时解释成每个 reuse 都整模上下卡。
+已核对实际冻结源码与配置：full-vocab fused 后端、异步 hidden 运输／预取、动态 token 分批和 activation checkpointing 均开启；无 EOS 合并、无 anchor、无额外 mirror diagnostics。优化后的评估调度已经接入，但它不改变每批 32 次 actor 更新的预算。[原生 worker](../../../../research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/optimized-handoff-20261102/source/verl/workers/engine_workers.py)的 train-mode 覆盖整个 reuse 循环，内层设置`disable_auto_offload=True`；不能把耗时解释成每个 reuse 都整模上下卡。
 
 若后续开展性能实验，优先在同一冻结 token 批次上验证 actor 配置：保持目标、reuse、cap 和学习率不变，比较 token budget32768→49152／65536、head chunk256→512，再评估 no-sync 的收益与 7B 未分片梯度显存代价。已有[Qwen 固定 token 配置实验](#固定-token-的配置优化实测)在 1.7B 上测得组合约 10%–11% 的改善，但其任务、模型和显存代价不同，不能转写为 MiMo 的预期收益。完整 teacher 概率缓存也不是现有 precompute 的含义，不能把隐藏状态缓存当成已经消除了每次更新的 teacher 输出头投影。
 

@@ -1,19 +1,19 @@
 {
   "public": {
-    "root": "runs/p0-p1-20261104/evaluation-a01/evaluation",
+    "root": "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/evaluation",
     "manifest_sha256": "ec160ee8890e58f44217472ef5e0215e8cc75d7588703f73fddd013052a05e1d",
     "final_metadata": {
-      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/bootstrap",
+      "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/bootstrap",
       "bootstrap_sha256": "370cf01763d104310f9978be363d3b917c0678737e0b2a02118534d4eb732583",
       "contract_sha256": "6e957b2dd58ea7732123051624a8fc493bc4debedcf41c4d18b8e22628ba0b68",
       "configuration": {
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/evaluation",
-        "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/bootstrap",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/evaluation",
+        "bootstrap": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/bootstrap",
         "datasets": [
           {
             "name": "MATH-500",
             "domain": "math",
-            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/MATH-500.parquet",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/MATH-500.parquet",
             "verifier": "math",
             "n": 1,
             "protocol": "public",
@@ -25,7 +25,7 @@
           {
             "name": "LCBv5",
             "domain": "code",
-            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/LCBv5.parquet",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/LCBv5.parquet",
             "verifier": "lcb",
             "n": 1,
             "protocol": "public",
@@ -36,7 +36,7 @@
           {
             "name": "GPQA-Diamond",
             "domain": "science",
-            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/GPQA-Diamond.parquet",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/GPQA-Diamond.parquet",
             "verifier": "gpqa",
             "n": 1,
             "protocol": "public",
@@ -47,7 +47,7 @@
           {
             "name": "IFEval",
             "domain": "if",
-            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/IFEval.parquet",
+            "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/IFEval.parquet",
             "verifier": "ifeval",
             "n": 1,
             "protocol": "public",
@@ -90,7 +90,7 @@
             "answer_channel": "after_thinking"
           }
         },
-        "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/source.parquet",
+        "source_file": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/source.parquet",
         "source_enabled": true,
         "history_enabled": true,
         "training_domain": "math",
@@ -520,10 +520,10 @@
     ]
   },
   "source_history": {
-    "root": "runs/p0-p1-20261104/evaluation-a03/source-history",
+    "root": "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a03/source-history",
     "manifest_sha256": "ad2e82e3224cfe7c875a121f85d5c070593c5c519e2038547d91b290f37ab0ff",
     "final_metadata": {
-      "source_bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a03/source-history/initial-student-bank",
+      "source_bank": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a03/source-history/initial-student-bank",
       "config_sha256": "4a13f6d53cf699ea88cf2bb3d443bb5ec17e5f4eb761599f4db592d5d271509d",
       "teacher_model": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/hub/Qwen--Qwen3-8B/b968826d9c46dd6066d109eabc6255188de91218",
       "teacher_identity": "checkpoint-v2:f906e4fec7cf85dac0565b20d9d804cb35aa3339286f4ec2366a8e4d7d1c16e8",

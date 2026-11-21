@@ -1,0 +1,1094 @@
+{
+  "time": 1794835501.9976945,
+  "start_update": 480,
+  "end_update": 528,
+  "successful_updates": 48,
+  "probability_readouts": 21,
+  "banks": 13,
+  "source_sha256": {
+    "banks-b1-i04-u484.json": "24ab5f08831701e79dc0362d48e1f1c4c1921cd4e0a46864f16b49bff65e7f4d",
+    "banks-b1-i08-u488.json": "0083e9869c9cd2a7ee0921a8aaad7da97afde9a46339e26994bc276cbb609c6d",
+    "banks-b1-i12-u492.json": "ade17fecb3af1a4bbcf63bfb5c1e6f91c6da4da0033e118c56bcb2c273406c27",
+    "banks-b1-i16-u496.json": "6defd79550f835e9260ffc6182a69e409b8372eaaa6024ab2f040fa4bc5b0c8e",
+    "banks-b2-i04-u500.json": "e6b62e07e6a29c888a9a424597a523d82d54732ffb3751a21f7083d9a109802b",
+    "banks-b2-i08-u504.json": "e1f7be5d5b4e1ec5cbbb3049fa804a6bececa9aa8f47060fa21cc844be3ba620",
+    "banks-b2-i12-u508.json": "086773238d79e3e9e6c2e49da59e1951e0a0da0ae7fdb74710d110981e08e2d7",
+    "banks-b2-i16-u512.json": "4a7a887a0e501f58f4306c4ad512eecfd093c0108e17e5a64966de4a744b0c19",
+    "banks-b3-i04-u516.json": "b507cb9460cbbc23776303f4b03cf3150c5013ef6a7546ed17d58ba5409123d2",
+    "banks-b3-i08-u520.json": "4c71979dafbac495e82b713952d17b149e097294e709e32a0ebec5a8b7d42c1c",
+    "banks-b3-i12-u524.json": "286aadd415aa2555e66f586f97d95780f4064f87f5fe698d619fc2f8538f2de4",
+    "banks-b3-i16-u528.json": "f725a404cc31cd372bf725cbf47d6c81e530bbc93fa7719501ac9e40cc4ad051",
+    "banks-initial-u480.json": "6705e3974b6f660826be9d17e65a913333b3b6313e8c71a096b5da02039fe313",
+    "protocol.json": "3ae9b7af70e42780b237a4cd5c9f0a400c7da7e2e94cbc49e5576ed9f967cd99",
+    "outer-01/complete.json": "2370d716c8d74c6cdde9594a83d85924cbb0f05f4fb942af4c5be4c86a680566",
+    "outer-01/inner-00.json": "d5d6d047b3c400cc9f334ba6d0291d929f53c0249f281dcc270764dd534a8d3e",
+    "outer-01/inner-01.json": "3dfed3b14c48a93f0e6e529e54e9870a5d8da4622fd4ce8d264ef909c82e5f2c",
+    "outer-01/inner-02.json": "648c89416b52a91c6979a085e59d17636c16fd90faec6058fb81c5c769fc825a",
+    "outer-01/inner-04.json": "16eee276a84b420ca39788d4d740457c509efaff73c6a81484024f8f98e3699c",
+    "outer-01/inner-08.json": "76c34f33c881db853861410b10acb0708d8820eb28e1ee5ac11330828b59d86e",
+    "outer-01/inner-12.json": "21ef0ba5a2d7d3970e6ca2b15dc1d0cdaf59c3d75a4a5589b35a0271a1015b97",
+    "outer-01/inner-16.json": "210e487cd860c9cf96b3db20ee20981a02ddf301d0116687f0d2be8af291c71d",
+    "outer-01/trajectories.json": "e8af4a07873c75eb5c1ad2b31ecaac9dc6b095a3e8908640e38dc7d7be63fcda",
+    "outer-02/complete.json": "2370d716c8d74c6cdde9594a83d85924cbb0f05f4fb942af4c5be4c86a680566",
+    "outer-02/inner-00.json": "19657a925e1bdc04466f17cd936b467b2271717c7d7ffd877c1ebf0296b83c67",
+    "outer-02/inner-01.json": "e6bf99b86d15abe9e51dce0557a1e06e8025103a72ec450db17d752a293cfabc",
+    "outer-02/inner-02.json": "2ef8d051b4740ce6dc5797d091c1d6fcf856c91604fbf132e4ebd86a1345174b",
+    "outer-02/inner-04.json": "18ed9e01a0dce8d7418938089cb43ce34929b18c7534dc85502a12d0070919d8",
+    "outer-02/inner-08.json": "90d78a1985489c5327fd51c99632b939f7722096509ba3ef8aff94cb99b87cee",
+    "outer-02/inner-12.json": "ce2ebdb664fc17a46b8c541d6de83ae6b2d072d4af25b6371df750a07a1012c3",
+    "outer-02/inner-16.json": "0e9fac8789cbee7ba77f2e0f1e1ed476b57ebb309cafb8bf9dfae7bbadf4c4ee",
+    "outer-02/trajectories.json": "ca1ac1a07cf6a680d73a20f67f770600a5c5d1b922d6002975ff41a1e75c9832",
+    "outer-03/complete.json": "2370d716c8d74c6cdde9594a83d85924cbb0f05f4fb942af4c5be4c86a680566",
+    "outer-03/inner-00.json": "c57748091c69321823ff4206299d7e6a01d934f99b102687d9522c17f2b54292",
+    "outer-03/inner-01.json": "b1e990c0edc9dc1657cfd9b48bd71c592b37358a42f32a01445a38f938cea2a8",
+    "outer-03/inner-02.json": "35b1744f7783b0489ab2291c461885916bdab7d65f028118ee27f3aa980b5a64",
+    "outer-03/inner-04.json": "705fe717f7ed2152c70379e33a68f27a41830646a980ec62b23b14aae93c363e",
+    "outer-03/inner-08.json": "f356b9dc865d7794f26330af7b72098270250e27efcadc8093295e66252c3cf6",
+    "outer-03/inner-12.json": "a98c740f30a0013a657c64b18d2f13e6bbe29a0fafb4cf136a175d7797af0b7d",
+    "outer-03/inner-16.json": "d8635716d42acd95fc1bbac8068d9950c063456093c4c479a8dbd946bdfd0e14",
+    "outer-03/trajectories.json": "a2c6a8d6e1493a057b92cd9d41189f8c64e87239157d3f2efdbdf995855761a3"
+  },
+  "batches": [
+    {
+      "outer": 1,
+      "start_update": 480,
+      "ess_inner0": {
+        "128": {
+          "n": 64,
+          "ess": 54.30662427672073,
+          "ess_fraction": 0.8485410043237614,
+          "log_mean_weight": 0.08065925396794149,
+          "log_second_moment": 0.32555537774991117,
+          "mean_weight": 1.0840014644313172,
+          "second_moment": 1.3847995192945268,
+          "cv_squared": 0.1784934315542508,
+          "max_normalized_weight": 0.041266528944718515,
+          "top10pct_weight_mass": 0.21029088565138354,
+          "logweight_quantiles": [
+            -0.7205948060930254,
+            -0.7193255472585983,
+            -0.4309902816305786,
+            0.00853829878568746,
+            0.5198711475389055,
+            0.936138891075006,
+            1.051838792556829
+          ],
+          "empirical_variance": 0.20974034440528655,
+          "clip2": {
+            "ess_fraction": 0.8774060946421144,
+            "removed_sample_weight_fraction": 0.018771083392515892
+          },
+          "clip5": {
+            "ess_fraction": 0.8485410043237614,
+            "removed_sample_weight_fraction": 0.0
+          },
+          "clip10": {
+            "ess_fraction": 0.8485410043237614,
+            "removed_sample_weight_fraction": 0.0
+          }
+        },
+        "1024": {
+          "n": 60,
+          "ess": 8.801374261544478,
+          "ess_fraction": 0.1466895710257413,
+          "log_mean_weight": 0.35583133779085196,
+          "log_second_moment": 2.6310993624276984,
+          "mean_weight": 1.4273667851253504,
+          "second_moment": 13.889030590467527,
+          "cv_squared": 5.817117215677988,
+          "max_normalized_weight": 0.3007125384088368,
+          "top10pct_weight_mass": 0.5460323615942761,
+          "logweight_quantiles": [
+            -4.55120965224463,
+            -3.759357168984503,
+            -1.9314115077311071,
+            -0.5071645941430383,
+            0.717670996060656,
+            2.628851740606808,
+            3.248575407558171
+          ],
+          "empirical_variance": 11.851654651188449,
+          "clip2": {
+            "ess_fraction": 0.6023650179537852,
+            "removed_sample_weight_fraction": 0.4064325782359215
+          },
+          "clip5": {
+            "ess_fraction": 0.44461180171820175,
+            "removed_sample_weight_fraction": 0.2891381932988245
+          },
+          "clip10": {
+            "ess_fraction": 0.3014019144401521,
+            "removed_sample_weight_fraction": 0.18394740949908037
+          }
+        },
+        "4096": {
+          "n": 41,
+          "ess": 2.656472032473302,
+          "ess_fraction": 0.06479200079203176,
+          "log_mean_weight": 1.4833004363380526,
+          "log_second_moment": 5.703174000487332,
+          "mean_weight": 4.407468270733993,
+          "second_moment": 299.8175132741989,
+          "cv_squared": 14.434004009380457,
+          "max_normalized_weight": 0.5764717385124021,
+          "top10pct_weight_mass": 0.9449697953491477,
+          "logweight_quantiles": [
+            -6.644193017427064,
+            -6.481129579992883,
+            -5.498547859358176,
+            -2.502815697485069,
+            1.2766287645713632,
+            4.131046762267977,
+            4.6460435400393365
+          ],
+          "empirical_variance": 280.391736716672,
+          "clip2": {
+            "ess_fraction": 0.2950848143927102,
+            "removed_sample_weight_fraction": 0.8949140019569642
+          },
+          "clip5": {
+            "ess_fraction": 0.21524635132005457,
+            "removed_sample_weight_fraction": 0.8144566467182778
+          },
+          "clip10": {
+            "ess_fraction": 0.1635207036238881,
+            "removed_sample_weight_fraction": 0.7037797573829985
+          }
+        }
+      },
+      "ess_inner16": {
+        "128": {
+          "actual_behavior": {
+            "n": 64,
+            "ess": 17.67225115061022,
+            "ess_fraction": 0.27612892422828467,
+            "log_mean_weight": -0.5097430625186299,
+            "log_second_moment": 0.2674012805236554,
+            "mean_weight": 0.6006498884569766,
+            "second_moment": 1.3065646400922126,
+            "cv_squared": 2.621496743938595,
+            "max_normalized_weight": 0.10989453630264095,
+            "top10pct_weight_mass": 0.5522788291635826,
+            "logweight_quantiles": [
+              -36.403262220626765,
+              -31.574253058578734,
+              -7.623558894593066,
+              -1.735692057958186,
+              0.7559172651003824,
+              1.405579406124821,
+              1.4409058868610387
+            ],
+            "empirical_variance": 0.9457843515888341,
+            "clip2": {
+              "ess_fraction": 0.35289773188850737,
+              "removed_sample_weight_fraction": 0.18808996606073258
+            },
+            "clip5": {
+              "ess_fraction": 0.27612892422828467,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.27612892422828467,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 64,
+            "ess": 16.080219783132392,
+            "ess_fraction": 0.25125343411144363,
+            "log_mean_weight": -0.4094601312752473,
+            "log_second_moment": 0.5623728890465167,
+            "mean_weight": 0.6640086308811157,
+            "second_moment": 1.754831584467216,
+            "cv_squared": 2.980045102812204,
+            "max_normalized_weight": 0.12852536623603514,
+            "top10pct_weight_mass": 0.5786941938477389,
+            "logweight_quantiles": [
+              -37.455101013183594,
+              -32.301202144622806,
+              -7.834053611755371,
+              -1.569681167602539,
+              0.7822168350219731,
+              1.6257094001770016,
+              1.697793960571289
+            ],
+            "empirical_variance": 1.3139241225826022,
+            "clip2": {
+              "ess_fraction": 0.3539306068119942,
+              "removed_sample_weight_fraction": 0.24925570490863191
+            },
+            "clip5": {
+              "ess_fraction": 0.2568736660197853,
+              "removed_sample_weight_fraction": 0.010868763043496868
+            },
+            "clip10": {
+              "ess_fraction": 0.25125343411144363,
+              "removed_sample_weight_fraction": 0.0
+            }
+          }
+        },
+        "1024": {
+          "actual_behavior": {
+            "n": 60,
+            "ess": 1.8063977080801674,
+            "ess_fraction": 0.03010662846800279,
+            "log_mean_weight": -3.574477841046164,
+            "log_second_moment": -3.645945765505097,
+            "mean_weight": 0.02803005809950272,
+            "second_moment": 0.02609671680429178,
+            "cv_squared": 32.21527686379085,
+            "max_normalized_weight": 0.7326549663080689,
+            "top10pct_weight_mass": 0.9954028335889615,
+            "logweight_quantiles": [
+              -93.24336861305375,
+              -86.9127397705286,
+              -47.94094372804419,
+              -17.886529879681973,
+              -5.242254968952159,
+              -1.154290065263286,
+              0.2087863188095156
+            ],
+            "empirical_variance": 0.025311032647230284,
+            "clip2": {
+              "ess_fraction": 0.03010662846800279,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.03010662846800279,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.03010662846800279,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 60,
+            "ess": 1.8974662091683814,
+            "ess_fraction": 0.03162443681947302,
+            "log_mean_weight": -2.9001118146581666,
+            "log_second_moment": -2.346398489143411,
+            "mean_weight": 0.05501706799781697,
+            "second_moment": 0.09571325454284732,
+            "cv_squared": 30.621116471052577,
+            "max_normalized_weight": 0.7024167599839827,
+            "top10pct_weight_mass": 0.9972541979652415,
+            "logweight_quantiles": [
+              -93.91287231445312,
+              -85.4829736328125,
+              -49.34679098129272,
+              -17.81785774230957,
+              -4.906574821472165,
+              -0.0675449657440238,
+              0.8410043716430664
+            ],
+            "empirical_variance": 0.0926863767717709,
+            "clip2": {
+              "ess_fraction": 0.03394934859184078,
+              "removed_sample_weight_fraction": 0.0965441726869647
+            },
+            "clip5": {
+              "ess_fraction": 0.03162443681947302,
+              "removed_sample_weight_fraction": 1.1102230246251565e-16
+            },
+            "clip10": {
+              "ess_fraction": 0.03162443681947302,
+              "removed_sample_weight_fraction": 1.1102230246251565e-16
+            }
+          }
+        },
+        "4096": {
+          "actual_behavior": {
+            "n": 41,
+            "ess": 1.0000000001149654,
+            "ess_fraction": 0.024390243905243057,
+            "log_mean_weight": -9.483369376583632,
+            "log_second_moment": -15.25316668657792,
+            "mean_weight": 7.610707127515351e-05,
+            "second_moment": 2.3748373819403088e-07,
+            "cv_squared": 39.99999999528642,
+            "max_normalized_weight": 0.9999999999425173,
+            "top10pct_weight_mass": 0.9999999999999999,
+            "logweight_quantiles": [
+              -201.89911519640222,
+              -197.2261479422436,
+              -141.72441222937553,
+              -75.65463515918361,
+              -40.76892379810872,
+              -15.477642609859014,
+              -5.769797309936806
+            ],
+            "empirical_variance": 2.3169145189594958e-07,
+            "clip2": {
+              "ess_fraction": 0.024390243905243057,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.024390243905243057,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.024390243905243057,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 41,
+            "ess": 1.000000005726788,
+            "ess_fraction": 0.024390244042116777,
+            "log_mean_weight": -7.989416637815523,
+            "log_second_moment": -12.265261214653528,
+            "mean_weight": 0.00033903180402024215,
+            "second_moment": 4.712645102637692e-06,
+            "cv_squared": 39.99999976520169,
+            "max_normalized_weight": 0.999999997136606,
+            "top10pct_weight_mass": 0.9999999999999999,
+            "logweight_quantiles": [
+              -196.5720920562744,
+              -191.37225685119628,
+              -138.86002731323242,
+              -72.30279541015625,
+              -38.0174503326416,
+              -12.151009368896457,
+              -4.275844573974609
+            ],
+            "empirical_variance": 4.5977025385004725e-06,
+            "clip2": {
+              "ess_fraction": 0.024390244042116777,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.024390244042116777,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.024390244042116777,
+              "removed_sample_weight_fraction": 0.0
+            }
+          }
+        }
+      },
+      "banks": [
+        {
+          "inner": 0,
+          "initial_math": 0.24826892274636764,
+          "teacher_math": 0.2803659263408037
+        },
+        {
+          "inner": 4,
+          "initial_math": 0.2480185095507938,
+          "teacher_math": 0.28037003195775345
+        },
+        {
+          "inner": 8,
+          "initial_math": 0.2477230335527954,
+          "teacher_math": 0.280056466598254
+        },
+        {
+          "inner": 12,
+          "initial_math": 0.2478679508030363,
+          "teacher_math": 0.27968278269830565
+        },
+        {
+          "inner": 16,
+          "initial_math": 0.24860556882750662,
+          "teacher_math": 0.28046454757289824
+        }
+      ]
+    },
+    {
+      "outer": 2,
+      "start_update": 496,
+      "ess_inner0": {
+        "128": {
+          "n": 64,
+          "ess": 54.88439659492295,
+          "ess_fraction": 0.857568696795671,
+          "log_mean_weight": 0.011235570227512426,
+          "log_second_moment": 0.1761251307246834,
+          "mean_weight": 1.011298926304902,
+          "second_moment": 1.1925872786248954,
+          "cv_squared": 0.16608733940094522,
+          "max_normalized_weight": 0.04985966101680356,
+          "top10pct_weight_mass": 0.19696400882923254,
+          "logweight_quantiles": [
+            -1.1188685879518516,
+            -0.9417085665843353,
+            -0.4310599428863419,
+            -0.06975323101933384,
+            0.43762078485817996,
+            0.7372452364680029,
+            1.171575653977058
+          ],
+          "empirical_variance": 0.16986176027944788,
+          "clip2": {
+            "ess_fraction": 0.901082209910324,
+            "removed_sample_weight_fraction": 0.018958807483633665
+          },
+          "clip5": {
+            "ess_fraction": 0.857568696795671,
+            "removed_sample_weight_fraction": 0.0
+          },
+          "clip10": {
+            "ess_fraction": 0.857568696795671,
+            "removed_sample_weight_fraction": 0.0
+          }
+        },
+        "1024": {
+          "n": 56,
+          "ess": 12.886334494955348,
+          "ess_fraction": 0.23011311598134548,
+          "log_mean_weight": 0.2210175769333187,
+          "log_second_moment": 1.9112194362092527,
+          "mean_weight": 1.2473453548775113,
+          "second_moment": 6.7613287825828845,
+          "cv_squared": 3.3456888397489983,
+          "max_normalized_weight": 0.22728717487745692,
+          "top10pct_weight_mass": 0.5123125621681937,
+          "logweight_quantiles": [
+            -3.563709786096105,
+            -3.2958398317079807,
+            -2.0682122239667464,
+            -0.633242747717091,
+            1.1957047930682805,
+            2.1442342411722457,
+            2.7648282941846105
+          ],
+          "empirical_variance": 5.20545834824838,
+          "clip2": {
+            "ess_fraction": 0.5792667939455197,
+            "removed_sample_weight_fraction": 0.3660018189771322
+          },
+          "clip5": {
+            "ess_fraction": 0.4116162593767497,
+            "removed_sample_weight_fraction": 0.1576683520814918
+          },
+          "clip10": {
+            "ess_fraction": 0.3225647838236444,
+            "removed_sample_weight_fraction": 0.08412599832506248
+          }
+        },
+        "4096": {
+          "n": 40,
+          "ess": 3.0011789402570974,
+          "ess_fraction": 0.07502947350642744,
+          "log_mean_weight": -0.16844226132474827,
+          "log_second_moment": 2.2529897399070813,
+          "mean_weight": 0.8449800500391889,
+          "second_moment": 9.516144144381686,
+          "cv_squared": 12.328095657159777,
+          "max_normalized_weight": 0.5348948971876842,
+          "top10pct_weight_mass": 0.8368215016311118,
+          "logweight_quantiles": [
+            -6.591688055027632,
+            -6.2650117450659755,
+            -5.3785972415514625,
+            -2.7753322532204017,
+            0.3055308565057182,
+            2.4985092461459475,
+            2.8947521875486757
+          ],
+          "empirical_variance": 8.802152859417456,
+          "clip2": {
+            "ess_fraction": 0.23352202955969736,
+            "removed_sample_weight_fraction": 0.6177248164139364
+          },
+          "clip5": {
+            "ess_fraction": 0.1508007847347313,
+            "removed_sample_weight_fraction": 0.4326819234077682
+          },
+          "clip10": {
+            "ess_fraction": 0.10753416662850443,
+            "removed_sample_weight_fraction": 0.23902992382126542
+          }
+        }
+      },
+      "ess_inner16": {
+        "128": {
+          "actual_behavior": {
+            "n": 64,
+            "ess": 4.8203881582557955,
+            "ess_fraction": 0.0753185649727468,
+            "log_mean_weight": 0.30257696182107674,
+            "log_second_moment": 3.1911825514232808,
+            "mean_weight": 1.353341828064898,
+            "second_moment": 24.317166747039877,
+            "cv_squared": 12.276939096779646,
+            "max_normalized_weight": 0.4394214705153689,
+            "top10pct_weight_mass": 0.6833819266869141,
+            "logweight_quantiles": [
+              -17.551193976122526,
+              -15.997772051853246,
+              -5.171850827418973,
+              -1.0173765526387477,
+              0.7969464933421392,
+              2.28952480340872,
+              3.6391637882129046
+            ],
+            "empirical_variance": 22.485632643449836,
+            "clip2": {
+              "ess_fraction": 0.4615565500962125,
+              "removed_sample_weight_fraction": 0.5241890508670924
+            },
+            "clip5": {
+              "ess_fraction": 0.33761016772991703,
+              "removed_sample_weight_fraction": 0.38169400035233675
+            },
+            "clip10": {
+              "ess_fraction": 0.2578820471786439,
+              "removed_sample_weight_fraction": 0.323966530189304
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 64,
+            "ess": 7.986162516050316,
+            "ess_fraction": 0.12478378931328618,
+            "log_mean_weight": 0.1319975470669048,
+            "log_second_moment": 2.3451678189405145,
+            "mean_weight": 1.1411055202083065,
+            "second_moment": 10.435023775249526,
+            "cv_squared": 7.013861459915823,
+            "max_normalized_weight": 0.3217825941023517,
+            "top10pct_weight_mass": 0.617209558004934,
+            "logweight_quantiles": [
+              -17.98285675048828,
+              -15.884942378997803,
+              -5.353669929504394,
+              -1.1063060760498047,
+              0.8578308105468758,
+              2.2495596313476525,
+              3.157001495361328
+            ],
+            "empirical_variance": 9.132901966999656,
+            "clip2": {
+              "ess_fraction": 0.461726123342906,
+              "removed_sample_weight_fraction": 0.4255094951044691
+            },
+            "clip5": {
+              "ess_fraction": 0.3380307725105195,
+              "removed_sample_weight_fraction": 0.26106394307741687
+            },
+            "clip10": {
+              "ess_fraction": 0.2568461890092557,
+              "removed_sample_weight_fraction": 0.18485397774487705
+            }
+          }
+        },
+        "1024": {
+          "actual_behavior": {
+            "n": 56,
+            "ess": 2.5477251031374584,
+            "ess_fraction": 0.04549509112745461,
+            "log_mean_weight": -6.216953664868437,
+            "log_second_moment": -9.343756483582698,
+            "mean_weight": 0.0019953143644904645,
+            "second_moment": 8.751008767052291e-05,
+            "cv_squared": 20.98039338350807,
+            "max_normalized_weight": 0.5409521637991981,
+            "top10pct_weight_mass": 0.9879474124125676,
+            "logweight_quantiles": [
+              -90.13261660343383,
+              -75.36322811567392,
+              -44.391334939669214,
+              -21.650439382234463,
+              -6.993347220797553,
+              -3.1358885775219947,
+              -2.8060263999913246
+            ],
+            "empirical_variance": 8.352880825738092e-05,
+            "clip2": {
+              "ess_fraction": 0.04549509112745461,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.04549509112745461,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.04549509112745461,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 56,
+            "ess": 2.957078368639095,
+            "ess_fraction": 0.05280497086855527,
+            "log_mean_weight": -5.814254759502637,
+            "log_second_moment": -8.687359571541759,
+            "mean_weight": 0.002984703821010054,
+            "second_moment": 0.00016870489184299273,
+            "cv_squared": 17.93761105349815,
+            "max_normalized_weight": 0.4727932743951261,
+            "top10pct_weight_mass": 0.9861944113003144,
+            "logweight_quantiles": [
+              -88.13027381896973,
+              -73.66268835067748,
+              -43.14725208282471,
+              -19.969558715820312,
+              -6.633584022521973,
+              -2.853125953674315,
+              -2.5380001068115234
+            ],
+            "empirical_variance": 0.0001597964349438407,
+            "clip2": {
+              "ess_fraction": 0.05280497086855527,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.05280497086855527,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.05280497086855527,
+              "removed_sample_weight_fraction": 0.0
+            }
+          }
+        },
+        "4096": {
+          "actual_behavior": {
+            "n": 40,
+            "ess": 1.0700503216960648,
+            "ess_fraction": 0.02675125804240162,
+            "log_mean_weight": -37.56034913307164,
+            "log_second_moment": -71.49952448901979,
+            "mean_weight": 4.87245271470022e-17,
+            "second_moment": 8.87464635097145e-32,
+            "cv_squared": 36.38141953604452,
+            "max_normalized_weight": 0.9661415534952958,
+            "top10pct_weight_mass": 0.9999928219166577,
+            "logweight_quantiles": [
+              -191.64500122017242,
+              -183.3837100392818,
+              -146.71911442013445,
+              -82.31490484784885,
+              -45.49910071926874,
+              -35.21988408944617,
+              -33.90591459875321
+            ],
+            "empirical_variance": 8.637238396401555e-32,
+            "clip2": {
+              "ess_fraction": 0.02675125804240162,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.02675125804240162,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.02675125804240162,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 40,
+            "ess": 2.03381982201362,
+            "ess_fraction": 0.0508454955503405,
+            "log_mean_weight": -36.981357308227146,
+            "log_second_moment": -70.98375087296219,
+            "mean_weight": 8.693618690435293e-17,
+            "second_moment": 1.4864444749064911e-31,
+            "cv_squared": 18.66742558364746,
+            "max_normalized_weight": 0.5851006500661078,
+            "top10pct_weight_mass": 0.9999737378024016,
+            "logweight_quantiles": [
+              -190.46406173706055,
+              -181.68220552444458,
+              -141.83270092010497,
+              -78.18812847137451,
+              -44.52699871063232,
+              -33.99135663986206,
+              -33.82844924926758
+            ],
+            "empirical_variance": 1.4108654689718054e-31,
+            "clip2": {
+              "ess_fraction": 0.0508454955503405,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.0508454955503405,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.0508454955503405,
+              "removed_sample_weight_fraction": 0.0
+            }
+          }
+        }
+      },
+      "banks": [
+        {
+          "inner": 0,
+          "initial_math": 0.24860556882750662,
+          "teacher_math": 0.28046454757289824
+        },
+        {
+          "inner": 4,
+          "initial_math": 0.24869616647278814,
+          "teacher_math": 0.2813239555575353
+        },
+        {
+          "inner": 8,
+          "initial_math": 0.2485851532756807,
+          "teacher_math": 0.28154496882725727
+        },
+        {
+          "inner": 12,
+          "initial_math": 0.24909518085059662,
+          "teacher_math": 0.2803293129361816
+        },
+        {
+          "inner": 16,
+          "initial_math": 0.2495940738984873,
+          "teacher_math": 0.27974759068010974
+        }
+      ]
+    },
+    {
+      "outer": 3,
+      "start_update": 512,
+      "ess_inner0": {
+        "128": {
+          "n": 64,
+          "ess": 55.4417478207967,
+          "ess_fraction": 0.8662773096999484,
+          "log_mean_weight": 0.00871450874417612,
+          "log_second_moment": 0.16097922011417443,
+          "mean_weight": 1.008752590616725,
+          "second_moment": 1.1746605592479535,
+          "cv_squared": 0.15436476149464085,
+          "max_normalized_weight": 0.03828538442954263,
+          "top10pct_weight_mass": 0.18610718841808166,
+          "logweight_quantiles": [
+            -1.6883712523234706,
+            -1.306642072124257,
+            -0.668216913810842,
+            -0.012303209345166266,
+            0.36624357839357347,
+            0.7075985508542013,
+            0.9049105288938648
+          ],
+          "empirical_variance": 0.15707877017199956,
+          "clip2": {
+            "ess_fraction": 0.8783081896664219,
+            "removed_sample_weight_fraction": 0.0073065296630889665
+          },
+          "clip5": {
+            "ess_fraction": 0.8662773096999484,
+            "removed_sample_weight_fraction": 4.440892098500625e-16
+          },
+          "clip10": {
+            "ess_fraction": 0.8662773096999484,
+            "removed_sample_weight_fraction": 4.440892098500625e-16
+          }
+        },
+        "1024": {
+          "n": 60,
+          "ess": 32.668443829524904,
+          "ess_fraction": 0.5444740638254151,
+          "log_mean_weight": 0.009176119035489316,
+          "log_second_moment": 0.6262872088257636,
+          "mean_weight": 1.0092183486850308,
+          "second_moment": 1.8706523285361267,
+          "cv_squared": 0.8366347755375336,
+          "max_normalized_weight": 0.05612158186102648,
+          "top10pct_weight_mass": 0.3156483444891431,
+          "logweight_quantiles": [
+            -3.1149976332906206,
+            -2.8404332684485247,
+            -1.956002785265106,
+            -0.45742788828657766,
+            0.9274426903644442,
+            1.2154579203292368,
+            1.223285844229828
+          ],
+          "empirical_variance": 0.8521306532135864,
+          "clip2": {
+            "ess_fraction": 0.6418236576072592,
+            "removed_sample_weight_fraction": 0.12670311428974665
+          },
+          "clip5": {
+            "ess_fraction": 0.5444740638254151,
+            "removed_sample_weight_fraction": 0.0
+          },
+          "clip10": {
+            "ess_fraction": 0.5444740638254151,
+            "removed_sample_weight_fraction": 0.0
+          }
+        },
+        "4096": {
+          "n": 43,
+          "ess": 8.159842769998722,
+          "ess_fraction": 0.18976378534880747,
+          "log_mean_weight": -0.8839630637020739,
+          "log_second_moment": -0.10595091211845364,
+          "mean_weight": 0.41314235354545514,
+          "second_moment": 0.8994688000101623,
+          "cv_squared": 4.26970938191334,
+          "max_normalized_weight": 0.23815650613237657,
+          "top10pct_weight_mass": 0.6618176198570533,
+          "logweight_quantiles": [
+            -6.424296046663919,
+            -6.26536045046524,
+            -5.442906999366656,
+            -2.4712954583773836,
+            0.027624639108249298,
+            1.3731121279814602,
+            1.4424098193555537
+          ],
+          "empirical_variance": 0.7287821957170844,
+          "clip2": {
+            "ess_fraction": 0.2843666678445394,
+            "removed_sample_weight_fraction": 0.21492871933129576
+          },
+          "clip5": {
+            "ess_fraction": 0.18976378534880747,
+            "removed_sample_weight_fraction": 0.0
+          },
+          "clip10": {
+            "ess_fraction": 0.18976378534880747,
+            "removed_sample_weight_fraction": 0.0
+          }
+        }
+      },
+      "ess_inner16": {
+        "128": {
+          "actual_behavior": {
+            "n": 64,
+            "ess": 22.2958331301011,
+            "ess_fraction": 0.3483723926578297,
+            "log_mean_weight": -0.4976526296571562,
+            "log_second_moment": 0.05917801819130242,
+            "mean_weight": 0.6079560841402571,
+            "second_moment": 1.0609640948391277,
+            "cv_squared": 1.8704915230817298,
+            "max_normalized_weight": 0.11688308725528446,
+            "top10pct_weight_mass": 0.44459624376539203,
+            "logweight_quantiles": [
+              -19.176288773974782,
+              -18.617944777817858,
+              -9.602722929746882,
+              -1.567154989248948,
+              0.5528740458852492,
+              1.1467583699405954,
+              1.5146493557024527
+            ],
+            "empirical_variance": 0.6913534945959723,
+            "clip2": {
+              "ess_fraction": 0.41765168404853886,
+              "removed_sample_weight_fraction": 0.09184435441222301
+            },
+            "clip5": {
+              "ess_fraction": 0.3483723926578297,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.3483723926578297,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 64,
+            "ess": 16.565584048535985,
+            "ess_fraction": 0.25883725075837477,
+            "log_mean_weight": -0.46491950748513444,
+            "log_second_moment": 0.4217167752732194,
+            "mean_weight": 0.6281856673988453,
+            "second_moment": 1.524576665719993,
+            "cv_squared": 2.8634315465415856,
+            "max_normalized_weight": 0.15711905511254115,
+            "top10pct_weight_mass": 0.48676183131788925,
+            "logweight_quantiles": [
+              -19.642385482788086,
+              -19.02336717605591,
+              -9.703121757507324,
+              -1.3731775283813477,
+              0.22783203125000004,
+              1.721064071655273,
+              1.8432121276855469
+            ],
+            "empirical_variance": 1.1299594329946605,
+            "clip2": {
+              "ess_fraction": 0.4365821389791268,
+              "removed_sample_weight_fraction": 0.1919131865930367
+            },
+            "clip5": {
+              "ess_fraction": 0.2901127036108039,
+              "removed_sample_weight_fraction": 0.037813990956662234
+            },
+            "clip10": {
+              "ess_fraction": 0.25883725075837477,
+              "removed_sample_weight_fraction": 0.0
+            }
+          }
+        },
+        "1024": {
+          "actual_behavior": {
+            "n": 60,
+            "ess": 1.03542020236897,
+            "ess_fraction": 0.017257003372816167,
+            "log_mean_weight": -4.750010922592817,
+            "log_second_moment": -5.440484619915182,
+            "mean_weight": 0.00865160070469284,
+            "second_moment": 0.004337380780219835,
+            "cv_squared": 56.947488239773705,
+            "max_normalized_weight": 0.9826255820406695,
+            "top10pct_weight_mass": 0.9999320034276417,
+            "logweight_quantiles": [
+              -88.9231322324558,
+              -70.90024812653473,
+              -43.27470810360677,
+              -23.297479541555933,
+              -11.015466433886958,
+              -3.1263440835048986,
+              -0.6731934849066619
+            ],
+            "empirical_variance": 0.004262530585466394,
+            "clip2": {
+              "ess_fraction": 0.017257003372816167,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip5": {
+              "ess_fraction": 0.017257003372816167,
+              "removed_sample_weight_fraction": 0.0
+            },
+            "clip10": {
+              "ess_fraction": 0.017257003372816167,
+              "removed_sample_weight_fraction": 0.0
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 60,
+            "ess": 1.0453846914347134,
+            "ess_fraction": 0.017423078190578555,
+            "log_mean_weight": -4.565717779200454,
+            "log_second_moment": -5.081475939628757,
+            "mean_weight": 0.010402409892964955,
+            "second_moment": 0.006210735577124904,
+            "cv_squared": 56.39513931245198,
+            "max_normalized_weight": 0.9778403862805639,
+            "top10pct_weight_mass": 0.999957044729224,
+            "logweight_quantiles": [
+              -86.87738227844238,
+              -69.60524559974671,
+              -44.14198398590088,
+              -22.688913345336914,
+              -11.728710174560545,
+              -2.779388351440443,
+              -0.49378204345703125
+            ],
+            "empirical_variance": 0.006102525445543648,
+            "clip2": {
+              "ess_fraction": 0.017423078190578555,
+              "removed_sample_weight_fraction": 1.734723475976807e-17
+            },
+            "clip5": {
+              "ess_fraction": 0.017423078190578555,
+              "removed_sample_weight_fraction": 1.734723475976807e-17
+            },
+            "clip10": {
+              "ess_fraction": 0.017423078190578555,
+              "removed_sample_weight_fraction": 1.734723475976807e-17
+            }
+          }
+        },
+        "4096": {
+          "actual_behavior": {
+            "n": 43,
+            "ess": 1.0000019934486597,
+            "ess_fraction": 0.023255860312759526,
+            "log_mean_weight": -30.900226024825802,
+            "log_second_moment": -58.039253927404715,
+            "mean_weight": 3.803665766363235e-14,
+            "second_moment": 6.221173101158367e-26,
+            "cv_squared": 41.99991428187851,
+            "max_normalized_weight": 0.9999990032767787,
+            "top10pct_weight_mass": 0.9999999999132265,
+            "logweight_quantiles": [
+              -181.34551164432753,
+              -177.42258228191045,
+              -151.23823437642528,
+              -88.34007013185786,
+              -46.88361715064458,
+              -33.00089567822759,
+              -27.139026905855957
+            ],
+            "empirical_variance": 6.076494368536331e-26,
+            "clip2": {
+              "ess_fraction": 0.023255860312759526,
+              "removed_sample_weight_fraction": 1.0947542971841611e-15
+            },
+            "clip5": {
+              "ess_fraction": 0.023255860312759526,
+              "removed_sample_weight_fraction": 1.0947542971841611e-15
+            },
+            "clip10": {
+              "ess_fraction": 0.023255860312759526,
+              "removed_sample_weight_fraction": 1.0947542971841611e-15
+            }
+          },
+          "same_scorer_anchor": {
+            "n": 43,
+            "ess": 1.000000043111643,
+            "ess_fraction": 0.023255814956084718,
+            "log_mean_weight": -27.3450891017061,
+            "log_second_moment": -50.92897813083028,
+            "mean_weight": 1.3310019629728555e-12,
+            "second_moment": 7.617734440968618e-23,
+            "cv_squared": 41.99999814619943,
+            "max_normalized_weight": 0.9999999784441791,
+            "top10pct_weight_mass": 0.9999999999660473,
+            "logweight_quantiles": [
+              -177.70563125610352,
+              -173.7635322189331,
+              -149.0721845626831,
+              -82.86230087280273,
+              -45.25507888793944,
+              -31.35504457473758,
+              -23.58388900756836
+            ],
+            "empirical_variance": 7.440577818424859e-23,
+            "clip2": {
+              "ess_fraction": 0.023255814956084718,
+              "removed_sample_weight_fraction": 8.77896309914462e-16
+            },
+            "clip5": {
+              "ess_fraction": 0.023255814956084718,
+              "removed_sample_weight_fraction": 8.77896309914462e-16
+            },
+            "clip10": {
+              "ess_fraction": 0.023255814956084718,
+              "removed_sample_weight_fraction": 8.77896309914462e-16
+            }
+          }
+        }
+      },
+      "banks": [
+        {
+          "inner": 0,
+          "initial_math": 0.2495940738984873,
+          "teacher_math": 0.27974759068010974
+        },
+        {
+          "inner": 4,
+          "initial_math": 0.24836079264279634,
+          "teacher_math": 0.2794857247737109
+        },
+        {
+          "inner": 8,
+          "initial_math": 0.24732170970468814,
+          "teacher_math": 0.2788152017129299
+        },
+        {
+          "inner": 12,
+          "initial_math": 0.24725190787583015,
+          "teacher_math": 0.27769736794208355
+        },
+        {
+          "inner": 16,
+          "initial_math": 0.24783527962882368,
+          "teacher_math": 0.27729356813385286
+        }
+      ]
+    }
+  ]
+}

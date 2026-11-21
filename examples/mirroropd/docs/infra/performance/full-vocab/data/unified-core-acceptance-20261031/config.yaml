@@ -534,9 +534,9 @@ data:
   tokenizer: null
   use_shm: false
   train_files:
-  - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/training.parquet
+  - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/training.parquet
   val_files:
-  - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/source.parquet
+  - /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/source.parquet
   train_max_samples: -1
   val_max_samples: -1
   prompt_key: prompt
@@ -1068,7 +1068,7 @@ trainer:
   critic_warmup: 0
   default_hdfs_dir: null
   del_local_ckpt_after_load: false
-  default_local_dir: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04/checkpoints
+  default_local_dir: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04/checkpoints
   max_actor_ckpt_to_keep: 1
   max_critic_ckpt_to_keep: null
   ray_wait_register_center_timeout: 300
@@ -1101,13 +1101,13 @@ trainer:
       sampler_kwargs: {}
   readout_callback_class: null
   evaluation:
-    output: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04/evaluation
-    source_file: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/source.parquet
-    bootstrap: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a03/bootstrap
+    output: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04/evaluation
+    source_file: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/source.parquet
+    bootstrap: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a03/bootstrap
     datasets:
     - name: MATH-500
       domain: math
-      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet
+      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/MATH-500.parquet
       verifier: math
       'n': 1
       protocol: public
@@ -1116,7 +1116,7 @@ trainer:
       - ec3e2443fabe0c8bd065427171010f965f1a11b1e76e4ef4fc1b3ed65c37c972
     - name: AMC23
       domain: math
-      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet
+      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/AMC23.parquet
       verifier: math
       'n': 2
       protocol: public
@@ -1125,7 +1125,7 @@ trainer:
       - 12a38ca6bf6dbb9d6d68341951b18e125ec22c434568003a6346e09f04c32e84
     - name: LCBv5
       domain: code
-      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet
+      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/LCBv5.parquet
       verifier: lcb
       'n': 2
       protocol: public
@@ -1134,7 +1134,7 @@ trainer:
       - d1e60bf2cebe18024a429d21a8902c6ba7ec75e6547c5f88e90103fab4ad5a74
     - name: GPQA-Diamond
       domain: science
-      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet
+      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/GPQA-Diamond.parquet
       verifier: gpqa
       'n': 2
       protocol: public
@@ -1143,7 +1143,7 @@ trainer:
       - 1b138362fcc0f17b63e68ce8e3179bb01d5710e7a0416d19629ee9c9f64539a2
     - name: IFEval
       domain: if
-      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet
+      path: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a02/IFEval.parquet
       verifier: ifeval
       'n': 1
       protocol: public
@@ -1243,9 +1243,9 @@ ray_kwargs:
     runtime_env:
       py_executable: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python
       env_vars:
-        WANDB_DIR: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04
+        WANDB_DIR: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04
         WANDB_MODE: disabled
-        VERL_FILE_LOGGER_PATH: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/unified-evaluation-20261031/acceptance-a04/metrics.jsonl
+        VERL_FILE_LOGGER_PATH: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/acceptance-a04/metrics.jsonl
         VERL_ROLLOUT_IPC_NAMESPACE: ${oc.env:VERL_ROLLOUT_IPC_NAMESPACE}
         PYTHONPATH: /mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl
         LD_LIBRARY_PATH: ${oc.env:LD_LIBRARY_PATH}

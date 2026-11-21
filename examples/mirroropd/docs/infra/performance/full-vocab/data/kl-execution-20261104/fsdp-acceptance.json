@@ -4,7 +4,7 @@
       "name": "rkl-future-tied-checkpoint",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -29,7 +29,7 @@
         "--future-mode",
         "mean",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-future-tied-checkpoint.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-future-tied-checkpoint.json"
       ],
       "returncode": 0,
       "seconds": 43.04389309883118
@@ -38,7 +38,7 @@
       "name": "rkl-discounted-extra-support",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -63,7 +63,7 @@
         "--gamma",
         "0.87",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-discounted-extra-support.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-discounted-extra-support.json"
       ],
       "returncode": 0,
       "seconds": 38.21276545524597
@@ -72,7 +72,7 @@
       "name": "forward-checkpoint",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -91,7 +91,7 @@
         "forward",
         "--checkpoint",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-forward-checkpoint.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-forward-checkpoint.json"
       ],
       "returncode": 0,
       "seconds": 36.815346479415894
@@ -100,7 +100,7 @@
       "name": "conditional-permuted",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -120,7 +120,7 @@
         "--permuted-teacher",
         "--checkpoint",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-conditional-permuted.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-conditional-permuted.json"
       ],
       "returncode": 0,
       "seconds": 47.27261185646057
@@ -129,7 +129,7 @@
       "name": "rkl-dense",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -145,7 +145,7 @@
         "--backend",
         "dense",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-dense.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-dense.json"
       ],
       "returncode": 0,
       "seconds": 36.63856053352356
@@ -154,7 +154,7 @@
       "name": "rkl-precompute",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -170,7 +170,7 @@
         "--backend",
         "precompute",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-precompute.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-precompute.json"
       ],
       "returncode": 0,
       "seconds": 38.57323741912842
@@ -179,7 +179,7 @@
       "name": "rkl-recompute",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -195,7 +195,7 @@
         "--backend",
         "recompute",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-recompute.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-recompute.json"
       ],
       "returncode": 0,
       "seconds": 47.58885836601257
@@ -204,7 +204,7 @@
       "name": "rkl-cached",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -220,7 +220,7 @@
         "--backend",
         "cached",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-cached.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-cached.json"
       ],
       "returncode": 0,
       "seconds": 37.96496820449829
@@ -229,7 +229,7 @@
       "name": "rkl-streaming",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -245,7 +245,7 @@
         "--backend",
         "streaming",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-streaming.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-streaming.json"
       ],
       "returncode": 0,
       "seconds": 39.82401943206787
@@ -254,7 +254,7 @@
       "name": "rkl-liger",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -270,7 +270,7 @@
         "--backend",
         "liger",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-rkl-liger.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-rkl-liger.json"
       ],
       "returncode": 0,
       "seconds": 45.10507249832153
@@ -279,7 +279,7 @@
       "name": "mdpo-future-eos-checkpoint",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -307,7 +307,7 @@
         "--future-mode",
         "mean",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-mdpo-future-eos-checkpoint.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-mdpo-future-eos-checkpoint.json"
       ],
       "returncode": 0,
       "seconds": 46.13811779022217
@@ -316,7 +316,7 @@
       "name": "bpo-compare-checkpoint",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -337,7 +337,7 @@
         "precompute",
         "--checkpoint",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-bpo-compare-checkpoint.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-bpo-compare-checkpoint.json"
       ],
       "returncode": 0,
       "seconds": 47.13887023925781
@@ -346,7 +346,7 @@
       "name": "mdpo-fp16-discounted",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -367,7 +367,7 @@
         "--gamma",
         "0.87",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-mdpo-fp16-discounted.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-mdpo-fp16-discounted.json"
       ],
       "returncode": 0,
       "seconds": 40.394914865493774
@@ -376,7 +376,7 @@
       "name": "mdpo-mixed-aa",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -402,7 +402,7 @@
         "--compare-backend",
         "precompute_fused",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-mdpo-mixed-aa.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-mdpo-mixed-aa.json"
       ],
       "returncode": 0,
       "seconds": 39.56021571159363
@@ -411,7 +411,7 @@
       "name": "mdpo-mixed-compare",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -437,9 +437,9 @@
         "--compare-backend",
         "precompute",
         "--diagnostic-dir",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-mixed-diagnostic",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-mixed-diagnostic",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/fsdp-mdpo-mixed-compare.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/fsdp-mdpo-mixed-compare.json"
       ],
       "returncode": 0,
       "seconds": 45.87551808357239
@@ -676,8 +676,8 @@
     "rtol": 1e-05,
     "log_sha256": "6fd0051a6525534ecd5b2c77084749188631ebd4fe4128d055aad277003058cc",
     "diagnostic_files": [
-      "runs/kl-backend-20261104/original-mixed-compare/rank0.pt",
-      "runs/kl-backend-20261104/original-mixed-compare/rank1.pt"
+      "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/original-mixed-compare/rank0.pt",
+      "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/original-mixed-compare/rank1.pt"
     ]
   },
   "commands": [
@@ -685,7 +685,7 @@
       "name": "original-mixed-aa",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -708,9 +708,9 @@
         "bf16_fp32",
         "--gradient-checkpointing",
         "--diagnostic-dir",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/original-mixed-aa",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/original-mixed-aa",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/original-mixed-aa.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/original-mixed-aa.json"
       ],
       "returncode": 0,
       "seconds": 43.375577211380005
@@ -719,7 +719,7 @@
       "name": "original-mixed-compare",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -742,9 +742,9 @@
         "bf16_fp32",
         "--gradient-checkpointing",
         "--diagnostic-dir",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/original-mixed-compare",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/original-mixed-compare",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/original-mixed-compare.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/original-mixed-compare.json"
       ],
       "returncode": 1,
       "seconds": 46.45848369598389
@@ -753,7 +753,7 @@
       "name": "profile-final",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -761,11 +761,11 @@
         "3,4",
         "--",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/profile_execution.py",
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/profile_execution.py",
         "--source",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
         "--output",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/kl-backend-20261104/profile-final.json"
+        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/profile-final.json"
       ],
       "returncode": 0,
       "seconds": 19.00775408744812
@@ -774,7 +774,7 @@
       "name": "final-gpu",
       "command": [
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/envs/mirroropd-fusion/bin/python",
-        "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/runs/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
+        "examples/mirroropd/research-evidence/engineering-evidence/gpu-expansion-20261030/idle-occupancy/runtime/resource_guard.py",
         "run",
         "--repo",
         "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl",
@@ -797,30 +797,30 @@
     "final-cpu": {
       "command": "python -m pytest tests/trainer/distillation -k cpu -q",
       "result": "927 passed, 18 skipped, 755 deselected, 7 warnings in 91.03s (0:01:31)",
-      "log": "runs/kl-backend-20261104/final-cpu.log",
+      "log": "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/final-cpu.log",
       "sha256": "69622560a41cf867324461bac5a7b04240d4b71a1b867392b2178412af885f77"
     },
     "final-gpu": {
       "command": "python -m pytest tests/trainer/distillation -k gpu -q",
       "result": "757 passed, 943 deselected, 7 warnings in 63.93s (0:01:03)",
-      "log": "runs/kl-backend-20261104/final-gpu.log",
+      "log": "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/final-gpu.log",
       "sha256": "87a284fdeb83335139c42c3fc3cabb2569fe34057c56c6abb9b2dc545eeeb608"
     },
     "stage-e-config-cpu": {
       "command": "python -m pytest tests/workers/config/test_distillation_spec_on_cpu.py -q",
       "result": "7 passed, 1 warning in 36.13s",
-      "log": "runs/kl-backend-20261104/stage-e-config-cpu.log",
+      "log": "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/stage-e-config-cpu.log",
       "sha256": "1bdeb91094777223cb7178edf2f59c4c1710733a1712bd66f930f032837d9578"
     }
   },
   "config_previews": {
     "config-e59-final": {
-      "log": "runs/kl-backend-20261104/config-e59-final.log",
+      "log": "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/config-e59-final.log",
       "sha256": "f2c7548825d01f2885376bb0320180dfd6490d78cbbc6f56e4c120e47ed5f03a",
       "result": "completed successfully with explicit PYTHON_BIN; see launcher arguments in raw log"
     },
     "config-e62-final": {
-      "log": "runs/kl-backend-20261104/config-e62-final.log",
+      "log": "examples/mirroropd/research-evidence/engineering-evidence/kl-backend-20261104/config-e62-final.log",
       "sha256": "04bab5f275ffff5f1199f75607e6dd0006f7c76449e8fb62f392b9fdb5689729",
       "result": "completed successfully with explicit PYTHON_BIN; see launcher arguments in raw log"
     }

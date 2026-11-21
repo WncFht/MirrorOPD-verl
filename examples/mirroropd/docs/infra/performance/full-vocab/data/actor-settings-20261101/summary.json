@@ -9,8 +9,8 @@
     "baseline": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/baseline.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/baseline.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -69,8 +69,8 @@
     "no-sync": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/no-sync.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/no-sync.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -129,8 +129,8 @@
     "budget65536": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/budget65536.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/budget65536.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -189,8 +189,8 @@
     "diagnostics-off": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/diagnostics-off.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/diagnostics-off.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -249,8 +249,8 @@
     "chunk1024": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/chunk1024.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/chunk1024.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -309,8 +309,8 @@
     "no-sync-budget65536": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/no-sync-budget65536.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/no-sync-budget65536.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -369,8 +369,8 @@
     "baseline-recheck": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/baseline-recheck.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/baseline-recheck.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -429,8 +429,8 @@
     "baseline-size512": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/baseline-size512.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/baseline-size512.json",
         "repeat_input": 4,
         "reuse": 4,
         "samples": 2,
@@ -489,8 +489,8 @@
     "partial-checkpoint": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-checkpoint.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/partial-checkpoint.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -568,8 +568,8 @@
     "partial-checkpoint-combined": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-checkpoint-combined.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/partial-checkpoint-combined.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -647,8 +647,8 @@
     "partial-expandable-size512": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-expandable-size512.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/partial-expandable-size512.json",
         "repeat_input": 4,
         "reuse": 4,
         "samples": 2,
@@ -726,8 +726,8 @@
     "lean-combo": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/lean-combo.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/lean-combo.json",
         "repeat_input": 2,
         "reuse": 4,
         "samples": 2,
@@ -786,8 +786,8 @@
     "lean-combo-size512": {
       "arguments": {
         "student": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/model/Qwen3-1.7B-Base",
-        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/teacher-cache128.pt",
-        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/lean-combo-size512.json",
+        "cache": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/teacher-cache128.pt",
+        "output": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/lean-combo-size512.json",
         "repeat_input": 4,
         "reuse": 4,
         "samples": 2,
@@ -853,27 +853,27 @@
     "checkpoint-off": {
       "exit": 1,
       "oom": true,
-      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/checkpoint-off.log"
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/checkpoint-off.log"
     },
     "checkpoint-off-budget24576": {
       "exit": 1,
       "oom": true,
-      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/checkpoint-off-budget24576.log"
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/checkpoint-off-budget24576.log"
     },
     "combined-checkpoint-off24576": {
       "exit": 1,
       "oom": true,
-      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/combined-checkpoint-off24576.log"
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/combined-checkpoint-off24576.log"
     },
     "combined-size512": {
       "exit": 1,
       "oom": true,
-      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/combined-size512.log"
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/combined-size512.log"
     },
     "partial-checkpoint-size512": {
       "exit": 1,
       "oom": true,
-      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/actor-settings-20261101/partial-checkpoint-size512.log"
+      "log": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/actor-settings-20261101/partial-checkpoint-size512.log"
     }
   },
   "trace": {

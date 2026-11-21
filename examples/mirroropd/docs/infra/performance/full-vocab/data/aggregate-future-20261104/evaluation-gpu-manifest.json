@@ -2,7 +2,7 @@
   "scope": "Two H800 GPUs; Qwen3-1.7B-Base student and Qwen3-8B teacher; batch4/reuse2/two outer; training and validation response cap32; public n1 and five samples across four domains; source2/history4; final_export=false",
   "runs": {
     "evaluation-a01": {
-      "path": "runs/p0-p1-20261104/evaluation-a01",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01",
       "command": [
         {
           "name": "initial",
@@ -10,7 +10,7 @@
             "-m",
             "verl.trainer.evaluation.bootstrap",
             "--config",
-            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/public.yaml",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/public.yaml",
             "--producer",
             "initial"
           ]
@@ -21,7 +21,7 @@
             "-m",
             "verl.trainer.evaluation.bootstrap",
             "--config",
-            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/public.yaml",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/public.yaml",
             "--producer",
             "teacher"
           ]
@@ -32,7 +32,7 @@
             "-m",
             "verl.trainer.evaluation.bootstrap",
             "--config",
-            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01/public.yaml",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/public.yaml",
             "--producer",
             "finalize"
           ]
@@ -43,7 +43,7 @@
             "-m",
             "verl.trainer.main_ppo",
             "--config-path",
-            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01",
             "--config-name",
             "public"
           ]
@@ -54,7 +54,7 @@
             "-m",
             "verl.trainer.main_ppo",
             "--config-path",
-            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a01",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01",
             "--config-name",
             "source-history"
           ]
@@ -83,7 +83,7 @@
       }
     },
     "evaluation-a03": {
-      "path": "runs/p0-p1-20261104/evaluation-a03",
+      "path": "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a03",
       "command": [
         {
           "name": "source-history",
@@ -91,7 +91,7 @@
             "-m",
             "verl.trainer.main_ppo",
             "--config-path",
-            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/p0-p1-20261104/evaluation-a03",
+            "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a03",
             "--config-name",
             "source-history"
           ]
@@ -122,13 +122,13 @@
     }
   },
   "audit": {
-    "command": "PYTHONPATH=. ../envs/mirroropd-fusion/bin/python runs/p0-p1-20261104/audit_evaluation.py --public runs/p0-p1-20261104/evaluation-a01/evaluation --source runs/p0-p1-20261104/evaluation-a03/source-history --output runs/p0-p1-20261104/evaluation-audit.json",
+    "command": "PYTHONPATH=. ../envs/mirroropd-fusion/bin/python examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/audit_evaluation.py --public examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a01/evaluation --source examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-a03/source-history --output examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-audit.json",
     "source_sha256": "1c44506047d7825eda2c43fc62866ef14d566b35f9e6a1c3c3f1a9be378065f5",
     "summary_sha256": "50dcb7294bd1e70f775310f97a9e440717cf9cf741f08e06ac5f26c90e4743d2"
   },
   "cpu_regression": {
     "passed": 98,
-    "log": "runs/p0-p1-20261104/evaluation-final-cpu.log",
+    "log": "examples/mirroropd/research-evidence/engineering-evidence/p0-p1-20261104/evaluation-final-cpu.log",
     "log_sha256": "3032072d8a69a4cb33bc9c5edfafb7476d6a922d9741d7a79962ca5c86f0b298"
   },
   "failures_retained": {

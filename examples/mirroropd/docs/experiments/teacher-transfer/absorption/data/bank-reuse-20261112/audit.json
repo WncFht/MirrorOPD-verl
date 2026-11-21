@@ -2,7 +2,7 @@
   "scope": "Read-only CPU check of selected existing Qwen and MiMo banks and R1 legacy bank; not a ten-pair reuse certification",
   "banks": [
     {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/S0",
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/S0",
       "exists": true,
       "status": "complete",
       "manifest_sha256": "b22596490b12e05484cb3d3f420b4cabfbcedbab20bb99b9e2bc780511817cce",
@@ -10,7 +10,7 @@
         "model_identity": "checkpoint-v2:88c207b27733caa38ed2f62ed62d25aa5eca4c6f48395c1692e58d8a02f54912",
         "teacher_identity": "checkpoint-v2:f25df8d1e880944bbeda73cf69e3d6ec3b843a1e7bf0f384c5bd2a5b83db667a",
         "provenance": "Imported actual frozen Qwen trajectories; not regenerated native samples",
-        "original_receipt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-prefix-six-20261031/banks/S0/complete.json",
+        "original_receipt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-prefix-six/banks/S0/complete.json",
         "original_receipt_sha256": "e2a424b074aa93cd2b18c71f5de8a4f6d8468f867b5b4a6f3e6f77ccb257c6ee",
         "original_bank_sha256": "abcc57bafd62d93bef6ecc8db000c6613355381ca972982e26a0446439283a75",
         "sampling": {
@@ -53,7 +53,7 @@
       "all_files_valid": true
     },
     {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-three-four-gpu-20261111-retry1/formal/banks/Q",
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-four-gpu/formal/banks/Q",
       "exists": true,
       "status": "complete",
       "manifest_sha256": "0c6e004b3dbc1c2d43312af6039524622c4f91e0252016461b7c54e28e0ddbdc",
@@ -61,7 +61,7 @@
         "model_identity": "checkpoint-v2:f25df8d1e880944bbeda73cf69e3d6ec3b843a1e7bf0f384c5bd2a5b83db667a",
         "teacher_identity": "checkpoint-v2:f25df8d1e880944bbeda73cf69e3d6ec3b843a1e7bf0f384c5bd2a5b83db667a",
         "provenance": "Imported actual frozen Qwen trajectories; not regenerated native samples",
-        "original_receipt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/qwen-prefix-six-20261031/banks/Q/complete.json",
+        "original_receipt": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/qwen-prefix-six/banks/Q/complete.json",
         "original_receipt_sha256": "42ea2ec900975d0b9bd35c802c327dfeeb6906d4890d8534746d28a7b83021be",
         "original_bank_sha256": "18aa3aba85e4e4284e89b8a5c1a3528cf959a7234730092b38979ed7ef10bfc6",
         "sampling": {
@@ -104,7 +104,7 @@
       "all_files_valid": true
     },
     {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/initial",
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/initial",
       "exists": true,
       "status": "complete",
       "manifest_sha256": "c52723ae89b087e374223c79353a6be455f0d456d4e9e1866e6bda2a7bf9eaff",
@@ -867,7 +867,7 @@
       "all_files_valid": true
     },
     {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/teacher",
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/bootstrap/E72-r16-o20/teacher",
       "exists": true,
       "status": "complete",
       "manifest_sha256": "ce87e0c730155674f6d0673f82e3332fc8b7b8694de7b3a13fe876ee827be53f",
@@ -1625,7 +1625,7 @@
       "all_files_valid": true
     },
     {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/initial",
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/initial",
       "exists": true,
       "status": "complete",
       "manifest_sha256": "c52723ae89b087e374223c79353a6be455f0d456d4e9e1866e6bda2a7bf9eaff",
@@ -2388,7 +2388,7 @@
       "all_files_valid": true
     },
     {
-      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/runs/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/teacher",
+      "path": "/mnt/tidalfs-bdsz01/dataset/llm_dataset/zkn_data/fht_data/MirrorOPD-verl/examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/bootstrap/E73-r16-o20/teacher",
       "exists": true,
       "status": "complete",
       "manifest_sha256": "6f222701a7af992afa1ffb496e9c4e8c8874438c230e9d055c8bc4cf572b4684",
