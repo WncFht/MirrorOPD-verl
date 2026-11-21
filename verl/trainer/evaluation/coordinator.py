@@ -66,14 +66,9 @@ class EvaluationCoordinator(ReadoutCallback):
             raise ValueError("Unified evaluation owns schedules and requires a fresh run")
         if not config.trainer.val_before_train or config.actor_rollout_ref.rollout.n != 1:
             raise ValueError("Initial validation and one training trajectory per question are required")
-        if config.trainer.save_freq > 0:
-            raise ValueError("Unified evaluation owns the single final export; disable periodic saves")
-        if self.options.final_export:
-            checkpoint = config.actor_rollout_ref.actor.checkpoint
-            if set(checkpoint.save_contents) != {"model", "hf_model"} or set(checkpoint.load_contents) != {"model"}:
-                raise ValueError("Final export requires model+hf_model saves and model-only reloads")
-            if not checkpoint.get("preserve_hf_master_weights", False):
-                raise ValueError("Final export must preserve fp32 master weights")
+        from .checkpoint import validate_checkpoint_policy
+
+        validate_checkpoint_policy(config, final_export=self.options.final_export)
         self.input_model = omega_conf_to_dataclass(config.actor_rollout_ref.model, dataclass_type=HFModelConfig)
         teacher_path = config.distillation.teacher_models.teacher_model.model_path
         self.hidden_size = AutoConfig.from_pretrained(
@@ -171,10 +166,7 @@ class EvaluationCoordinator(ReadoutCallback):
 
     def on_before_weight_sync(self, trainer, batch, outer):
         rows = capture_rows(batch, outer)
-        known = {r["source_id"] for prior in self.batches.values() for r in prior}
-        known.update(r["source_id"] for r in self.fixed.get("source_heldout", []))
-        if known.intersection(r["source_id"] for r in rows):
-            raise ValueError("Training repeated a question or overlaps source heldout")
+        self._validate_training_sources(trainer, rows)
         shard = f"trajectories/outer-{outer:03d}.parquet"
         for row in rows:
             row.update(
@@ -275,6 +267,23 @@ class EvaluationCoordinator(ReadoutCallback):
             schema=schema,
         )
 
+    def _validate_training_sources(self, trainer, rows):
+        heldout = {r["source_id"] for r in self.fixed.get("source_heldout", [])}
+        current = {r["source_id"] for r in rows}
+        if heldout.intersection(current):
+            raise ValueError("Training overlaps source heldout")
+        # Update-budget runs may cycle the same prompt pool with fresh responses.
+        # Source/history studies retain their original unique-question contract.
+        allow_repeats = (
+            getattr(trainer, "update_budget", None) is not None
+            and not self.options.source_enabled
+            and not self.options.history_enabled
+        )
+        if not allow_repeats and any(
+            current.intersection(r["source_id"] for r in prior) for prior in self.batches.values()
+        ):
+            raise ValueError("Training repeated a question")
+
     def _progress(self, value):
         # Structured stdout is picked up by the existing run logger; no second service.
         print("EVALUATION_PROGRESS " + json.dumps(value, sort_keys=True), flush=True)
@@ -287,9 +296,16 @@ class EvaluationCoordinator(ReadoutCallback):
         if outer in self.completed or outer in self.pending_events:
             return {}
         started = time.monotonic()
+        budget = getattr(trainer, "update_budget", None)
+        # In matched-update runs, configured schedules count successful updates;
+        # artifact paths and metadata retain the real rollout-batch boundary.
         plan = compile_plan(
-            self.options, outer=outer, total=trainer.total_training_steps, optimizer_steps=trainer.actor_optimizer_step
+            self.options,
+            outer=trainer.actor_optimizer_step if budget else outer,
+            total=budget.total if budget else trainer.total_training_steps,
+            optimizer_steps=trainer.actor_optimizer_step,
         )
+        plan = dataclasses.replace(plan, outer=outer)
         export_due = outer in self.options.export_outers or (
             outer == trainer.total_training_steps and self.options.final_export
         )

@@ -24,6 +24,8 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None, pu
         panels = {"all": selected}
         for row in selected:
             panels.setdefault(row["domain"], []).append(row)
+            if row.get("dataset"):
+                panels.setdefault("dataset/" + row["dataset"], []).append(row)
         for domain, panel in panels.items():
             prefix = f"eval/rkl/{bank}/{domain}"
             group = "domain" if domain == "all" and public_equal_domains else None
@@ -39,7 +41,13 @@ def evaluation_metrics(rows, *, baselines, previous_history=(), aliases=None, pu
                         metrics[f"{prefix}/{diagnostic}"] = summary_mass["mean"]
             baseline = baselines.get(bank)
             if baseline is not None and bank != "public_current":
-                original = [r for r in baseline if domain == "all" or r["domain"] == domain]
+                original = [
+                    r
+                    for r in baseline
+                    if domain == "all"
+                    or r["domain"] == domain
+                    or (domain.startswith("dataset/") and r.get("dataset") == domain.removeprefix("dataset/"))
+                ]
                 if {(r["id"], r["tokens"]) for r in original} != {(r["id"], r["tokens"]) for r in panel}:
                     raise ValueError("Fixed public bank identities or masks changed")
                 before = summarize_rkl(original, equal_groups=group)

@@ -548,12 +548,14 @@ class TrainingWorker(Worker, DistProfilerExtension):
         return final_output
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
-    def save_checkpoint(self, local_path, hdfs_path=None, global_step=0, max_ckpt_to_keep=None):
-        return self.engine.save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep)
+    def save_checkpoint(self, local_path, hdfs_path=None, global_step=0, max_ckpt_to_keep=None, *, model_only=False):
+        options = {"model_only": True} if model_only else {}
+        return self.engine.save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep, **options)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
-    def load_checkpoint(self, local_path, hdfs_path=None, del_local_after_load=False):
-        return self.engine.load_checkpoint(local_path, hdfs_path, del_local_after_load)
+    def load_checkpoint(self, local_path, hdfs_path=None, del_local_after_load=False, *, model_only=False):
+        options = {"model_only": True} if model_only else {}
+        return self.engine.load_checkpoint(local_path, hdfs_path, del_local_after_load, **options)
 
 
 class ActorRolloutRefWorker(Worker, DistProfilerExtension):
@@ -928,14 +930,16 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
         return output.cpu() if output is not None else None
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
-    def load_checkpoint(self, local_path, hdfs_path=None, del_local_after_load=False):
+    def load_checkpoint(self, local_path, hdfs_path=None, del_local_after_load=False, *, model_only=False):
         assert "actor" in self.role, "load_checkpoint only support actor role"
-        self.actor.load_checkpoint(local_path, hdfs_path, del_local_after_load)
+        options = {"model_only": True} if model_only else {}
+        self.actor.load_checkpoint(local_path, hdfs_path, del_local_after_load, **options)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
-    def save_checkpoint(self, local_path, hdfs_path=None, global_step=0, max_ckpt_to_keep=None):
+    def save_checkpoint(self, local_path, hdfs_path=None, global_step=0, max_ckpt_to_keep=None, *, model_only=False):
         assert "actor" in self.role, "save_checkpoint only support actor role"
-        self.actor.save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep)
+        options = {"model_only": True} if model_only else {}
+        self.actor.save_checkpoint(local_path, hdfs_path, global_step, max_ckpt_to_keep, **options)
 
     @register(dispatch_mode=Dispatch.ONE_TO_ALL, blocking=False)
     def park_fusion_actor(self):

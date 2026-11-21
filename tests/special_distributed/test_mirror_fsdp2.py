@@ -27,7 +27,7 @@ from transformers import AutoModelForCausalLM, PreTrainedTokenizerFast, Qwen2Con
 
 from verl.utils import tensordict_utils as tu
 from verl.utils.distributed import initialize_global_process_group
-from verl.workers.config import DistillationConfig, DistillationLossConfig
+from verl.workers.config import DistillationConfig, DistillationLossConfig, FSDPOptimizerConfig
 from verl.workers.config.distillation import FullVocabConfig
 from verl.workers.engine_workers import ActorRolloutRefWorker
 
@@ -48,6 +48,7 @@ def main():
     parser.add_argument("--tied", action="store_true")
     parser.add_argument("--model-type", choices=["qwen2", "qwen3"], default="qwen2")
     parser.add_argument("--checkpoint", action="store_true")
+    parser.add_argument("--optimizer", choices=("AdamW", "SGD", "MuonAdamW"), default="AdamW")
     parser.add_argument("--diagnostic-dir", type=Path, help="Save per-step local shards before numerical assertions")
     parser.add_argument(
         "--loss-agg-mode",
@@ -106,6 +107,13 @@ def main():
         precision=args.precision,
         gradient_checkpointing=args.gradient_checkpointing,
         token_budget=args.token_budget or 2 * args.sequence_length,
+        optimizer_config=FSDPOptimizerConfig(
+            optimizer=args.optimizer,
+            optimizer_impl="verl.utils.fsdp_optimizers" if args.optimizer == "MuonAdamW" else "torch.optim",
+            lr=1e-3,
+            total_training_steps=3,
+            override_optimizer_config={"distributed_mode": "owner"} if args.optimizer == "MuonAdamW" else None,
+        ),
     )
     teacher = make_worker(root / "teacher", world, teacher=True, full_vocab=full, token_budget=2 * args.sequence_length)
     observed_dtypes = {}
@@ -340,9 +348,22 @@ def main():
         torch.testing.assert_close(
             local_snapshot(dict(actor.engine.module.named_parameters())), expected, atol=0, rtol=0
         )
-        torch.testing.assert_close(local_snapshot(actor.engine.optimizer.state_dict()), expected_opt, atol=0, rtol=0)
+        actual_opt = local_snapshot(actor.engine.optimizer.state_dict())
+        # Parameter-group metadata may include string-valued optimizer options.
+        assert actual_opt["param_groups"] == expected_opt["param_groups"]
+        torch.testing.assert_close(actual_opt["state"], expected_opt["state"], atol=0, rtol=0)
         assert local_snapshot(actor.engine.lr_scheduler.state_dict()) == expected_sched
         assert (actor.engine.scaler.state_dict() if actor.engine.scaler else None) == expected_scaler
+        manager = actor.engine.checkpoint_manager
+        retention = (manager.previous_global_step, list(manager.previous_saved_paths))
+        actor.save_checkpoint(str(root / "model-readout"), global_step=2, model_only=True)
+        assert not list((root / "model-readout").glob("optim*"))
+        assert not list((root / "model-readout").glob("extra_state*"))
+        assert (manager.previous_global_step, list(manager.previous_saved_paths)) == retention
+        actor.load_checkpoint(str(root / "model-readout"), model_only=True)
+        actual_opt = local_snapshot(actor.engine.optimizer.state_dict())
+        assert actual_opt["param_groups"] == expected_opt["param_groups"]
+        torch.testing.assert_close(actual_opt["state"], expected_opt["state"], atol=0, rtol=0)
     if args.precision:
         expected_dtype = {
             "bf16": "torch.bfloat16",

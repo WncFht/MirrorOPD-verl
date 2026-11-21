@@ -14,6 +14,21 @@ from .scoring import score_native_rows
 from .trajectory import load_trajectories
 
 
+def validate_checkpoint_policy(config, *, final_export):
+    """Keep resumable trainer checkpoints separate from model-only readout exports."""
+    checkpoint = config.actor_rollout_ref.actor.checkpoint
+    saves = set(checkpoint.save_contents)
+    loads = set(checkpoint.load_contents)
+    runtime = {"model", "optimizer", "extra"}
+    if config.trainer.save_freq > 0 and not (runtime <= saves and runtime <= loads):
+        raise ValueError("Periodic runtime checkpoints require model, optimizer and extra in save/load contents")
+    if final_export:
+        if not {"model", "hf_model"} <= saves or "model" not in loads:
+            raise ValueError("Final export requires model+hf_model saves and model reload support")
+        if not checkpoint.get("preserve_hf_master_weights", False):
+            raise ValueError("Final export must preserve fp32 master weights")
+
+
 def final_model_export(
     trainer, references, *, hidden_size, budget, destination, verify=True, live_payload_bytes=0, max_ckpt_to_keep=1
 ):
@@ -30,8 +45,10 @@ def final_model_export(
         hidden_size=hidden_size, budget=budget, live_payload_bytes=live_payload_bytes, load_window=load_trajectories
     )
     before = score_native_rows(trainer, selected, **kwargs)[0] if verify else []
+    checkpoint = trainer.config.actor_rollout_ref.actor.checkpoint
+    save_options = {"model_only": True} if set(checkpoint.get("save_contents", ())) & {"optimizer", "extra"} else {}
     trainer.actor_rollout_wg.save_checkpoint(
-        str(destination), None, trainer.global_steps, max_ckpt_to_keep=max_ckpt_to_keep
+        str(destination), None, trainer.global_steps, max_ckpt_to_keep=max_ckpt_to_keep, **save_options
     )
     if list(destination.glob("optim*")) or list(destination.glob("extra_state*")):
         raise RuntimeError("Final export unexpectedly saved optimizer or runtime state")
@@ -51,7 +68,8 @@ def final_model_export(
             raise ValueError("Master-weight export contains non-FP32 tensors")
     max_error = None
     if verify:
-        trainer.actor_rollout_wg.load_checkpoint(str(destination), None, del_local_after_load=False)
+        load_options = {"model_only": True} if set(checkpoint.get("load_contents", ())) & {"optimizer", "extra"} else {}
+        trainer.actor_rollout_wg.load_checkpoint(str(destination), None, del_local_after_load=False, **load_options)
         after = score_native_rows(trainer, selected, **kwargs)[0]
         old = {r["id"]: r for r in before}
         errors = []

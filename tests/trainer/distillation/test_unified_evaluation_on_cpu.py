@@ -457,3 +457,14 @@ def test_completed_generation_is_not_timed_out_by_slow_cpu_consumption():
         assert sorted(result) == list(range(4))
 
     asyncio.run(run())
+
+
+def test_public_dataset_metrics_keep_development_and_test_separate():
+    rows = [
+        dict(id="test", bank="public_initial", domain="math", dataset="math", rkl_sum=2.0, tokens=2),
+        dict(id="dev", bank="public_initial", domain="math", dataset="development_math", rkl_sum=8.0, tokens=2),
+    ]
+    metrics = evaluation_metrics(rows, baselines={"public_initial": rows})
+    assert metrics["eval/rkl/public_initial/dataset/math/question_mean"] == 1.0
+    assert metrics["eval/rkl/public_initial/dataset/development_math/question_mean"] == 4.0
+    assert metrics["eval/rkl/public_initial/dataset/math/reduction_percent"] == 0.0

@@ -295,7 +295,7 @@ class AutomodelOptimizerConfig(OptimizerConfig):
         return super().__post_init__()
 
 
-def build_optimizer(parameters, config: FSDPOptimizerConfig):
+def build_optimizer(parameters, config: FSDPOptimizerConfig, *, model=None):
     """Build an optimizer based on the configuration.
 
     Dynamically imports and instantiates an optimizer class from the specified module.
@@ -348,4 +348,11 @@ def build_optimizer(parameters, config: FSDPOptimizerConfig):
             f"Available optimizers: {dir(module)}"
         ) from e
 
+    if config.optimizer_impl == "verl.utils.fsdp_optimizers" and config.optimizer == "MuonAdamW":
+        from verl.utils.fsdp_optimizers import muon_parameter_groups
+
+        if model is None:
+            raise ValueError("MuonAdamW requires model for structural parameter grouping")
+        optimizer_args.setdefault("betas", config.betas)
+        return optimizer_cls(muon_parameter_groups(model), **optimizer_args)
     return optimizer_cls(parameters, **optimizer_args)

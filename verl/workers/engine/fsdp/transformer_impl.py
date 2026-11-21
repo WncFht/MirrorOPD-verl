@@ -540,7 +540,13 @@ class FSDPEngine(BaseEngine):
     def _build_optimizer(self, module):
         from verl.workers.config.optimizer import build_optimizer
 
-        optimizer = build_optimizer(module.parameters(), self.optimizer_config)
+        if (
+            self.optimizer_config.optimizer_impl == "verl.utils.fsdp_optimizers"
+            and self.optimizer_config.optimizer == "MuonAdamW"
+        ):
+            if fsdp_version(module) != 2:
+                raise ValueError("Full-matrix MuonAdamW is supported only with FSDP2")
+        optimizer = build_optimizer(module.parameters(), self.optimizer_config, model=module)
 
         return optimizer
 
@@ -982,6 +988,7 @@ class FSDPEngine(BaseEngine):
         hdfs_path: Optional[str] = None,
         global_step: int = 0,
         max_ckpt_to_keep: Optional[int] = None,
+        model_only: bool = False,
         **kwargs,
     ) -> None:
         """
@@ -993,16 +1000,35 @@ class FSDPEngine(BaseEngine):
         ):
             load_fsdp_model_to_gpu(self.module)
 
-        self.checkpoint_manager.save_checkpoint(
-            local_path=local_path, hdfs_path=hdfs_path, global_step=global_step, max_ckpt_to_keep=max_ckpt_to_keep
-        )
+        manager = self.checkpoint_manager
+        contents = manager.checkpoint_save_contents
+        previous_step, previous_paths = manager.previous_global_step, list(manager.previous_saved_paths)
+        if model_only:
+            manager.checkpoint_save_contents = ["model", "hf_model"]
+        try:
+            manager.save_checkpoint(
+                local_path=local_path,
+                hdfs_path=hdfs_path,
+                global_step=global_step,
+                max_ckpt_to_keep=None if model_only else max_ckpt_to_keep,
+            )
+        finally:
+            manager.checkpoint_save_contents = contents
+            if model_only:
+                manager.previous_global_step = previous_step
+                manager.previous_saved_paths[:] = previous_paths
 
         torch.distributed.barrier()
         if self._is_offload_param:
             offload_fsdp_model_to_cpu(self.module)
 
     def load_checkpoint(
-        self, local_path: str, hdfs_path: Optional[str] = None, del_local_after_load: int = True, **kwargs
+        self,
+        local_path: str,
+        hdfs_path: Optional[str] = None,
+        del_local_after_load: int = True,
+        model_only: bool = False,
+        **kwargs,
     ) -> None:
         """
         Load FSDP checkpoint, restoring parameters and optimizer state.
@@ -1012,9 +1038,16 @@ class FSDPEngine(BaseEngine):
         if self._is_offload_param:
             load_fsdp_model_to_gpu(self.module)
 
-        self.checkpoint_manager.load_checkpoint(
-            local_path=local_path, hdfs_path=hdfs_path, del_local_after_load=del_local_after_load
-        )
+        manager = self.checkpoint_manager
+        contents = manager.checkpoint_load_contents
+        if model_only:
+            manager.checkpoint_load_contents = ["model"]
+        try:
+            manager.load_checkpoint(
+                local_path=local_path, hdfs_path=hdfs_path, del_local_after_load=del_local_after_load
+            )
+        finally:
+            manager.checkpoint_load_contents = contents
 
         torch.distributed.barrier()
         if self._is_offload_param:

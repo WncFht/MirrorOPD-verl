@@ -78,6 +78,7 @@ from verl.trainer.ppo.v1.progress import (
     update_log_events,
 )
 from verl.trainer.ppo.v1.replay_buffer import DAPO_FILTERED_REWARD_COUNTS_KEY, ReplayBuffer, ReplayBufferAsync
+from verl.trainer.ppo.v1.reuse import build_training_control, load_training_control, save_training_control
 from verl.trainer.ppo.v1.utils import MetricsAggregator, compute_advantage_for_multi_trajectories
 from verl.utils import tensordict_utils as tu
 from verl.utils.checkpoint.checkpoint_manager import find_latest_ckpt_path
@@ -180,6 +181,7 @@ class PPOTrainer(ABC):
         self.actor_optimizer_step = 0
         self.critic_optimizer_step_attempts = 0
         self.critic_optimizer_step = 0
+        self.update_budget, self.reuse_controller = build_training_control(config)
 
     def _build_replay_buffer(self) -> ReplayBuffer:
         """Instantiate the replay buffer (or a user-provided custom sampler).
@@ -562,6 +564,11 @@ class PPOTrainer(ABC):
             experiment_name=self.config.trainer.experiment_name,
         )
 
+        budget = getattr(self, "update_budget", None)
+        if budget is not None and self.actor_optimizer_step == budget.total:
+            self._shutdown_dump_executor()
+            return
+
         # perform validation before training
         if self.config.trainer.get("val_before_train", True):
             self.on_validate_begin()
@@ -602,7 +609,9 @@ class PPOTrainer(ABC):
                 data=readout_metrics | self._metric_coordinates() | {"step/outer": initial_outer}, step=initial_outer
             )
         last_val_metrics = None
-        while current_epoch < self.config.trainer.total_epochs and self.global_steps <= self.total_training_steps:
+        while (budget is not None or current_epoch < self.config.trainer.total_epochs) and (
+            self.global_steps <= self.total_training_steps
+        ):
             is_last_step = self.global_steps >= self.total_training_steps
             metrics = {}
             self.timing_raw = {}
@@ -614,10 +623,18 @@ class PPOTrainer(ABC):
                 self._start_profiling()
                 batch = self.step(metrics, self.timing_raw)
                 self._stop_profiling()
+                budget = getattr(self, "update_budget", None)
+                if budget is not None:
+                    is_last_step = self.actor_optimizer_step == budget.total
+                    if is_last_step:
+                        # Native readouts and final exports share the actual terminal boundary.
+                        self.total_training_steps = self.global_steps
 
                 # 2. save checkpoint
                 if self.config.trainer.save_freq > 0 and (
-                    is_last_step or self.global_steps % self.config.trainer.save_freq == 0
+                    budget.due(self.actor_optimizer_step, save=True)
+                    if budget
+                    else is_last_step or self.global_steps % self.config.trainer.save_freq == 0
                 ):
                     with marked_timer("save_checkpoint", self.timing_raw, color="green"):
                         self._save_checkpoint()
@@ -631,7 +648,9 @@ class PPOTrainer(ABC):
 
             # 4. validate
             if self.config.trainer.test_freq > 0 and (
-                is_last_step or self.global_steps % self.config.trainer.test_freq == 0
+                budget.due(self.actor_optimizer_step)
+                if budget
+                else is_last_step or self.global_steps % self.config.trainer.test_freq == 0
             ):
                 with marked_timer("testing", self.timing_raw, color="green"):
                     self.on_validate_begin()
@@ -676,6 +695,8 @@ class PPOTrainer(ABC):
         self.on_train_end()
         # Ensure dump executor is shut down when training loop ends without reaching is_last_step
         self._shutdown_dump_executor()
+        if getattr(self, "update_budget", None) is not None and self.actor_optimizer_step != self.update_budget.total:
+            raise RuntimeError("Training exhausted its outer/data safety cap before the optimizer update budget")
 
     def step(self, metrics: dict, timing_raw: dict) -> KVBatchMeta:
         train_batch_size = self.config.data.train_batch_size
@@ -968,6 +989,8 @@ class PPOTrainer(ABC):
         # ``parameter_sync_step`` local updates (see ``PPOTrainer.step``). The optimizer's
         # schedule horizon must therefore count optimizer updates.
         optim_total_training_steps = total_training_steps * self.parameter_sync_step
+        if getattr(self, "update_budget", None) is not None:
+            optim_total_training_steps = self.update_budget.total
         try:
             OmegaConf.set_struct(self.config, True)
             with open_dict(self.config):
@@ -1194,6 +1217,8 @@ class PPOTrainer(ABC):
             self._optimizer_progress(),
             self._optimizer_progress("critic") if getattr(self, "use_critic", False) else None,
         )
+        if getattr(self, "update_budget", None) is not None:
+            save_training_control(checkpoint_dir, self.update_budget, self.reuse_controller, self.actor_optimizer_step)
 
     def _load_actor_optimizer_progress(self, checkpoint_dir):
         if getattr(self, "rollout_identity", None) is not None:
@@ -1203,6 +1228,8 @@ class PPOTrainer(ABC):
         actor, critic = load_optimizer_progress(checkpoint_dir, self.global_steps)
         self._set_optimizer_progress(actor)
         self._set_optimizer_progress(critic, "critic")
+        if getattr(self, "update_budget", None) is not None:
+            load_training_control(checkpoint_dir, self.update_budget, self.reuse_controller, self.actor_optimizer_step)
 
     def _save_checkpoint(self):
         """Save actor, critic, and dataloader checkpoints to local (and optionally remote) storage."""
@@ -2015,6 +2042,10 @@ class PPOTrainer(ABC):
 
     def _update_actor(self, batch: KVBatchMeta, metrics: dict) -> KVBatchMeta:
         """Update the actor network."""
+        budget = getattr(self, "update_budget", None)
+        epochs = self.config.actor_rollout_ref.actor.ppo_epochs
+        if budget is not None:
+            epochs = budget.epochs(self.actor_optimizer_step, self.reuse_controller.current)
         if self._uses_full_vocab():
             # Only small sample fields enter the bridge; hidden payload is read per micro-batch.
             batch.fields = ["input_ids", "position_ids", "loss_mask", "response_mask", "prompts", "responses"]
@@ -2065,7 +2096,7 @@ class PPOTrainer(ABC):
             "score_centering": score_centering,
             "global_batch_size": ppo_mini_batch_size,
             "mini_batch_size": ppo_mini_batch_size,
-            "epochs": self.config.actor_rollout_ref.actor.ppo_epochs,
+            "epochs": epochs,
             "seed": self.config.actor_rollout_ref.actor.data_loader_seed,
             "dataloader_kwargs": {"shuffle": self.config.actor_rollout_ref.actor.shuffle},
             "temperature": self.config.actor_rollout_ref.rollout.temperature,
@@ -2114,6 +2145,8 @@ class PPOTrainer(ABC):
         if records and len(records) != tu.get(output, "optimizer_step_attempts"):
             raise ValueError("Per-update metric records do not match optimizer attempts")
         self._accumulate_actor_optimizer_steps(output)
+        if budget is not None:
+            metrics.update(self.reuse_controller.observe(records, used=epochs, completed=self.actor_optimizer_step))
         if records and getattr(self, "logger", None) is not None:
             self._log_update_records(records, attempts_before, steps_before)
         actor_metrics = {worker_outer_name(k, "actor"): v for k, v in reduce_metrics(output["metrics"]).items()}

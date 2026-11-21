@@ -64,7 +64,15 @@ def teacher_policy_loss(model_output, data, dp_group, *, config, distillation_co
 
 
 def make_worker(
-    path, world_size, *, teacher, full_vocab=False, precision=None, gradient_checkpointing=False, token_budget=6
+    path,
+    world_size,
+    *,
+    teacher,
+    full_vocab=False,
+    precision=None,
+    gradient_checkpointing=False,
+    token_budget=6,
+    optimizer_config=None,
 ):
     """Use the production worker and engine constructors."""
     model = HFModelConfig(
@@ -87,7 +95,7 @@ def make_worker(
         max_token_len_per_gpu=token_budget,
         use_no_sync_for_gradient_accumulation=False,
     )
-    optimizer = None if teacher else FSDPOptimizerConfig(lr=1e-3, total_training_steps=3)
+    optimizer = None if teacher else (optimizer_config or FSDPOptimizerConfig(lr=1e-3, total_training_steps=3))
     worker = TrainingWorker(
         TrainingWorkerConfig(
             model_type="language_model", model_config=model, engine_config=engine, optimizer_config=optimizer

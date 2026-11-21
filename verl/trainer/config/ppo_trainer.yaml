@@ -149,6 +149,14 @@ trainer:
   # Total training steps (can be set explicitly or derived from epochs)
   total_training_steps: null
 
+  # Optional matched successful-update budget (v1 synchronous full-batch OPD).
+  # {total: 640, eval_every: 160, save_every: 160}; requires reuse_control.
+  update_budget: null
+
+  # Driver-side native RKL refresh controller, or {mode: fixed, minimum: 4}.
+  # Adaptive defaults: window=5, patience=2, threshold=0.9, warmup_updates=160.
+  reuse_control: null
+
   # Project name for experiment tracking (e.g., wandb)
   project_name: verl_examples
 

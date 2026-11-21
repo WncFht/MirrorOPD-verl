@@ -62,6 +62,33 @@ def test_retains_two_verified_fp32_snapshots(tmp_path, monkeypatch):
         assert ArtifactStore(root / "export-audit").manifest(complete=True)["metadata"]["native_reload_rkl"] == "passed"
 
 
+def test_runtime_checkpoint_configuration_requests_model_only_export(tmp_path, monkeypatch):
+    model = trainer(tmp_path)
+    model.config.actor_rollout_ref.actor.checkpoint.save_contents = ["model", "optimizer", "extra", "hf_model"]
+    model.config.actor_rollout_ref.actor.checkpoint.load_contents = ["model", "optimizer", "extra"]
+    save, load = model.actor_rollout_wg.save_checkpoint, model.actor_rollout_wg.load_checkpoint
+    calls = []
+
+    def save_model(*args, model_only=False, **kwargs):
+        assert model_only
+        calls.append("save")
+        return save(*args, **kwargs)
+
+    def load_model(*args, model_only=False, **kwargs):
+        assert model_only
+        calls.append("load")
+        return load(*args, **kwargs)
+
+    model.actor_rollout_wg.save_checkpoint = save_model
+    model.actor_rollout_wg.load_checkpoint = load_model
+    bank = ArtifactStore.create(tmp_path / "bank", kind="test", metadata={})
+    bank.finish()
+    reference = {"id": "r", "valid_tokens": 2, "bank": "public_initial", "artifact": str(bank.root)}
+    monkeypatch.setattr(checkpoint, "score_native_rows", lambda *a, **k: ([{"id": "r", "tokens": 2, "rkl_sum": 1}], {}))
+    checkpoint.final_model_export(model, [reference], hidden_size=2, budget=None, destination=tmp_path / "readout")
+    assert calls == ["save", "load"]
+
+
 def test_failed_reload_does_not_publish_snapshot(tmp_path, monkeypatch):
     reference = {"id": "r", "valid_tokens": 2}
     outputs = iter([([{"id": "r", "tokens": 2, "rkl_sum": 1}], {}), ([{"id": "r", "tokens": 2, "rkl_sum": 2}], {})])
@@ -93,3 +120,29 @@ def test_rejects_unpaired_banks_and_unverified_snapshots():
     for extra in ({"fixed_banks": {"public_initial": "a"}}, {"export_outers": [1], "verify_export": False}):
         with pytest.raises(ValueError):
             EvaluationConfig.parse(base | extra)
+
+
+@pytest.mark.parametrize("periodic", [False, True])
+def test_checkpoint_policy_accepts_model_exports_with_runtime_state(periodic):
+    config = OmegaConf.create(
+        {
+            "trainer": {"save_freq": 5 if periodic else -1},
+            "actor_rollout_ref": {
+                "actor": {
+                    "checkpoint": {
+                        "save_contents": ["model", "optimizer", "extra", "hf_model"],
+                        "load_contents": ["model", "optimizer", "extra"],
+                        "preserve_hf_master_weights": True,
+                    }
+                }
+            },
+        }
+    )
+    checkpoint.validate_checkpoint_policy(config, final_export=True)
+    config.actor_rollout_ref.actor.checkpoint.save_contents = ["model", "hf_model"]
+    config.actor_rollout_ref.actor.checkpoint.load_contents = ["model"]
+    if periodic:
+        with pytest.raises(ValueError, match="Periodic runtime"):
+            checkpoint.validate_checkpoint_policy(config, final_export=True)
+    else:
+        checkpoint.validate_checkpoint_policy(config, final_export=True)

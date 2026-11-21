@@ -13,13 +13,14 @@ import torch.distributed as dist
 from torch.distributed.device_mesh import init_device_mesh
 from torch.distributed.tensor import Shard, distribute_tensor
 
-from examples.mirroropd.research.backends.solver_optimizers import FullMatrixMuonAdamW
+from verl.utils.fsdp_optimizers import MuonAdamW as FullMatrixMuonAdamW
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cpu")
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--distributed-mode", choices=("replicated", "owner"), default="replicated")
     args = parser.parse_args()
     torch.set_num_threads(1)
     if args.device == "cuda":
@@ -29,13 +30,17 @@ def main():
     mesh = init_device_mesh(args.device, (world,))
     torch.manual_seed(7)
     cases = []
-    for shape in [(13, 7), (7, 13)]:
+    for shape in [(13, 7), (7, 13), (2, 7)]:
         full_matrix = torch.randn(*shape, device=args.device)
         full_bias = torch.randn(7, device=args.device)
         matrix = torch.nn.Parameter(distribute_tensor(full_matrix.clone(), mesh, [Shard(0)]))
         bias = torch.nn.Parameter(distribute_tensor(full_bias.clone(), mesh, [Shard(0)]))
         ref_matrix, ref_bias = [torch.nn.Parameter(x.clone()) for x in (full_matrix, full_bias)]
-        optimizer = FullMatrixMuonAdamW([("model.layers.0.weight", matrix), ("model.norm.weight", bias)], lr=0.002)
+        optimizer = FullMatrixMuonAdamW(
+            [{"params": [matrix], "use_muon": True}, {"params": [bias], "use_muon": False}],
+            lr=0.002,
+            distributed_mode=args.distributed_mode,
+        )
         muon = torch.optim.Muon([ref_matrix], lr=0.002, weight_decay=0, adjust_lr_fn="match_rms_adamw")
         adam = torch.optim.AdamW([ref_bias], lr=0.002, weight_decay=0, foreach=False)
         errors = []
@@ -58,7 +63,7 @@ def main():
             if step == 1:
                 state = copy.deepcopy(optimizer.state_dict())
                 optimizer = FullMatrixMuonAdamW(
-                    [("model.layers.0.weight", matrix), ("model.norm.weight", bias)], lr=0.1
+                    [{"params": [matrix], "use_muon": True}, {"params": [bias], "use_muon": False}], lr=0.1
                 )
                 optimizer.load_state_dict(state)
         cases.append({"shape": shape, "errors": errors, "partition": optimizer.partition})
@@ -71,6 +76,7 @@ def main():
                     "world_size": world,
                     "cases": cases,
                     "resume": True,
+                    "distributed_mode": args.distributed_mode,
                 },
                 indent=2,
             )
