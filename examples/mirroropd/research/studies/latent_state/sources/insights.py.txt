@@ -1,0 +1,504 @@
+"""Token- and state-level statistics behind the failure of OPD (Qwen3-1.7B-Base from Qwen3-8B), CPU only.
+
+Per rollout bank, sample 0, prompts 0..--max-prompt-index (fused025 / fused075 have prompts 0..63):
+A regime (think tags, length cap, boxed, accuracy, length, first tokens); B veto tokens (teacher near-certain,
+student puts ~no mass on the teacher's choice); C depth profile over absolute token-position bins with a
+rollout bootstrap; D concentration of the reverse-KL mass; E exact 32-gram repetition and looping;
+F teacher-signature geometry against outcome; G scores at the signature states.
+Per-token scores are base student vs teacher on the full vocabulary, except the distilled bank (scored with the
+distilled student). Writes --output/insights.json (4 significant digits) and --output/insights.md.
+"""
+import argparse
+import json
+import sys
+import warnings
+from collections import Counter
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from analyze_latent_map import BANK_ORDER, LABELS, attach_scores, bank_names, load_signatures, load_token_scores  # noqa: E402
+from extract_signatures import load_rows, parse_bank, prompt_index  # noqa: E402
+
+THINK, END_THINK = 151667, 151668
+CAP = 7168                                   # response-token cap of every bank (finish_reason 'length')
+SCORE_METRICS = ("reverse_kl", "forward_kl", "overlap_mass", "teacher_entropy")
+VETO_THRESHOLDS = ((0.01, 0.1), (0.05, 0.5))  # (overlap_mass <, teacher_entropy <); the first is the headline
+DEPTH_EDGES = (0, 1, 16, 128, 512, 2048, CAP + 1)  # bins [0], [1,16), [16,128), [128,512), [512,2048), [2048,7168]
+DEPTH_METRICS = ("reverse_kl", "overlap_mass", "teacher_entropy")
+N_BOOT, BOOT_SEED = 1000, 0
+TOP_FRACTIONS = (0.01, 0.05, 0.10)
+RKL_HIGH = 1.0                                # nats
+LORENZ_POINTS = 50
+NGRAM = 32                                    # repeat = this n-gram already ended at an earlier position
+TAIL = 2048                                   # looping = repeat fraction of the last TAIL tokens > LOOP_THRESHOLD
+LOOP_THRESHOLD = 0.5
+LOOP_WINDOW = 512                             # trailing window of the loop-start detector
+KNN = 10                                      # teacher neighbours from other prompts for d_other
+TOP_FIRST = 5
+STATE_METRICS = ("overlap_mass", "reverse_kl")
+
+RUNS = Path("/tmp/galaxy_srv_disk00/pengchx3/opd-state-experiments/runs")
+LATENT = Path("/extra/zhanglab1/pengchx3/latent-map")
+DEFAULT_SCORES = {"student": RUNS / "fusion-f0/lam0.0/scores", "fused025": RUNS / "fusion-f0/lam0.25/scores",
+                  "fused050": RUNS / "fusion-f0/lam0.5/scores", "fused075": RUNS / "fusion-f0/lam0.75/scores",
+                  "teacher": RUNS / "dense-pair-b0/scores/alpha0.00--on--teacher",
+                  "distilled": LATENT / "banks/distilled/scores"}
+SEPARATELY_SCORED = ("distilled",)
+
+
+def depth_labels(edges=DEPTH_EDGES):
+    """Human-readable bin labels: '[a]' for one position, '[a,b)' otherwise, the last bin closed '[a,b-1]'."""
+    labels = []
+    for i, (a, b) in enumerate(zip(edges[:-1], edges[1:])):
+        labels.append(f"[{a}]" if b == a + 1 else f"[{a},{b - 1}]" if i == len(edges) - 2 else f"[{a},{b})")
+    return labels
+
+
+def load_bank(rollouts_path, scores_dir, max_prompt_index):
+    """Sample-0 rollouts (prompt index <= max_prompt_index, sorted) joined to their per-token scores by prompt index.
+
+    Returns (rows, tokens, scores): tokens holds flat per-token arrays in row order (rollout = row position,
+    pos = token index, and SCORE_METRICS as float64); scores is load_token_scores' dict restricted to these
+    prompts. Asserts every scored length equals the rollout's n_tokens."""
+    rows = load_rows(rollouts_path, max_prompt_index)
+    scores = load_token_scores(scores_dir, metrics=SCORE_METRICS)
+    scores = {k: v for k, v in scores.items() if k <= max_prompt_index}
+    parts = {m: [] for m in SCORE_METRICS}
+    for r in rows:
+        k, n = prompt_index(r["id"]), r["n_tokens"]
+        assert n == len(r["response_ids"]), f"{rollouts_path}: n_tokens != len(response_ids) for {r['id']}"
+        if n == 0:
+            assert k not in scores, f"{scores_dir}: scores for the empty response {r['id']}"
+            continue
+        assert k in scores, f"{scores_dir}: prompt {k} not scored"
+        for m in SCORE_METRICS:
+            assert len(scores[k][m]) == n, f"{scores_dir}: {r['id']} scored {len(scores[k][m])} tokens, rollout {n}"
+            parts[m].append(scores[k][m])
+    assert set(scores) == {prompt_index(r["id"]) for r in rows if r["n_tokens"]}, f"{scores_dir}: extra prompts"
+    lengths = np.array([r["n_tokens"] for r in rows], dtype=np.int64)
+    tokens = {"rollout": np.repeat(np.arange(len(rows)), lengths),
+              "pos": np.concatenate([np.arange(n) for n in lengths]) if len(rows) else np.zeros(0, np.int64)}
+    for m in SCORE_METRICS:
+        tokens[m] = np.concatenate(parts[m]).astype(np.float64) if parts[m] else np.zeros(0)
+    assert len(tokens["pos"]) == lengths.sum() == len(tokens["reverse_kl"])
+    return rows, tokens, scores
+
+
+def _mean(x):
+    """Mean of a nonempty array as float, None when empty."""
+    return float(np.mean(x)) if len(x) else None
+
+
+def regime_stats(rows, tok):
+    """Section A: think-tag use, cap, boxed, accuracy, length, the most common first token ids, token-mean scores."""
+    ids = [r["response_ids"] for r in rows]
+    lengths = np.array([r["n_tokens"] for r in rows])
+    first = Counter(x[0] for x in ids if x)
+    return {"n_rollouts": len(rows), "first_token_think": _mean([bool(x) and x[0] == THINK for x in ids]),
+            "has_think": _mean([THINK in x for x in ids]), "has_end_think": _mean([END_THINK in x for x in ids]),
+            "capped": _mean([r["finish_reason"] == "length" for r in rows]),
+            "boxed": _mean([bool(r["boxed"]) for r in rows]), "accuracy": _mean([bool(r["acc"]) for r in rows]),
+            "mean_length": _mean(lengths), "median_length": float(np.median(lengths)) if len(lengths) else None,
+            "n_tokens": int(lengths.sum()), "top_first_tokens": [[int(t), int(c)] for t, c in first.most_common(TOP_FIRST)],
+            **{f"mean_{m}": _mean(tok[m]) for m in ("reverse_kl", "forward_kl", "overlap_mass")}}
+
+
+def veto_mask(overlap, entropy, overlap_max=VETO_THRESHOLDS[0][0], entropy_max=VETO_THRESHOLDS[0][1]):
+    """Veto tokens: overlap_mass < overlap_max and teacher_entropy < entropy_max (teacher near-certain, student
+    puts ~no mass where the teacher does)."""
+    return (np.asarray(overlap) < overlap_max) & (np.asarray(entropy) < entropy_max)
+
+
+def veto_stats(tok, n_rollouts, overlap_max, entropy_max):
+    """Section B for one threshold pair: share of rollouts vetoed at token 0, and over all tokens / tokens t >= 1
+    the veto rate per 1,000 tokens, the veto tokens' share of the reverse-KL mass and mean rKL on veto vs others."""
+    veto = veto_mask(tok["overlap_mass"], tok["teacher_entropy"], overlap_max, entropy_max)
+    first = tok["pos"] == 0
+    out = {"veto_at_token0_share": float(veto[first].sum() / n_rollouts) if n_rollouts else None}
+    for tag, keep in (("all", np.ones(len(veto), bool)), ("excl_token0", ~first)):
+        v, rkl = veto[keep], tok["reverse_kl"][keep]
+        out[tag] = {"n_tokens": int(keep.sum()), "n_veto": int(v.sum()),
+                    "veto_per_1000": 1000 * float(v.mean()) if len(v) else None,
+                    "rkl_mass_share": float(rkl[v].sum() / rkl.sum()) if rkl.sum() > 0 else None,
+                    "mean_rkl_veto": _mean(rkl[v]), "mean_rkl_nonveto": _mean(rkl[~v])}
+    return out
+
+
+def position_bins(pos, edges=DEPTH_EDGES):
+    """Bin index of each absolute token position: bin b holds edges[b] <= pos < edges[b + 1]."""
+    pos = np.asarray(pos)
+    assert not len(pos) or (pos.min() >= edges[0] and pos.max() < edges[-1]), "position outside the depth bins"
+    return np.searchsorted(np.asarray(edges), pos, side="right") - 1
+
+
+def bootstrap_ratio(sums, counts, n_boot=N_BOOT, seed=BOOT_SEED):
+    """Token-weighted mean sum(sums) / sum(counts) per column and its 95% percentile CI from resampling the rows
+    (rollouts) with replacement n_boot times; sums and counts are [rollouts, bins]. NaN where a bin is empty."""
+    rng = np.random.default_rng(seed)
+    n = len(sums)
+    w = np.stack([np.bincount(rng.integers(0, n, n), minlength=n) for _ in range(n_boot)]).astype(float)
+    with np.errstate(invalid="ignore", divide="ignore"), warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        mean = sums.sum(0) / counts.sum(0)
+        lo, hi = np.nanpercentile((w @ sums) / (w @ counts), [2.5, 97.5], axis=0)
+    return mean, lo, hi
+
+
+def depth_profile(tok, n_rollouts, n_boot=N_BOOT, seed=BOOT_SEED, edges=DEPTH_EDGES):
+    """Section C: per depth bin the token and rollout counts and, for DEPTH_METRICS, the token-weighted mean with a
+    rollout-bootstrap 95% CI (the same resamples for every metric)."""
+    nb = len(edges) - 1
+    idx = tok["rollout"] * nb + position_bins(tok["pos"], edges)
+    counts = np.bincount(idx, minlength=n_rollouts * nb).reshape(n_rollouts, nb).astype(float)
+    out = {"bins": depth_labels(edges), "n_tokens": counts.sum(0).astype(int).tolist(),
+           "n_rollouts": (counts > 0).sum(0).tolist()}
+    for m in DEPTH_METRICS:
+        sums = np.bincount(idx, weights=tok[m], minlength=n_rollouts * nb).reshape(n_rollouts, nb)
+        mean, lo, hi = bootstrap_ratio(sums, counts, n_boot, seed)
+        out[m] = {"mean": mean.tolist(), "ci_low": lo.tolist(), "ci_high": hi.tolist()}
+    return out
+
+
+def _top_k(fraction, n):
+    """Number of items in the top `fraction` of n (ceil, guarded against float error such as 0.05 * 100)."""
+    return int(np.ceil(fraction * n - 1e-9))
+
+
+def top_share(values, fraction):
+    """Share of sum(values) carried by the ceil(fraction * n) largest values."""
+    v = np.sort(np.asarray(values, float))[::-1]
+    return float(v[:_top_k(fraction, len(v))].sum() / v.sum()) if len(v) and v.sum() > 0 else None
+
+
+def lorenz(values, n_points=LORENZ_POINTS):
+    """Concentration curve: x = i / n_points (i = 1..n_points) is the fraction of tokens taken in descending order
+    of value, y the share of sum(values) they carry."""
+    v = np.sort(np.asarray(values, float))[::-1]
+    x = np.arange(1, n_points + 1) / n_points
+    if not len(v) or v.sum() <= 0:
+        return x.tolist(), [None] * n_points
+    k = np.maximum([_top_k(f, len(v)) for f in x], 1)
+    return x.tolist(), (np.cumsum(v)[k - 1] / v.sum()).tolist()
+
+
+def concentration(tok):
+    """Section D: bank-pooled share of the reverse-KL mass in the top 1/5/10% of tokens and share of tokens with
+    rKL > RKL_HIGH, over all tokens and without token 0; Lorenz curve without token 0."""
+    rkl, later = tok["reverse_kl"], tok["pos"] > 0
+    out = {}
+    for tag, v in (("all", rkl), ("excl_token0", rkl[later])):
+        out[tag] = {f"top{round(100 * q)}pct_share": top_share(v, q) for q in TOP_FRACTIONS}
+        out[tag]["share_tokens_rkl_gt1"] = _mean(v > RKL_HIGH)
+    x, y = lorenz(rkl[later])
+    out["lorenz_excl_token0"] = {"x": x, "y": y}
+    return out
+
+
+def repeat_flags(ids, n=NGRAM):
+    """flags[t] = True iff the n-gram ids[t-n+1 .. t] (t >= n-1) already ended at an earlier position of the same
+    sequence (exact: a set of tuples; overlapping occurrences count)."""
+    ids, seen = tuple(ids), set()
+    flags = np.zeros(len(ids), bool)
+    for t in range(n - 1, len(ids)):
+        gram = ids[t - n + 1:t + 1]
+        if gram in seen:
+            flags[t] = True
+        else:
+            seen.add(gram)
+    return flags
+
+
+def loop_start(flags, window=LOOP_WINDOW, threshold=LOOP_THRESHOLD):
+    """First position t (end of a trailing window flags[t-window+1 .. t]) from which the window's repeat fraction
+    stays > threshold through the last token; None if the final window is not above it or the sequence is
+    shorter than the window. The repetition itself begins up to ~window tokens earlier."""
+    f = np.asarray(flags, float)
+    if len(f) < window:
+        return None
+    c = np.concatenate([[0.0], np.cumsum(f)])
+    frac = (c[window:] - c[:-window]) / window          # frac[i]: window ending at position i + window - 1
+    bad = np.flatnonzero(frac <= threshold)
+    i = bad[-1] + 1 if len(bad) else 0
+    return None if i == len(frac) else int(i + window - 1)
+
+
+def rollout_repetition(ids):
+    """Repeat flags of one response and its summary: repeat fraction overall and in the last TAIL tokens (None if
+    shorter), looping (tail fraction > LOOP_THRESHOLD; responses shorter than TAIL never loop), loop start."""
+    flags = repeat_flags(ids)
+    tail = float(flags[-TAIL:].mean()) if len(flags) >= TAIL else None
+    return flags, {"repeat_fraction": float(flags.mean()) if len(flags) else 0.0, "tail_repeat_fraction": tail,
+                   "looping": tail is not None and tail > LOOP_THRESHOLD, "loop_start": loop_start(flags)}
+
+
+def repetition_stats(rows, tok, per):
+    """Section E for one bank: looping shares (all, capped), scores on repeat vs non-repeat tokens, median loop
+    start (over rollouts with one, and over looping rollouts)."""
+    looping = np.array([p["looping"] for p in per], bool)
+    capped = np.array([r["finish_reason"] == "length" for r in rows], bool)
+    rep = tok["repeat"]
+    starts = [p["loop_start"] for p in per if p["loop_start"] is not None]
+    starts_looping = [p["loop_start"] for p in per if p["looping"] and p["loop_start"] is not None]
+    med = lambda s: float(np.median(s)) if s else None
+    return {"mean_repeat_fraction": _mean([p["repeat_fraction"] for p in per]), "repeat_token_share": _mean(rep),
+            "n_long": int(sum(r["n_tokens"] >= TAIL for r in rows)), "n_looping": int(looping.sum()),
+            "looping_share": _mean(looping), "n_capped": int(capped.sum()),
+            "looping_share_of_capped": _mean(looping[capped]),
+            "reverse_kl_repeat": _mean(tok["reverse_kl"][rep]), "reverse_kl_nonrepeat": _mean(tok["reverse_kl"][~rep]),
+            "overlap_repeat": _mean(tok["overlap_mass"][rep]), "overlap_nonrepeat": _mean(tok["overlap_mass"][~rep]),
+            "median_loop_start": med(starts), "n_loop_start": len(starts),
+            "median_loop_start_looping": med(starts_looping), "n_loop_start_looping": len(starts_looping)}
+
+
+def bank_insights(rows, tok, n_boot=N_BOOT, seed=BOOT_SEED):
+    """Sections A-E for one bank (rows and tokens from load_bank)."""
+    reps = [rollout_repetition(r["response_ids"]) for r in rows]
+    tok = dict(tok, repeat=np.concatenate([f for f, _ in reps]) if reps else np.zeros(0, bool))
+    assert len(tok["repeat"]) == len(tok["pos"])
+    return {"regime": regime_stats(rows, tok),
+            "veto": {f"overlap<{o:g},entropy<{e:g}": veto_stats(tok, len(rows), o, e) for o, e in VETO_THRESHOLDS},
+            "depth": depth_profile(tok, len(rows), n_boot, seed), "concentration": concentration(tok),
+            "repetition": repetition_stats(rows, tok, [p for _, p in reps])}
+
+
+def teacher_distances(features, prompt, is_teacher, k=KNN):
+    """Cosine distances (L2-normalised features) to the teacher's states. d_other: mean distance to the k nearest
+    teacher states from OTHER prompts; d_same: min distance to the teacher states of the SAME prompt (NaN if none;
+    0 for a teacher state itself)."""
+    f = features / np.linalg.norm(features, axis=1, keepdims=True)
+    dist = 1.0 - f @ f[is_teacher].T
+    same = prompt[:, None] == prompt[is_teacher][None, :]
+    other = np.where(same, np.inf, dist)
+    d_other = np.partition(other, k - 1, axis=1)[:, :k].mean(1)
+    assert np.isfinite(d_other).all(), f"fewer than {k} teacher states from other prompts"
+    d_same = np.where(same.any(1), np.where(same, dist, np.inf).min(1), np.nan)
+    return d_other, d_same
+
+
+def per_rollout(meta, mask, values):
+    """Prompt indices of the masked states' rollouts and the per-rollout mean of values (one bank)."""
+    prompts, inv = np.unique(meta["prompt_index"][mask], return_inverse=True)
+    return prompts, np.bincount(inv, weights=values[mask]) / np.bincount(inv)
+
+
+def geometry_stats(meta, d_other, d_same, at_states, rollout_rkl, names, teacher="teacher"):
+    """Section F: per bank and state rank j the mean d_other / d_same; per bank the rollout-mean d_other of correct
+    vs incorrect rollouts (Mann-Whitney, two-sided) and its Spearman correlation with the rollout's token-mean
+    reverse KL (and with the mean rKL at its signature states)."""
+    from scipy.stats import mannwhitneyu, spearmanr
+    out = {}
+    for b in names:
+        mb = meta["bank"] == b
+        by_j = {}
+        for j in np.unique(meta["state_rank"][mb]):
+            m = mb & (meta["state_rank"] == j)
+            by_j[str(int(j))] = {"n": int(m.sum()), "d_other": _mean(d_other[m]),
+                                 "d_same": None if b == teacher else _mean(d_same[m])}
+        prompts, r_other = per_rollout(meta, mb, d_other)
+        _, r_acc = per_rollout(meta, mb, meta["acc"].astype(float))
+        _, r_state_rkl = per_rollout(meta, mb, at_states["reverse_kl"])
+        r_rkl = np.array([rollout_rkl[b][int(k)] for k in prompts])
+        good, bad = r_other[r_acc > 0.5], r_other[r_acc <= 0.5]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            p = float(mannwhitneyu(good, bad, alternative="two-sided").pvalue) if len(good) and len(bad) else None
+            rho = tuple(spearmanr(r_other, r_rkl)) if len(prompts) > 2 else (None, None)
+            rho_s = tuple(spearmanr(r_other, r_state_rkl)) if len(prompts) > 2 else (None, None)
+        out[b] = {"by_j": by_j, "d_other_correct": _mean(good), "n_correct": len(good),
+                  "d_other_incorrect": _mean(bad), "n_incorrect": len(bad), "mannwhitney_p": p,
+                  "spearman_d_other_vs_rollout_rkl": rho[0], "spearman_p": rho[1],
+                  "spearman_d_other_vs_state_rkl": rho_s[0], "spearman_state_p": rho_s[1]}
+    return out
+
+
+def state_scores(meta, at_states, names):
+    """Section G: mean overlap_mass and reverse_kl at the signature states (token index response_action), per bank
+    over all states and per state rank j."""
+    out = {}
+    for b in names:
+        mb = meta["bank"] == b
+        row = {"all": {"n": int(mb.sum()), **{m: _mean(at_states[m][mb]) for m in STATE_METRICS}}, "by_j": {}}
+        for j in np.unique(meta["state_rank"][mb]):
+            m = mb & (meta["state_rank"] == j)
+            row["by_j"][str(int(j))] = {"n": int(m.sum()), **{k: _mean(at_states[k][m]) for k in STATE_METRICS}}
+        out[b] = row
+    return out
+
+
+def sig(x, digits=4):
+    """Recursively round floats to `digits` significant digits (NaN / inf -> None); ints, bools, strings kept."""
+    if isinstance(x, dict):
+        return {str(k): sig(v, digits) for k, v in x.items()}
+    if isinstance(x, np.ndarray):
+        return sig(x.tolist(), digits)
+    if isinstance(x, (list, tuple)):
+        return [sig(v, digits) for v in x]
+    if isinstance(x, (bool, np.bool_)):
+        return bool(x)
+    if isinstance(x, (int, np.integer)):
+        return int(x)
+    if isinstance(x, (float, np.floating)):
+        return float(f"{float(x):.{digits}g}") if np.isfinite(x) else None
+    return x
+
+
+def fmt(v):
+    """Table cell: 4 significant digits, '–' for None."""
+    return "–" if v is None else str(v) if isinstance(v, (bool, int, str)) else f"{v:.4g}"
+
+
+def table(header, rows):
+    """Markdown table lines."""
+    return ["| " + " | ".join(header) + " |", "|" + "---|" * len(header),
+            *("| " + " | ".join(fmt(c) for c in r) + " |" for r in rows)]
+
+
+def write_markdown(res):
+    """Readable tables of every section from the (rounded) result dict."""
+    banks, s = res["banks"], res["settings"]
+    lab = lambda b: LABELS.get(b, b) + (" *" if b in s["separately_scored"] else "")
+    vk = list(next(iter(banks.values()))["veto"])
+    bins = next(iter(banks.values()))["depth"]["bins"]
+    L = [f"# OPD failure insights: token and state statistics\n",
+         f"Sample 0 of each bank, prompts 0..{s['max_prompt_index']} (fused λ=0.25 / 0.75: "
+         f"0..{min(s['max_prompt_index'], 63)}). Per-token scores: "
+         "base student vs teacher, full vocabulary; * = scored with its own (distilled) student. rKL = reverse KL "
+         f"(nats), overlap = overlap_mass. Signatures: `{s['signatures']}` (prompt-end state dropped).\n",
+         "## A. Regime\n",
+         *table(["bank", "n", "token 0 = `<think>`", "`<think>` anywhere", "`</think>` anywhere", "capped", "boxed",
+                 "accuracy", "mean len", "median len", "mean rKL", "mean fKL", "mean overlap",
+                 f"top-{TOP_FIRST} first token ids (count)"],
+                [[lab(b), a["n_rollouts"], a["first_token_think"], a["has_think"], a["has_end_think"], a["capped"],
+                  a["boxed"], a["accuracy"], a["mean_length"], a["median_length"], a["mean_reverse_kl"],
+                  a["mean_forward_kl"], a["mean_overlap_mass"], ", ".join(f"{t} ({c})" for t, c in a["top_first_tokens"])]
+                 for b, a in ((b, v["regime"]) for b, v in banks.items())]), ""]
+    for key in vk:
+        L += [f"## B. Veto tokens: {key.replace(',', ', ')}{' (headline)' if key == vk[0] else ' (sensitivity)'}\n",
+              *table(["bank", "veto at token 0 (share of rollouts)", "veto / 1k tok", "rKL mass on veto",
+                      "mean rKL veto", "mean rKL non-veto", "veto / 1k tok (t≥1)", "rKL mass on veto (t≥1)",
+                      "mean rKL veto (t≥1)", "mean rKL non-veto (t≥1)"],
+                     [[lab(b), v["veto_at_token0_share"], *(v[t][c] for t in ("all", "excl_token0") for c in
+                       ("veto_per_1000", "rkl_mass_share", "mean_rkl_veto", "mean_rkl_nonveto"))]
+                      for b, v in ((b, x["veto"][key]) for b, x in banks.items())]), ""]
+    L += ["## C. Depth profile (absolute token position; token-weighted mean [95% bootstrap CI over rollouts, "
+          f"{s['n_boot']} resamples, seed {s['seed']}])\n",
+          *table(["bank", *(f"{x} tokens / rollouts" for x in bins)],
+                 [[lab(b), *(f"{n} / {r}" for n, r in zip(v["depth"]["n_tokens"], v["depth"]["n_rollouts"]))]
+                  for b, v in banks.items()]), ""]
+    for m in DEPTH_METRICS:
+        cell = lambda d, i: "–" if d["mean"][i] is None else f"{fmt(d['mean'][i])} [{fmt(d['ci_low'][i])}, {fmt(d['ci_high'][i])}]"
+        L += [f"### {m}\n", *table(["bank", *bins], [[lab(b), *(cell(v["depth"][m], i) for i in range(len(bins)))]
+                                                      for b, v in banks.items()]), ""]
+    pick = [0, 1, 4, 9, 24, 49]  # Lorenz points x = 0.02, 0.04, 0.1, 0.2, 0.5, 1.0
+    x = next(iter(banks.values()))["concentration"]["lorenz_excl_token0"]["x"]
+    L += ["## D. Concentration of the reverse-KL mass (bank-pooled tokens)\n",
+          *table(["bank", *(f"top {round(100 * q)}%" for q in TOP_FRACTIONS), "tokens rKL > 1",
+                  *(f"top {round(100 * q)}% (t≥1)" for q in TOP_FRACTIONS), "tokens rKL > 1 (t≥1)"],
+                 [[lab(b), *(c[t][k] for t in ("all", "excl_token0") for k in
+                   [*(f"top{round(100 * q)}pct_share" for q in TOP_FRACTIONS), "share_tokens_rkl_gt1"])]
+                  for b, c in ((b, v["concentration"]) for b, v in banks.items())]),
+          "", "Lorenz curve without token 0 (share of rKL mass in the top x of tokens; 50 points in insights.json):\n",
+          *table(["bank", *(f"x={x[i]:g}" for i in pick)],
+                 [[lab(b), *(v["concentration"]["lorenz_excl_token0"]["y"][i] for i in pick)] for b, v in banks.items()]),
+          ""]
+    L += [f"## E. Repetition and looping (exact {NGRAM}-gram repeats; looping = repeat fraction of the last {TAIL} "
+          f"tokens > {LOOP_THRESHOLD}; loop start = first t from which the trailing {LOOP_WINDOW}-token repeat "
+          f"fraction stays > {LOOP_THRESHOLD})\n",
+          *table(["bank", "mean repeat frac", "repeat tokens", "rollouts ≥2048", "looping (n)", "looping share",
+                  "capped (n)", "looping share of capped", "rKL repeat", "rKL non-repeat", "overlap repeat",
+                  "overlap non-repeat", "median loop start (n)", "median loop start, looping (n)"],
+                 [[lab(b), e["mean_repeat_fraction"], e["repeat_token_share"], e["n_long"], e["n_looping"],
+                   e["looping_share"], e["n_capped"], e["looping_share_of_capped"], e["reverse_kl_repeat"],
+                   e["reverse_kl_nonrepeat"], e["overlap_repeat"], e["overlap_nonrepeat"],
+                   f"{fmt(e['median_loop_start'])} ({e['n_loop_start']})",
+                   f"{fmt(e['median_loop_start_looping'])} ({e['n_loop_start_looping']})"]
+                  for b, e in ((b, v["repetition"]) for b, v in banks.items())]), ""]
+    geo, js = res["geometry"], [str(j) for j in range(1, 8)]
+    get = lambda d, j, k: d["by_j"].get(j, {}).get(k)
+    L += [f"## F. Geometry vs outcome (teacher final-layer signatures, cosine distance)\n",
+          f"d_other = mean distance to the {KNN} nearest teacher states from other prompts; "
+          "d_same = min distance to the teacher's states on the same prompt.\n", "### d_other by state rank j\n",
+          *table(["bank", *(f"j={j}" for j in js)], [[lab(b), *(get(g, j, "d_other") for j in js)] for b, g in geo.items()]),
+          "", "### d_same by state rank j\n",
+          *table(["bank", *(f"j={j}" for j in js)], [[lab(b), *(get(g, j, "d_same") for j in js)]
+                                                     for b, g in geo.items() if b != s["teacher_bank"]]),
+          "", "### Rollout-mean d_other vs outcome and divergence\n",
+          *table(["bank", "d_other correct (n)", "d_other incorrect (n)", "Mann-Whitney p",
+                  "Spearman ρ vs rollout token-mean rKL (p)", "Spearman ρ vs mean rKL at its states (p)"],
+                 [[lab(b), f"{fmt(g['d_other_correct'])} ({g['n_correct']})", f"{fmt(g['d_other_incorrect'])} ({g['n_incorrect']})",
+                   g["mannwhitney_p"], f"{fmt(g['spearman_d_other_vs_rollout_rkl'])} ({fmt(g['spearman_p'])})",
+                   f"{fmt(g['spearman_d_other_vs_state_rkl'])} ({fmt(g['spearman_state_p'])})"] for b, g in geo.items()]), ""]
+    st = res["state_scores"]
+    L += ["## G. Scores at the signature states (token index response_action)\n"]
+    for m in STATE_METRICS:
+        L += [f"### {m}\n", *table(["bank", "all states (n)", *(f"j={j}" for j in js)],
+                                   [[lab(b), f"{fmt(g['all'][m])} ({g['all']['n']})", *(get(g, j, m) for j in js)]
+                                    for b, g in st.items()]), ""]
+    L += ["## Checks\n", *(f"- {k}: {v}" for k, v in res["checks"].items()), ""]
+    return "\n".join(L)
+
+
+def main():
+    """CLI: load the banks and signatures, compute sections A-G, write insights.json and insights.md."""
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--output", type=Path, required=True)
+    ap.add_argument("--banks-dir", type=Path, default=LATENT / "banks", help="<dir>/<bank>/rollouts.jsonl")
+    ap.add_argument("--scores", type=parse_bank, action="append", default=[],
+                    help="NAME=SCORES_DIR, overrides the default for that bank")
+    ap.add_argument("--signatures", type=Path, default=LATENT / "signatures/relative8.npz")
+    ap.add_argument("--banks", nargs="+", default=BANK_ORDER)
+    ap.add_argument("--teacher-bank", default="teacher")
+    ap.add_argument("--max-prompt-index", type=int, default=127)
+    ap.add_argument("--bootstrap", type=int, default=N_BOOT)
+    ap.add_argument("--seed", type=int, default=BOOT_SEED)
+    args = ap.parse_args()
+    if (args.output / "insights.json").exists():
+        raise FileExistsError(f"refusing to overwrite {args.output / 'insights.json'}")
+    scores_dirs = {**DEFAULT_SCORES, **dict(args.scores)}
+    assert args.teacher_bank in args.banks, f"teacher bank {args.teacher_bank!r} not in --banks"
+
+    banks, scores, rollout_rkl, checks = {}, {}, {}, {}
+    for b in args.banks:
+        rows, tok, scores[b] = load_bank(args.banks_dir / b / "rollouts.jsonl", scores_dirs[b], args.max_prompt_index)
+        n_tok = sum(r["n_tokens"] for r in rows)
+        checks[f"{b}: scored tokens == sum n_tokens"] = f"{len(tok['pos']) == n_tok} ({len(tok['pos'])} vs {n_tok})"
+        per = np.bincount(tok["rollout"], weights=tok["reverse_kl"], minlength=len(rows)) / \
+            np.maximum(np.bincount(tok["rollout"], minlength=len(rows)), 1)
+        rollout_rkl[b] = {prompt_index(r["id"]): float(v) for r, v in zip(rows, per) if r["n_tokens"]}
+        banks[b] = bank_insights(rows, tok, args.bootstrap, args.seed)
+        print(f"[{b}] {len(rows)} rollouts, {n_tok} tokens", flush=True)
+
+    features, meta = load_signatures(args.signatures, drop_prompt_state=True)
+    keep = np.isin(meta["bank"], args.banks) & (meta["prompt_index"] <= args.max_prompt_index)
+    features, meta = features[keep], {k: v[keep] for k, v in meta.items()}
+    names = bank_names(meta["bank"])
+    assert set(names) == set(args.banks), f"signature banks {names} vs {args.banks}"
+    at_states = attach_scores(meta, scores, metrics=STATE_METRICS)
+    d_other, d_same = teacher_distances(features, meta["prompt_index"], meta["bank"] == args.teacher_bank)
+    geometry = geometry_stats(meta, d_other, d_same, at_states, rollout_rkl, names, args.teacher_bank)
+    states = state_scores(meta, at_states, names)
+    for b in ("student", "distilled"):
+        if b in states:
+            checks[f"{b}: mean overlap / rKL at signature states"] = \
+                f"{states[b]['all']['overlap_mass']:.4g} / {states[b]['all']['reverse_kl']:.4g}"
+    checks["signature states"] = int(len(meta["bank"]))
+
+    settings = {"banks_dir": str(args.banks_dir), "scores": {b: str(scores_dirs[b]) for b in args.banks},
+                "signatures": str(args.signatures), "teacher_bank": args.teacher_bank,
+                "max_prompt_index": args.max_prompt_index, "n_boot": args.bootstrap, "seed": args.seed,
+                "separately_scored": [b for b in SEPARATELY_SCORED if b in args.banks],
+                "veto_thresholds": VETO_THRESHOLDS, "depth_edges": DEPTH_EDGES, "top_fractions": TOP_FRACTIONS,
+                "rkl_high": RKL_HIGH, "ngram": NGRAM, "tail": TAIL, "loop_threshold": LOOP_THRESHOLD,
+                "loop_window": LOOP_WINDOW, "knn": KNN, "think_ids": [THINK, END_THINK]}
+    res = sig({"settings": settings, "banks": banks, "geometry": geometry, "state_scores": states, "checks": checks})
+    args.output.mkdir(parents=True, exist_ok=True)
+    (args.output / "insights.json").write_text(json.dumps(res, indent=1, ensure_ascii=False) + "\n")
+    md = write_markdown(res)
+    (args.output / "insights.md").write_text(md)
+    print(md, flush=True)
+
+
+if __name__ == "__main__":
+    main()

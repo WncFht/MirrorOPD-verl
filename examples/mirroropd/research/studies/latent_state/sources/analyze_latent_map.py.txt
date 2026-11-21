@@ -1,0 +1,445 @@
+"""Latent state map (CPU): B.1 state coverage and a 2-D map of teacher signatures across rollout banks.
+
+Input: extract_signatures.py output (teacher last_hidden_state at 8 relative states per rollout). Two references:
+- pooled: PCA(50) + KMeans(K=200, n_init=10, seed) fit on an equal number of states per bank (larger banks
+  subsampled, seeded), then every state assigned; drives the map, cluster occupancy, JS-to-teacher, cluster stats.
+- teacher-anchored (the paper's anchoring, teacher in the role of full-data OPD): fit on teacher states of prompts
+  < --reference-prompts; teacher states of the remaining prompts are 'teacher (held-out)'. Coverage = fraction of the
+  K clusters reached, on an equal budget (--draw-prompts prompts per bank, --draws draws; the banks on reference
+  prompts share each draw, the held-out teacher draws from its own prompts), for K in --ks. Off-reference check:
+  mean cosine distance to the 10 nearest reference states in the unreduced space.
+Optional --scores NAME=DIR attaches per-state overlap_mass / reverse_kl at token index response_action (token t of
+a scored response is the state before response token t, the same state as hidden index prompt_tokens - 1 + t).
+"""
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # oneshot/
+from state_geometry import ReferenceGeometry  # noqa: E402
+from extract_signatures import parse_bank, prompt_index  # noqa: E402
+
+BANK_ORDER = ["student", "fused025", "fused050", "fused075", "teacher", "distilled"]
+LABELS = {"student": "student (λ=0)", "fused025": "fused λ=0.25", "fused050": "fused λ=0.5",
+          "fused075": "fused λ=0.75", "teacher": "teacher", "distilled": "distilled (OPD, 120 upd.)"}
+COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
+MARKERS = ["o", "s", "^", "D", "v", "P", "X", "h"]
+J_RAMP = ["#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#1c5cab", "#104281", "#0d366b"]
+GREY = "#d6d5d0"
+METRICS = ("overlap_mass", "reverse_kl")
+META = ["bank", "prompt_index", "state_rank", "response_action", "hidden_index", "prompt_tokens",
+        "response_tokens", "acc", "finish_reason"]
+
+
+def load_signatures(path, drop_prompt_state=False):
+    """Features (float32) and metadata arrays; optionally drop the prompt-end state (response_action 0)."""
+    with np.load(path) as z:
+        features, meta = z["features"].astype(np.float32), {k: z[k] for k in META}
+    if drop_prompt_state:
+        keep = meta["response_action"] > 0
+        features, meta = features[keep], {k: v[keep] for k, v in meta.items()}
+    return features, meta
+
+
+def load_token_scores(scores_dir, metrics=METRICS):
+    """{prompt_index: {metric: per-token array}} for sample 0 of a scored bank (analyze_f0.load's join:
+    responses.jsonl rows follow the bank order with empty responses skipped, aligned with tokens.npz offsets)."""
+    scores_dir = Path(scores_dir)
+    rows = [json.loads(line) for line in (scores_dir / "responses.jsonl").read_text().splitlines()]
+    with np.load(scores_dir / "tokens.npz") as z:
+        arrays, offsets = {m: z[m] for m in metrics}, z["offsets"]
+    assert len(offsets) == len(rows) + 1, f"{scores_dir}: {len(rows)} rows vs {len(offsets) - 1} offsets"
+    out = {}
+    for r, a, b in zip(rows, offsets[:-1], offsets[1:]):
+        if r["sample"] == 0:
+            k = prompt_index(r["id"])
+            assert k not in out and b - a == r["n_tokens"], (scores_dir, r["id"])
+            out[k] = {m: arrays[m][a:b] for m in metrics}
+    return out
+
+
+def attach_scores(meta, scores_by_bank, metrics=METRICS):
+    """Per-state metric at token index response_action of its own response (NaN for unscored banks)."""
+    out = {m: np.full(len(meta["bank"]), np.nan) for m in metrics}
+    for name, scores in scores_by_bank.items():
+        idx = np.flatnonzero(meta["bank"] == name)
+        assert len(idx), f"--scores given for {name}, which has no states"
+        for i in idx:
+            k, a = int(meta["prompt_index"][i]), int(meta["response_action"][i])
+            assert k in scores, f"{name}: prompt {k} missing from its scores"
+            for m in metrics:
+                assert len(scores[k][m]) == meta["response_tokens"][i], f"{name} prompt {k}: length mismatch"
+                out[m][i] = scores[k][m][a]
+    return out
+
+
+def bank_names(bank):
+    """Banks present, canonical order first, then any others in order of appearance."""
+    present = list(dict.fromkeys(bank.tolist()))
+    return [b for b in BANK_ORDER if b in present] + [b for b in present if b not in BANK_ORDER]
+
+
+def balanced_indices(bank, names, seed=42):
+    """Equal number of states per bank (the smallest bank's size), sampled without replacement, seeded."""
+    rng = np.random.default_rng(seed)
+    pools = [np.flatnonzero(bank == b) for b in names]
+    n = min(len(p) for p in pools)
+    return np.concatenate([np.sort(rng.choice(p, n, replace=False)) for p in pools])
+
+
+def occupancy(labels, k):
+    """Share of states in each of the k clusters."""
+    return np.bincount(labels, minlength=k) / max(len(labels), 1)
+
+
+def js_divergence(p, q):
+    """Jensen-Shannon divergence in bits (0 = identical, 1 = disjoint support)."""
+    p, q = np.asarray(p, float) / np.sum(p), np.asarray(q, float) / np.sum(q)
+    m = (p + q) / 2
+    kl = lambda x: float(np.sum(x[x > 0] * np.log2(x[x > 0] / m[x > 0])))
+    return (kl(p) + kl(q)) / 2
+
+
+def coverage(labels, k):
+    """Cov(S): fraction of the k reference clusters reached by the states' labels."""
+    return np.unique(labels).size / k
+
+
+def coverage_draws(labels, prompt, groups, k, n_prompts=32, n_draws=30, seed=42):
+    """Equal-budget coverage: per draw, n_prompts prompts from each group's pool (groups with the same pool share
+    the draw); groups = {name: (state mask, pool of prompt indices)}. Returns {name: {mean, sd, values}}."""
+    rng = np.random.default_rng(seed)
+    values = {g: [] for g in groups}
+    for _ in range(n_draws):
+        chosen = {}
+        for g, (mask, pool) in groups.items():
+            key = tuple(pool)
+            if key not in chosen:
+                chosen[key] = rng.choice(np.asarray(pool), n_prompts, replace=False)
+            values[g].append(coverage(labels[mask & np.isin(prompt, chosen[key])], k))
+    return {g: {"mean": float(np.mean(v)), "sd": float(np.std(v, ddof=1)) if len(v) > 1 else 0.0,
+                "values": [float(x) for x in v]} for g, v in values.items()}
+
+
+def cluster_means(labels, values, mask, k):
+    """Per-cluster mean of values over masked, finite states (NaN where none)."""
+    m = mask & np.isfinite(values)
+    n = np.bincount(labels[m], minlength=k)
+    s = np.bincount(labels[m], weights=values[m], minlength=k)
+    return np.where(n > 0, s / np.maximum(n, 1), np.nan), n
+
+
+def cluster_table(labels, bank, names, k, scores, separate):
+    """Per pooled cluster: counts and shares per bank, base-student-scored means, separately scored means,
+    dominant bank (largest share of its own states)."""
+    counts = np.stack([np.bincount(labels[bank == b], minlength=k) for b in names])
+    shares = counts / counts.sum(1, keepdims=True)
+    base = ~np.isin(bank, separate)
+    table = {"counts": counts, "shares": shares, "dominant": shares.argmax(0),
+             "dominant_share": shares.max(0) / np.maximum(shares.sum(0), 1e-12)}
+    for m, v in scores.items():
+        table[f"{m}_base"], table["n_scored_base"] = cluster_means(labels, v, base, k)
+        for b in separate:
+            table[f"{m}_{b}"], _ = cluster_means(labels, v, bank == b, k)
+    return table
+
+
+def prompt_end_check(features, meta, names):
+    """Max cosine distance, over prompts, between the prompt-end states (action 0) of different banks
+    (identical prefixes, so ~0 up to bf16 kernel noise)."""
+    worst = 0.0
+    start = meta["response_action"] == 0
+    for k in np.unique(meta["prompt_index"][start]):
+        rows = np.flatnonzero(start & (meta["prompt_index"] == k))
+        if len(rows) > 1:
+            f = features[rows] / np.linalg.norm(features[rows], axis=1, keepdims=True)
+            worst = max(worst, float(1 - (f @ f[0]).min()))
+    return worst
+
+
+def per_trajectory(meta, mask):
+    """First-state index of each (prompt) trajectory among the masked states."""
+    rows = np.flatnonzero(mask)
+    _, first = np.unique(meta["prompt_index"][rows], return_index=True)
+    return rows[first]
+
+
+def pick_trajectory_prompts(meta, names, n=4, below=64):
+    """Prompts < below with states in every bank, preferring the most accuracy disagreement across banks."""
+    candidates = []
+    for k in np.unique(meta["prompt_index"][meta["prompt_index"] < below]):
+        accs = [meta["acc"][(meta["bank"] == b) & (meta["prompt_index"] == k)] for b in names]
+        if all(len(a) for a in accs):
+            right = sum(bool(a[0]) for a in accs)
+            candidates.append((-min(right, len(names) - right), int(k)))
+    return [k for _, k in sorted(candidates)[:n]]
+
+
+def _r(x, nd=4):
+    """Round for JSON; NaN/inf -> None."""
+    x = float(x)
+    return round(x, nd) if np.isfinite(x) else None
+
+
+def plot_all(out, xy, meta, names, table, cov, js, traj_prompts, sort_metric):
+    """Write the four PNG figures."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import BoundaryNorm, LinearSegmentedColormap, ListedColormap
+    plt.rcParams.update({"font.size": 10, "axes.edgecolor": "#c3c2b7", "axes.labelcolor": "#52514e",
+                         "xtick.color": "#898781", "ytick.color": "#898781", "axes.titlesize": 11,
+                         "figure.facecolor": "#fcfcfb", "axes.facecolor": "#fcfcfb"})
+    color = {b: COLORS[i % len(COLORS)] for i, b in enumerate(names)}
+    marker = {b: MARKERS[i % len(MARKERS)] for i, b in enumerate(names)}
+
+    def blank(ax):
+        ax.set_xticks([]); ax.set_yticks([])
+
+    # (i) small multiples, coloured by state rank along the response
+    cols = 3
+    rows = -(-len(names) // cols)
+    fig, axes = plt.subplots(rows, cols, figsize=(4.2 * cols, 3.9 * rows), squeeze=False)
+    jmax = int(meta["state_rank"].max())
+    cmap = ListedColormap(J_RAMP[:jmax + 1] if jmax < len(J_RAMP) else J_RAMP)
+    norm = BoundaryNorm(np.arange(-0.5, jmax + 1.5), cmap.N)
+    for ax, b in zip(axes.flat, names):
+        ax.scatter(xy[:, 0], xy[:, 1], s=3, c=GREY, linewidths=0, rasterized=True)
+        m = meta["bank"] == b
+        sc = ax.scatter(xy[m, 0], xy[m, 1], s=9, c=meta["state_rank"][m], cmap=cmap, norm=norm, linewidths=0)
+        ax.set_title(f"{LABELS.get(b, b)}  (n={m.sum()})"); blank(ax)
+    for ax in axes.flat[len(names):]:
+        ax.axis("off")
+    cb = fig.colorbar(sc, ax=axes, shrink=0.6, ticks=range(jmax + 1))
+    cb.set_label("state rank j along the response (0 = prompt end)")
+    fig.suptitle("Teacher signatures, t-SNE of pooled PCA-50 (grey: all banks)")
+    fig.savefig(out / "fig_small_multiples.png", dpi=150); plt.close(fig)
+
+    # (ii) trajectories of the same prompts across banks
+    if traj_prompts:
+        fig, axes = plt.subplots(2, 2, figsize=(11, 10), squeeze=False)
+        for ax, k in zip(axes.flat, traj_prompts):
+            ax.scatter(xy[:, 0], xy[:, 1], s=2, c=GREY, linewidths=0, rasterized=True)
+            right, starts = [], []
+            for b in names:
+                m = np.flatnonzero((meta["bank"] == b) & (meta["prompt_index"] == k))
+                m = m[np.argsort(meta["state_rank"][m])]
+                starts.append(m[0])
+                ax.plot(xy[m, 0], xy[m, 1], "-", color=color[b], lw=1.5, alpha=0.9)
+                ax.scatter(xy[m, 0], xy[m, 1], s=40, marker=marker[b], color=color[b], edgecolors="#fcfcfb",
+                           linewidths=0.8, label=LABELS.get(b, b), zorder=3)
+                ax.scatter(xy[m[-1], 0], xy[m[-1], 1], s=110, marker=marker[b], facecolors="none",
+                           edgecolors=color[b], linewidths=1.6, zorder=4)
+                if meta["acc"][m[0]]:
+                    right.append(LABELS.get(b, b).split(" (")[0])
+            ax.scatter(xy[starts, 0], xy[starts, 1], s=200, marker="*", c="#0b0b0b", zorder=5, label="start")
+            ax.set_title(f"dapo-{k}: correct = {', '.join(right) or 'none'}", fontsize=9.5); blank(ax)
+        for ax in axes.flat[len(traj_prompts):]:
+            ax.axis("off")
+        h, l = axes.flat[0].get_legend_handles_labels()
+        fig.legend(h, l, loc="lower center", ncol=len(l), frameon=False, fontsize=9)
+        fig.suptitle("Trajectories (8 states, start -> end; hollow ring = last state)")
+        fig.tight_layout(rect=(0, 0.04, 1, 0.97))
+        fig.savefig(out / "fig_trajectories.png", dpi=150); plt.close(fig)
+
+    # (iii) cluster occupancy heatmap, clusters sorted by mean overlap (base-student-scored states)
+    shares = table["shares"]
+    key = table.get(f"{sort_metric}_base")
+    order = np.argsort(np.where(np.isfinite(key), key, np.inf), kind="stable") if key is not None else \
+        np.arange(shares.shape[1])
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(13, 1.2 + 0.45 * len(names)), sharex=True,
+                                   gridspec_kw={"height_ratios": [1, len(names)], "hspace": 0.08})
+    if key is not None:
+        im0 = ax0.imshow(key[order][None], aspect="auto", cmap="Oranges", interpolation="nearest")
+        fig.colorbar(im0, ax=ax0, pad=0.01, fraction=0.03).ax.tick_params(labelsize=7)
+    ax0.set_yticks([0]); ax0.set_yticklabels([f"cluster mean\n{sort_metric}" if key is not None else "unscored"])
+    seq = LinearSegmentedColormap.from_list("seq", ["#fcfcfb", "#cde2fb", "#6da7ec", "#2a78d6", "#0d366b"])
+    im1 = ax1.imshow(np.sqrt(shares[:, order]), aspect="auto", cmap=seq, interpolation="nearest")
+    cb = fig.colorbar(im1, ax=ax1, pad=0.01, fraction=0.03)
+    ticks = np.array([0, 0.01, 0.03, 0.1, 0.3])
+    ticks = ticks[ticks <= shares.max()]
+    cb.set_ticks(np.sqrt(ticks)); cb.set_ticklabels([f"{t:g}" for t in ticks]); cb.set_label("share of bank (sqrt)")
+    ax1.set_yticks(range(len(names))); ax1.set_yticklabels([LABELS.get(b, b) for b in names])
+    ax1.set_xlabel(f"pooled cluster (sorted by mean {sort_metric}, low -> high)" if key is not None else "cluster")
+    fig.savefig(out / "fig_cluster_occupancy.png", dpi=150, bbox_inches="tight"); plt.close(fig)
+
+    # (iv) teacher-anchored coverage (equal budget) and JS to the teacher
+    k200 = max(cov)
+    groups = list(cov[k200])
+    fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(12, 0.6 + 0.5 * len(groups)))
+    for i, g in enumerate(groups):
+        b = "teacher" if g.startswith("teacher") else g
+        c = cov[k200][g]
+        hollow = g == "teacher (reference, in-sample)"
+        ax0.errorbar(c["mean"], i, xerr=c["sd"], fmt=marker.get(b, "o"), color=color.get(b, "#52514e"),
+                     mfc="none" if hollow else color.get(b, "#52514e"), ms=8, capsize=3, lw=1.5)
+        ax0.annotate(f"{c['mean']:.3f}", (c["mean"], i), xytext=(0, 8), textcoords="offset points",
+                     ha="center", fontsize=8, color="#52514e")
+    ax0.set_yticks(range(len(groups))); ax0.set_yticklabels([LABELS.get(g, g) for g in groups])
+    ax0.invert_yaxis(); ax0.grid(axis="x", color="#e1e0d9", lw=0.6)
+    ax0.set_xlabel(f"coverage of K={k200} teacher clusters (mean ± sd over draws)")
+    jb = [b for b in names if b != "teacher"]
+    ax1.barh(range(len(jb)), [js[b] for b in jb], color=[color[b] for b in jb], height=0.6)
+    for i, b in enumerate(jb):
+        ax1.annotate(f"{js[b]:.3f}", (js[b], i), xytext=(3, 0), textcoords="offset points", va="center",
+                     fontsize=8, color="#52514e")
+    ax1.set_yticks(range(len(jb))); ax1.set_yticklabels([LABELS.get(b, b) for b in jb]); ax1.invert_yaxis()
+    ax1.grid(axis="x", color="#e1e0d9", lw=0.6)
+    ax1.set_xlabel("JS to teacher, pooled clusters, common prompts (bits)")
+    fig.tight_layout()
+    fig.savefig(out / "fig_coverage_js.png", dpi=150); plt.close(fig)
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--signatures", type=Path, required=True)
+    ap.add_argument("--scores", type=parse_bank, action="append", default=[], help="NAME=SCORES_DIR")
+    ap.add_argument("--output", type=Path, required=True)
+    ap.add_argument("--teacher-bank", default="teacher")
+    ap.add_argument("--separately-scored", nargs="*", default=["distilled"],
+                    help="banks whose scores use a different student (kept out of cluster means)")
+    ap.add_argument("--reference-prompts", type=int, default=64, help="teacher prompts < this form the reference")
+    ap.add_argument("--draw-prompts", type=int, default=32)
+    ap.add_argument("--draws", type=int, default=30)
+    ap.add_argument("--ks", type=int, nargs="+", default=[50, 100, 200])
+    ap.add_argument("--k", type=int, default=200, help="clusters of the pooled reference")
+    ap.add_argument("--perplexity", type=float, default=40)
+    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--trajectory-prompts", type=int, nargs="*", help="default: 4 picked by accuracy disagreement")
+    ap.add_argument("--drop-prompt-state", action="store_true", help="drop j=0 (prompt end, shared by all banks)")
+    args = ap.parse_args()
+    if (args.output / "latent_map.json").exists():
+        raise FileExistsError(f"refusing to overwrite {args.output / 'latent_map.json'}")
+    from sklearn.manifold import TSNE
+
+    features, meta = load_signatures(args.signatures, args.drop_prompt_state)
+    bank, prompt, T, R = meta["bank"], meta["prompt_index"], args.teacher_bank, args.reference_prompts
+    names = bank_names(bank)
+    assert T in names, f"teacher bank {T!r} missing"
+    scores = attach_scores(meta, {n: load_token_scores(d) for n, d in args.scores}) if args.scores else {}
+    separate = [b for b in args.separately_scored if b in names]
+
+    # (a) pooled equal-size reference: map + occupancy
+    sub = balanced_indices(bank, names, args.seed)
+    pooled = ReferenceGeometry(k=args.k, components=50, seed=args.seed).fit(features[sub])
+    labels = pooled.labels(features)
+    pcs = pooled.pca.transform(features)
+    xy = TSNE(n_components=2, perplexity=args.perplexity, init="pca", random_state=0).fit_transform(pcs)
+
+    # (b) teacher-anchored reference: equal-budget coverage for each K
+    ref = (bank == T) & (prompt < R)
+    held = (bank == T) & (prompt >= R)
+    assert ref.any() and held.any(), "teacher needs prompts on both sides of --reference-prompts"
+    groups = {b: ((bank == b) & (prompt < R), list(range(R))) for b in names if b != T}
+    groups["teacher (held-out)"] = (held, sorted(set(prompt[held].tolist())))
+    groups["teacher (reference, in-sample)"] = (ref, list(range(R)))
+    cov, anchored = {}, None
+    for k in sorted(args.ks):
+        geom = ReferenceGeometry(k=k, components=50, seed=args.seed).fit(features[ref])
+        cov[k] = coverage_draws(geom.labels(features), prompt, groups, k, args.draw_prompts, args.draws, args.seed)
+        anchored = geom
+    dist = anchored.distances(features)  # kNN set does not depend on K
+    p95 = float(np.percentile(dist[held], 95))
+
+    # (c) per-bank summary
+    teacher_occ = lambda ks: occupancy(labels[(bank == T) & np.isin(prompt, ks)], args.k)
+    summary, js_common = {}, {}
+    for b in names:
+        mb = bank == b
+        own = sorted(set(prompt[mb].tolist()))
+        traj = per_trajectory(meta, mb)
+        traj_common = per_trajectory(meta, mb & (prompt < R))
+        js_common[b] = js_divergence(occupancy(labels[mb & (prompt < R)], args.k), teacher_occ(range(R)))
+        s = {"n_prompts": len(own), "n_states": int(mb.sum()), "accuracy": float(meta["acc"][traj].mean()),
+             "accuracy_common": float(meta["acc"][traj_common].mean()),
+             "mean_response_tokens": float(meta["response_tokens"][traj].mean()),
+             "capped": float((meta["finish_reason"][traj] == "length").mean()),
+             "js_to_teacher_common": js_common[b],
+             "js_to_teacher_own": js_divergence(occupancy(labels[mb], args.k), teacher_occ(own)),
+             "scored_with": None if b not in dict(args.scores) else
+             ("own (separately scored) student" if b in separate else "base student")}
+        for side, sm in (("ref_prompts", prompt < R), ("heldout_prompts", prompt >= R)):
+            m = mb & sm
+            s[f"knn_dist_{side}"] = float(dist[m].mean()) if m.any() else None
+            s[f"beyond_p95_{side}"] = float((dist[m] > p95).mean()) if m.any() else None
+        for m, v in scores.items():
+            s[f"mean_{m}"] = float(np.nanmean(v[mb])) if np.isfinite(v[mb]).any() else None
+        summary[b] = s
+
+    # (d) per-cluster stats; (e) map coordinates
+    table = cluster_table(labels, bank, names, args.k, scores, separate)
+    traj_prompts = args.trajectory_prompts if args.trajectory_prompts is not None else \
+        pick_trajectory_prompts(meta, names, 4, R)
+    checks = {"prompt_end_max_cosine_distance": None if args.drop_prompt_state else prompt_end_check(features, meta, names),
+              "pooled_states_per_bank": int(len(sub) // len(names)), "heldout_teacher_knn_p95": p95}
+
+    # (f) outputs
+    args.output.mkdir(parents=True, exist_ok=True)
+    nan = np.full(len(bank), np.nan)
+    states = {"x": [_r(v, 3) for v in xy[:, 0]], "y": [_r(v, 3) for v in xy[:, 1]],
+              "pc1": [_r(v, 3) for v in pcs[:, 0]], "pc2": [_r(v, 3) for v in pcs[:, 1]],
+              "bank": bank.tolist(), "prompt_index": prompt.tolist(), "j": meta["state_rank"].tolist(),
+              "cluster": labels.tolist(), "overlap": [_r(v) for v in scores.get("overlap_mass", nan)],
+              "rkl": [_r(v) for v in scores.get("reverse_kl", nan)], "acc": meta["acc"].astype(int).tolist()}
+    clusters = []
+    for c in range(args.k):
+        row = {"cluster": c, "counts": dict(zip(names, table["counts"][:, c].tolist())),
+               "dominant_bank": names[table["dominant"][c]], "dominant_share": _r(table["dominant_share"][c])}
+        for key in table:
+            if key.startswith(METRICS):
+                row[key] = _r(table[key][c])
+        if "n_scored_base" in table:
+            row["n_scored_base"] = int(table["n_scored_base"][c])
+        clusters.append(row)
+    coverage_out = {str(k): {g: {"mean": v["mean"], "sd": v["sd"]} for g, v in cov[k].items()} for k in cov}
+    settings = {"signatures": str(args.signatures), "scores": {n: str(d) for n, d in args.scores},
+                "k_pooled": args.k, "ks_anchored": sorted(args.ks), "reference_prompts": R,
+                "draw_prompts": args.draw_prompts, "draws": args.draws, "seed": args.seed,
+                "perplexity": args.perplexity, "drop_prompt_state": args.drop_prompt_state,
+                "separately_scored": separate, "trajectory_prompts": traj_prompts}
+    (args.output / "latent_map.json").write_text(json.dumps(
+        {"settings": settings, "banks": summary, "coverage_anchored": coverage_out, "checks": checks,
+         "clusters": clusters, "states": states}, separators=(",", ":")) + "\n")
+    plot_all(args.output, xy, meta, names, table, cov, js_common, traj_prompts, "overlap_mass")
+
+    f = lambda v, nd=3: "–" if v is None else f"{v:.{nd}f}"
+    lines = [f"# Latent state map\n\nSignatures: `{args.signatures}`; pooled reference: {len(sub) // len(names)} "
+             f"states per bank, PCA 50 + K-means K={args.k}. Teacher-anchored reference: teacher prompts < {R}.\n",
+             "## Per bank\n", "| bank | prompts | states | acc | acc (p<%d) | mean len | capped | JS→teacher (p<%d) | "
+             "JS→teacher (own prompts) | kNN dist ref-prompts | kNN dist held-out prompts | >p95 ref | >p95 held-out "
+             "| overlap | rKL | scored with |" % (R, R), "|" + "---|" * 16]
+    for b, s in summary.items():
+        lines.append(f"| {LABELS.get(b, b)} | {s['n_prompts']} | {s['n_states']} | {f(s['accuracy'])} | "
+                     f"{f(s['accuracy_common'])} | {s['mean_response_tokens']:.0f} | {f(s['capped'])} | "
+                     f"{f(s['js_to_teacher_common'])} | {f(s['js_to_teacher_own'])} | {f(s['knn_dist_ref_prompts'], 4)} | "
+                     f"{f(s['knn_dist_heldout_prompts'], 4)} | {f(s['beyond_p95_ref_prompts'])} | "
+                     f"{f(s['beyond_p95_heldout_prompts'])} | {f(s.get('mean_overlap_mass'))} | "
+                     f"{f(s.get('mean_reverse_kl'))} | {s['scored_with'] or '–'} |")
+    lines += ["", f"kNN dist = mean cosine distance to the 10 nearest teacher-reference states (unreduced space); "
+              f"p95 = {p95:.4f} (held-out teacher). On reference prompts the teacher row is in-sample.", "",
+              f"## Teacher-anchored coverage (equal budget: {args.draw_prompts} prompts × {args.draws} draws; "
+              f"banks on prompts < {R} share each draw)\n", "| group | " + " | ".join(f"K={k}" for k in cov) + " |",
+              "|---|" + "---|" * len(cov)]
+    for g in groups:
+        lines.append(f"| {LABELS.get(g, g)} | " + " | ".join(f"{cov[k][g]['mean']:.3f} ± {cov[k][g]['sd']:.3f}"
+                                                         for k in cov) + " |")
+    if "overlap_mass_base" in table:
+        ov = table["overlap_mass_base"]
+        lo = np.argsort(np.where(np.isfinite(ov), ov, np.inf))[:10]
+        lines += ["", "## Ten lowest-overlap pooled clusters (base-student-scored states)\n",
+                  "| cluster | mean overlap | mean rKL | dominant bank | " + " | ".join(
+                      f"share {LABELS.get(b, b)}" for b in names) + " |", "|---|---|---|---|" + "---|" * len(names)]
+        for c in lo:
+            lines.append(f"| {c} | {ov[c]:.3f} | {table['reverse_kl_base'][c]:.3f} | {LABELS.get(names[table['dominant'][c]], names[table['dominant'][c]])} | "
+                         + " | ".join(f"{table['shares'][i, c]:.3f}" for i in range(len(names))) + " |")
+    lines += ["", "## Checks\n", *(f"- {k}: {v}" for k, v in checks.items()),
+              f"- trajectory prompts: {traj_prompts}", ""]
+    (args.output / "summary.md").write_text("\n".join(lines))
+    print("\n".join(lines))
+
+
+if __name__ == "__main__":
+    main()

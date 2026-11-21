@@ -1,0 +1,147 @@
+"""Teacher signatures of rollout states for the latent state map (One-Shot OPD, Appendix B.1).
+
+For every kept rollout (sample 0, prompt index <= --max-prompt-index, nonempty response) one forward of
+prompt + response through the teacher (AutoModel, bf16, sdpa); the signature of a state is last_hidden_state
+(after the final norm) at the hidden index immediately BEFORE a selected response token, at the 8 relative
+positions of state_positions(..., 'relative8') (the first is the prompt's last token). Writes float16 features
+[N, hidden] plus per-state metadata to --output (.npz) and a manifest to the sibling .json. GPU: run in Slurm.
+"""
+import argparse
+import hashlib
+import json
+import os
+import sys
+import time
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # oneshot/
+from state_geometry import state_positions  # noqa: E402
+
+META_INT = ["prompt_index", "state_rank", "response_action", "hidden_index", "prompt_tokens", "response_tokens"]
+
+
+def parse_bank(spec):
+    """'NAME=PATH' -> (NAME, Path)."""
+    name, sep, path = spec.partition("=")
+    if not sep or not name or not path:
+        raise argparse.ArgumentTypeError(f"expected NAME=PATH, got {spec!r}")
+    return name, Path(path)
+
+
+def prompt_index(row_id):
+    """'dapo-<k>' -> k."""
+    prefix, _, k = row_id.rpartition("-")
+    assert prefix == "dapo", row_id
+    return int(k)
+
+
+def load_rows(path, max_prompt_index):
+    """Sample-0 rows with prompt index <= max_prompt_index, sorted by prompt index (ids must be unique)."""
+    rows = [r for r in map(json.loads, Path(path).read_text().splitlines()) if r["sample"] == 0 and prompt_index(r["id"]) <= max_prompt_index]
+    ids = [r["id"] for r in rows]
+    assert len(ids) == len(set(ids)), f"duplicate sample-0 ids in {path}"
+    return sorted(rows, key=lambda r: prompt_index(r["id"]))
+
+
+def plan_states(row):
+    """Per-state metadata for one nonempty rollout: state j sits before response token a = response_action."""
+    p, r = len(row["prompt_ids"]), len(row["response_ids"])
+    hidden = state_positions(p, r, "relative8")
+    return {"prompt_index": [prompt_index(row["id"])] * len(hidden), "state_rank": list(range(len(hidden))),
+            "response_action": [h - (p - 1) for h in hidden], "hidden_index": hidden,
+            "prompt_tokens": [p] * len(hidden), "response_tokens": [r] * len(hidden),
+            "acc": [bool(row["acc"])] * len(hidden), "finish_reason": [row["finish_reason"]] * len(hidden)}
+
+
+def save_signatures(path, features, meta):
+    """Write float16 features [N, hidden] and per-state metadata lists (as typed arrays) to an .npz."""
+    assert len(features) == len(meta["bank"]) and features.dtype == np.float16
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    np.savez(path, features=features, bank=np.array(meta["bank"]),
+             **{k: np.array(meta[k], dtype=np.int64) for k in META_INT},
+             acc=np.array(meta["acc"], dtype=bool), finish_reason=np.array(meta["finish_reason"]))
+
+
+def sha256_file(path):
+    """Hex sha256 of a (small) file."""
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--teacher", type=Path, required=True)
+    ap.add_argument("--bank", type=parse_bank, action="append", required=True, help="NAME=PATH/rollouts.jsonl")
+    ap.add_argument("--max-prompt-index", type=int, default=127)
+    ap.add_argument("--output", type=Path, required=True, help="PATH.npz (manifest at PATH.json)")
+    a = ap.parse_args()
+    manifest_path = a.output.with_suffix(".json")
+    assert a.output.suffix == ".npz", "--output must end in .npz"
+    if a.output.exists() or manifest_path.exists():
+        raise FileExistsError(f"refusing to overwrite {a.output} / {manifest_path}")
+    names = [n for n, _ in a.bank]
+    assert len(names) == len(set(names)), f"duplicate bank names {names}"
+    assert os.environ.get("SLURM_JOB_ID"), "GPU extraction must run in Slurm"
+    import torch
+    from transformers import AutoModel
+
+    model = AutoModel.from_pretrained(a.teacher, torch_dtype=torch.bfloat16, attn_implementation="sdpa",
+                                      local_files_only=True).eval().to("cuda:0")
+    features, meta = [], {k: [] for k in ["bank", *META_INT, "acc", "finish_reason"]}
+    prompts, banks_info = {}, {}
+    with torch.inference_mode():
+        for name, path in a.bank:
+            rows, t0, check, skipped = load_rows(path, a.max_prompt_index), time.time(), None, []
+            print(f"[{name}] {len(rows)} rows from {path}", flush=True)
+            for n, row in enumerate(rows):
+                k = prompt_index(row["id"])
+                assert prompts.setdefault(k, row["prompt_ids"]) == row["prompt_ids"], f"prompt ids differ: {name} {k}"
+                if not row["response_ids"]:
+                    skipped.append(k)
+                    continue
+                plan = plan_states(row)
+                ids = torch.tensor([row["prompt_ids"] + row["response_ids"]], device="cuda:0")
+                hidden = model(input_ids=ids, use_cache=False, return_dict=True).last_hidden_state[0]
+                if check is None:  # causal-prefix check, once per bank
+                    pos = plan["hidden_index"][len(plan["hidden_index"]) // 2]
+                    prefix = model(input_ids=ids[:, :pos + 1], use_cache=False, return_dict=True).last_hidden_state[0, -1]
+                    cos = float(torch.nn.functional.cosine_similarity(hidden[pos].float(), prefix.float(), dim=0))
+                    assert cos > 0.999, f"[{name}] prefix/causal position check failed: cosine={cos}"
+                    check = {"cosine_similarity": cos, "prompt_index": k, "hidden_index": pos,
+                             "check": "full causal forward versus explicit prefix forward"}
+                    del prefix
+                feat = hidden[plan["hidden_index"]].float().cpu().numpy().astype(np.float16)
+                assert np.isfinite(feat).all(), f"[{name}] non-finite float16 signature at prompt {k}"
+                features.append(feat)
+                meta["bank"] += [name] * len(feat)
+                for key, values in plan.items():
+                    meta[key] += values
+                del hidden, ids
+                torch.cuda.empty_cache()
+                if (n + 1) % 16 == 0 or n + 1 == len(rows):
+                    print(f"[{name}] {n + 1}/{len(rows)} rows, {time.time() - t0:.0f}s", flush=True)
+            assert check is not None, f"[{name}] no nonempty rollouts"
+            banks_info[name] = {"path": str(path), "sha256": sha256_file(path), "rows": len(rows),
+                                "skipped_empty_prompt_indices": skipped, "prefix_check": check,
+                                "states": meta["bank"].count(name)}
+    features = np.concatenate(features)
+    if a.output.exists() or manifest_path.exists():
+        raise FileExistsError(f"refusing to overwrite {a.output} / {manifest_path}")
+    save_signatures(a.output, features, meta)
+    manifest = {"schema": "latent-map-signatures-v1", "position_mode": "relative8",
+                "signature": "teacher AutoModel last_hidden_state (after final norm) at hidden_index",
+                "precision": "bfloat16 forward (sdpa); float16 stored features",
+                "teacher_path": str(a.teacher), "teacher_config_sha256": sha256_file(a.teacher / "config.json"),
+                "teacher_index_sha256": sha256_file(a.teacher / "model.safetensors.index.json")
+                if (a.teacher / "model.safetensors.index.json").exists() else None,
+                "max_prompt_index": a.max_prompt_index, "features_shape": list(features.shape),
+                "banks": banks_info, "features_sha256": hashlib.sha256(a.output.read_bytes()).hexdigest(),
+                "slurm_job_id": os.environ.get("SLURM_JOB_ID")}
+    manifest_path.write_text(json.dumps(manifest, indent=1) + "\n")
+    print(json.dumps({"output": str(a.output), "shape": list(features.shape),
+                      "states_per_bank": {n: b["states"] for n, b in banks_info.items()}}), flush=True)
+
+
+if __name__ == "__main__":
+    main()

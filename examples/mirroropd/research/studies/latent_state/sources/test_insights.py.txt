@@ -1,0 +1,209 @@
+"""CPU tests for insights.py (synthetic data). Run: python -m pytest -q test_insights.py
+(or python -m unittest test_insights; TestCase classes are collected by both)."""
+import json
+import sys
+import unittest
+from pathlib import Path
+from unittest import mock
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import insights as ins  # noqa: E402
+from test_latent_map import build_signatures, synthetic_bank, tmpdir  # noqa: E402
+
+
+def tokens(pos, rollout, overlap, entropy, rkl):
+    """Flat per-token table in load_bank's layout."""
+    return {"pos": np.array(pos), "rollout": np.array(rollout), "overlap_mass": np.array(overlap, float),
+            "teacher_entropy": np.array(entropy, float), "reverse_kl": np.array(rkl, float)}
+
+
+class RepetitionTests(unittest.TestCase):
+    def test_repeat_flags_small_n(self):
+        """Trigram repeats: (1,2,3) and (2,3,1) recur ending at t = 5 and 6."""
+        got = ins.repeat_flags([1, 2, 3, 1, 2, 3, 1], n=3)
+        np.testing.assert_array_equal(got, [0, 0, 0, 0, 0, 1, 1])
+
+    def test_repeat_flags_32gram_exact(self):
+        """Default 32-grams: a copy flags only grams that lie wholly inside it; one changed token breaks the 32
+        grams covering it; a constant run flags from t = 32."""
+        a = list(range(40))
+        np.testing.assert_array_equal(np.flatnonzero(ins.repeat_flags(a + a)), np.arange(71, 80))
+        np.testing.assert_array_equal(np.flatnonzero(ins.repeat_flags([7] * 40)), np.arange(32, 40))
+        a = list(range(100))
+        b = a.copy()
+        b[50] = -1  # position 150 of the concatenation
+        expect = np.concatenate([np.arange(131, 150), np.arange(182, 200)])
+        np.testing.assert_array_equal(np.flatnonzero(ins.repeat_flags(a + b)), expect)
+        self.assertFalse(ins.repeat_flags(list(range(31)) * 1).any())
+
+    def test_loop_start(self):
+        """Trailing window of 4: counts 0,1,2,3,4,4,3,3,3 at t = 3..11; > 2 from t = 6 to the end."""
+        flags = [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1]
+        self.assertEqual(ins.loop_start(flags, window=4, threshold=0.5), 6)
+        self.assertIsNone(ins.loop_start(flags + [0, 0, 0], window=4, threshold=0.5))
+        self.assertIsNone(ins.loop_start([1, 1, 1], window=4, threshold=0.5))
+        self.assertEqual(ins.loop_start([1] * 6, window=4, threshold=0.5), 3)
+
+    def test_rollout_looping(self):
+        """A response ending in a 100-token cycle loops; one shorter than TAIL never does."""
+        rng = np.random.default_rng(0)
+        cycle = rng.integers(0, 50000, 100).tolist()
+        ids = rng.integers(0, 50000, 3000).tolist() + cycle * 25
+        _, p = ins.rollout_repetition(ids)
+        self.assertTrue(p["looping"])
+        self.assertGreater(p["tail_repeat_fraction"], 0.9)
+        self.assertTrue(3000 <= p["loop_start"] < 3000 + ins.LOOP_WINDOW)
+        _, short = ins.rollout_repetition(cycle * 15)
+        self.assertFalse(short["looping"])
+        self.assertIsNone(short["tail_repeat_fraction"])
+
+
+class VetoTests(unittest.TestCase):
+    def test_veto_mask(self):
+        """Both conditions are strict: overlap < 0.01 and teacher entropy < 0.1."""
+        ov, ent = [0.005, 0.005, 0.02, 0.005, 0.01], [0.05, 0.2, 0.05, 0.0999, 0.05]
+        np.testing.assert_array_equal(ins.veto_mask(ov, ent), [1, 0, 0, 1, 0])
+        np.testing.assert_array_equal(ins.veto_mask(ov, ent, 0.05, 0.5), [1, 1, 1, 1, 1])
+
+    def test_veto_stats(self):
+        """Two rollouts; veto at (0, t0) and (0, t2); the last token is a veto only at the looser thresholds."""
+        tok = tokens([0, 1, 2, 0, 1], [0, 0, 0, 1, 1], [0.001, 0.5, 0.005, 0.5, 0.002],
+                     [0.01, 0.01, 0.05, 0.01, 0.3], [10, 1, 5, 2, 3])
+        v = ins.veto_stats(tok, 2, 0.01, 0.1)
+        self.assertEqual(v["veto_at_token0_share"], 0.5)
+        self.assertAlmostEqual(v["all"]["veto_per_1000"], 400)
+        self.assertAlmostEqual(v["all"]["rkl_mass_share"], 15 / 21)
+        self.assertAlmostEqual(v["all"]["mean_rkl_veto"], 7.5)
+        self.assertAlmostEqual(v["all"]["mean_rkl_nonveto"], 2.0)
+        self.assertEqual(v["excl_token0"]["n_tokens"], 3)
+        self.assertAlmostEqual(v["excl_token0"]["veto_per_1000"], 1000 / 3)
+        self.assertAlmostEqual(v["excl_token0"]["rkl_mass_share"], 5 / 9)
+        self.assertAlmostEqual(v["excl_token0"]["mean_rkl_nonveto"], 2.0)
+        loose = ins.veto_stats(tok, 2, 0.05, 0.5)
+        self.assertEqual(loose["all"]["n_veto"], 3)
+        self.assertAlmostEqual(loose["excl_token0"]["mean_rkl_veto"], 4.0)
+
+
+class DepthTests(unittest.TestCase):
+    def test_position_bins(self):
+        pos = [0, 1, 15, 16, 127, 128, 511, 512, 2047, 2048, 7167, 7168]
+        np.testing.assert_array_equal(ins.position_bins(pos), [0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5])
+        self.assertEqual(ins.depth_labels(), ["[0]", "[1,16)", "[16,128)", "[128,512)", "[512,2048)", "[2048,7168]"])
+        with self.assertRaises(AssertionError):
+            ins.position_bins([7169])
+
+    def test_depth_profile_token_weighted(self):
+        """Bin means weight tokens, not rollouts; identical rollouts give a zero-width CI; empty bins are NaN."""
+        tok = tokens([0, 1, 2, 0, 1], [0, 0, 0, 1, 1], [1, 2, 3, 4, 5], [0, 0, 0, 0, 0], [1, 2, 4, 3, 8])
+        d = ins.depth_profile(tok, 2, n_boot=200)
+        self.assertEqual(d["n_tokens"][:2], [2, 3])
+        self.assertEqual(d["n_rollouts"][:3], [2, 2, 0])
+        self.assertAlmostEqual(d["reverse_kl"]["mean"][1], 14 / 3)
+        self.assertTrue(np.isnan(d["reverse_kl"]["mean"][2]))
+        same = tokens([0, 1, 0, 1], [0, 0, 1, 1], [1, 1, 1, 1], [0] * 4, [2, 6, 2, 6])
+        m, lo, hi = (ins.depth_profile(same, 2, n_boot=50)["reverse_kl"][k][1] for k in ("mean", "ci_low", "ci_high"))
+        self.assertEqual((m, lo, hi), (6.0, 6.0, 6.0))
+
+
+class ConcentrationTests(unittest.TestCase):
+    def test_top_share_and_lorenz(self):
+        """1..100 shuffled: the top 1/5/10% carry 100, 96..100 and 91..100 of 5,050."""
+        v = np.random.default_rng(0).permutation(np.arange(1, 101))
+        self.assertAlmostEqual(ins.top_share(v, 0.01), 100 / 5050)
+        self.assertAlmostEqual(ins.top_share(v, 0.05), 490 / 5050)
+        self.assertAlmostEqual(ins.top_share(v, 0.10), 955 / 5050)
+        x, y = ins.lorenz(v)
+        self.assertEqual(len(x), 50)
+        self.assertAlmostEqual(x[0], 0.02)
+        self.assertAlmostEqual(y[0], 199 / 5050)
+        self.assertAlmostEqual(y[-1], 1.0)
+        self.assertTrue(np.all(np.diff(y) > 0))
+
+    def test_concentration_excludes_token0(self):
+        """A huge token-0 value dominates the pooled shares but not the t >= 1 ones."""
+        rkl = [1000.0] + list(range(1, 100))
+        tok = tokens(range(100), [0] * 100, [1] * 100, [1] * 100, rkl)
+        c = ins.concentration(tok)
+        self.assertAlmostEqual(c["all"]["top1pct_share"], 1000 / (1000 + 4950))
+        self.assertAlmostEqual(c["excl_token0"]["top1pct_share"], 99 / 4950)
+        self.assertAlmostEqual(c["excl_token0"]["share_tokens_rkl_gt1"], 98 / 99)
+
+
+class GeometryTests(unittest.TestCase):
+    def test_teacher_distances_exclude_same_prompt(self):
+        """2-D unit vectors: d_other ignores the same prompt's teacher states, d_same takes their minimum."""
+        ang = np.deg2rad([0, 10, 90, 100, 5, 95])
+        f = np.stack([np.cos(ang), np.sin(ang)], 1).astype(np.float32) * 3
+        prompt = np.array([0, 0, 1, 1, 0, 1])
+        is_t = np.array([1, 1, 1, 1, 0, 0], bool)
+        d_other, d_same = ins.teacher_distances(f, prompt, is_t, k=1)
+        cos = lambda a, b: 1 - np.cos(np.deg2rad(a - b))
+        np.testing.assert_allclose(d_other, [cos(0, 90), cos(10, 90), cos(90, 10), cos(100, 10), cos(5, 90),
+                                             cos(95, 10)], atol=1e-6)
+        np.testing.assert_allclose(d_same, [0, 0, 0, 0, cos(5, 0), cos(95, 90)], atol=1e-6)
+
+    def test_sig_rounding(self):
+        out = ins.sig({"a": 1.23456789, "b": [np.float32(0.000123456), np.nan], "c": np.int64(7), "d": True})
+        self.assertEqual(out, {"a": 1.235, "b": [0.0001235, None], "c": 7, "d": True})
+
+
+def write_scores4(directory, rows, seed):
+    """Scorer-format scores with all four SCORE_METRICS (empty responses skipped)."""
+    rng = np.random.default_rng(seed)
+    directory.mkdir(parents=True)
+    kept = [r for r in rows if r["response_ids"]]
+    with open(directory / "responses.jsonl", "w") as h:
+        for r in kept:
+            h.write(json.dumps({"id": r["id"], "sample": r["sample"], "n_tokens": len(r["response_ids"])}) + "\n")
+    n = sum(len(r["response_ids"]) for r in kept)
+    offsets = np.cumsum([0] + [len(r["response_ids"]) for r in kept])
+    np.savez_compressed(directory / "tokens.npz", offsets=offsets, overlap_mass=rng.random(n).astype(np.float32),
+                        reverse_kl=rng.exponential(1, n).astype(np.float32),
+                        forward_kl=rng.exponential(1, n).astype(np.float32),
+                        teacher_entropy=rng.exponential(0.5, n).astype(np.float32))
+
+
+class EndToEndTests(unittest.TestCase):
+    def test_main_writes_outputs_and_refuses_overwrite(self):
+        """main() on synthetic banks shaped like the real ones (128/64 prompts, one empty student response)."""
+        rng = np.random.default_rng(0)
+        sizes = {"student": 128, "fused025": 64, "fused050": 128, "fused075": 64, "teacher": 128, "distilled": 128}
+        banks = {b: [r | {"boxed": r["acc"]} for r in synthetic_bank(b, n, rng, empty={70} if b == "student" else ())]
+                 for b, n in sizes.items()}
+        banks["teacher"] = [r | {"response_ids": [ins.THINK] + r["response_ids"][1:]} for r in banks["teacher"]]
+        with tmpdir() as d:
+            d = Path(d)
+            build_signatures(d / "sig.npz", banks)
+            scores = []
+            for i, (b, rows) in enumerate(banks.items()):
+                (d / "banks" / b).mkdir(parents=True)
+                (d / "banks" / b / "rollouts.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+                write_scores4(d / f"scores-{b}", rows, i)
+                scores += ["--scores", f"{b}={d}/scores-{b}"]
+            argv = ["x", "--output", str(d / "out"), "--banks-dir", str(d / "banks"), "--signatures",
+                    str(d / "sig.npz"), "--bootstrap", "50", *scores]
+            with mock.patch.object(sys, "argv", argv), mock.patch("builtins.print"):
+                ins.main()
+            res = json.loads((d / "out" / "insights.json").read_text())
+            self.assertTrue((d / "out" / "insights.md").read_text().startswith("# OPD failure insights"))
+            self.assertEqual(list(res["banks"]), list(sizes))
+            for b, rows in banks.items():
+                a = res["banks"][b]["regime"]
+                self.assertEqual(a["n_rollouts"], sizes[b])
+                self.assertEqual(a["n_tokens"], sum(len(r["response_ids"]) for r in rows if r["sample"] == 0))
+                self.assertTrue(res["checks"][f"{b}: scored tokens == sum n_tokens"].startswith("True"))
+                self.assertEqual(sum(res["banks"][b]["depth"]["n_tokens"]), a["n_tokens"])
+            self.assertEqual(res["banks"]["teacher"]["regime"]["first_token_think"], 1.0)
+            self.assertEqual(res["banks"]["teacher"]["regime"]["top_first_tokens"], [[ins.THINK, 128]])
+            g = res["geometry"]["student"]
+            self.assertEqual(g["n_correct"] + g["n_incorrect"], 127)
+            self.assertIsNone(res["geometry"]["teacher"]["by_j"]["1"]["d_same"])
+            self.assertEqual(len(res["banks"]["student"]["concentration"]["lorenz_excl_token0"]["y"]), 50)
+            with mock.patch.object(sys, "argv", argv), self.assertRaises(FileExistsError):
+                ins.main()
+
+
+if __name__ == "__main__":
+    unittest.main()

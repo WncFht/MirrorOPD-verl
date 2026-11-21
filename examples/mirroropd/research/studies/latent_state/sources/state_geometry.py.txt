@@ -1,0 +1,71 @@
+"""Explicit prefix positions and reference-only geometry for a B.1 reconstruction."""
+from __future__ import annotations
+
+import numpy as np
+
+
+def state_positions(prompt_length, response_length, mode='relative8'):
+    if min(prompt_length, response_length) <= 0:
+        raise ValueError('Prompt/response must be nonempty')
+    if mode == 'relative8':
+        # Hidden index immediately BEFORE a selected response action; includes s_0.
+        actions = np.unique(np.linspace(0, response_length-1, 8).astype(int))
+        return (prompt_length-1+actions).tolist()
+    if mode == 'final':
+        # Explicitly different convention: AFTER the final nonpadding response token.
+        return [prompt_length+response_length-1]
+    if mode in {'absolute2000','absolute4000'}:
+        index = int(mode.removeprefix('absolute'))-1  # one-based absolute position in prompt+response
+        return [index] if index < prompt_length+response_length else []
+    raise ValueError(mode)
+
+
+class ReferenceGeometry:
+    def __init__(self, k=200, components=50, seed=42):
+        self.k, self.components, self.seed = k, components, seed
+
+    def fit(self, reference):
+        from sklearn.decomposition import PCA
+        from sklearn.cluster import KMeans
+        from sklearn.neighbors import NearestNeighbors
+        reference=np.asarray(reference,dtype=np.float32)
+        if len(reference)<max(self.k,10,self.components+1) or reference.shape[1]<self.components:
+            raise ValueError('Insufficient reference states for the requested geometry')
+        if not np.isfinite(reference).all() or np.any(np.linalg.norm(reference,axis=1)==0):
+            raise ValueError('Invalid reference embeddings')
+        self.pca=PCA(n_components=self.components,svd_solver='full')
+        reduced=self.pca.fit_transform(reference)
+        self.kmeans=KMeans(n_clusters=self.k,random_state=self.seed,n_init=10).fit(reduced)
+        self.neighbors=NearestNeighbors(n_neighbors=10,metric='cosine',algorithm='brute').fit(reference)
+        return self
+
+    def labels(self, features):
+        return self.kmeans.predict(self.pca.transform(np.asarray(features,dtype=np.float32)))
+
+    def distances(self, features, chunk=256):
+        features=np.asarray(features,dtype=np.float32)
+        if not np.isfinite(features).all() or np.any(np.linalg.norm(features,axis=1)==0):
+            raise ValueError('Invalid query embeddings')
+        # Distance is in original hidden space, deliberately not the PCA projection.
+        return np.concatenate([self.neighbors.kneighbors(features[i:i+chunk])[0].mean(axis=1)
+                               for i in range(0,len(features),chunk)])
+
+
+def scheduled_rows(metadata, last_step, repetition=0, seed=42, heldout=False, trajectory_schedule=None):
+    """Two actual trajectories/step, preserving every signature from each selected trajectory."""
+    rng=np.random.default_rng(np.random.SeedSequence([seed,repetition]))
+    selected=[]
+    rows_by_step={}
+    for i,m in enumerate(metadata):
+        rows_by_step.setdefault(m['optimizer_step'],[]).append(i)
+    ordinals_by_step={}
+    for m in (metadata if trajectory_schedule is None else trajectory_schedule):
+        ordinals_by_step.setdefault(m['optimizer_step'],set()).add(m['capture_ordinal'])
+    for step in range(1,last_step+1):
+        at=rows_by_step.get(step,[])
+        ordinals=sorted(ordinals_by_step.get(step,[]))
+        if ordinals!=list(range(5)):
+            raise ValueError(f'Step {step} does not contain all five captured trajectories: {ordinals}')
+        take={3,4} if heldout else set(rng.choice(5,size=2,replace=False).tolist())
+        selected.extend(i for i in at if metadata[i]['capture_ordinal'] in take)
+    return np.asarray(selected,dtype=np.int64)

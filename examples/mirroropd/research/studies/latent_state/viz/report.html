@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MirrorOPD · State Explorer</title>
+    <!--STYLE-->
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#">MirrorOPD <span>State Explorer</span></a>
+      <div class="header-actions">
+        <button id="download-data" class="quiet">结果 JSON ↓</button
+        ><button id="theme" aria-label="切换明暗主题">深色</button>
+      </div>
+    </header>
+    <main>
+      <nav class="pair-nav" aria-label="选择实验">
+        <div id="pair-tabs" role="tablist"></div>
+        <label
+          >K
+          <select id="clusters">
+            <option>50</option>
+            <option>100</option>
+            <option selected>200</option>
+          </select></label
+        >
+      </nav>
+      <section id="pair-content" role="tabpanel" tabindex="-1">
+        <div class="pair-heading">
+          <div>
+            <div id="pair-label" class="eyebrow"></div>
+            <h1 id="pair-name"></h1>
+          </div>
+          <span id="pair-context" class="muted"></span>
+        </div>
+        <div id="summary-cards" class="summary-cards"></div>
+        <nav class="workspace-nav" aria-label="分析视图">
+          <button data-pane="overview" aria-pressed="true">全局趋势</button>
+          <button data-pane="clusters" aria-pressed="false">簇明细</button>
+          <button data-pane="map" aria-pressed="false">状态地图</button>
+          <button data-pane="trajectory" aria-pressed="false">单条回答</button>
+          <button data-pane="risk" aria-pressed="false">输出匹配</button>
+        </nav>
+        <section data-panel="overview" class="workspace-panel">
+          <div id="overview"></div>
+        </section>
+        <section data-panel="clusters" class="workspace-panel" hidden>
+          <div class="section-head">
+            <h2>哪些簇在变化？</h2>
+            <span class="muted">Initial → 四个训练阶段 → Teacher</span>
+          </div>
+          <p class="caption">
+            每行一个簇，数字直接比较占比。Teacher 列为实际占比，其余列默认显示与 Teacher 的差值。
+          </p>
+          <div id="occupancy"></div>
+          <details class="support-details">
+            <summary>其他几何指标 · 参考为训练 test</summary>
+            <p id="metric-budget" class="caption"></p>
+            <div class="metric-charts">
+              <div>
+                <h3>JS → 训练 test · bits</h3>
+                <svg id="js-chart" viewBox="0 0 500 280" role="img" aria-label="JS to training test"></svg>
+              </div>
+              <div>
+                <h3>等回答数 coverage</h3>
+                <svg
+                  id="coverage-chart"
+                  viewBox="0 0 500 280"
+                  role="img"
+                  aria-label="Reference cluster coverage"
+                ></svg>
+              </div>
+            </div>
+            <div class="table-wrap"><table id="metric-table"></table></div>
+          </details>
+        </section>
+        <section data-panel="map" class="workspace-panel" hidden>
+          <div class="section-head">
+            <h2>状态地图</h2>
+            <span id="map-count" class="muted"></span>
+          </div>
+          <div id="scatter"></div>
+          <p class="caption">滚轮缩放 · 拖动平移 · 点击选回答。t-SNE 坐标仅用于展示，切换 K 不改变坐标。</p>
+        </section>
+        <section data-panel="trajectory" class="workspace-panel" id="trajectory-section" hidden>
+          <div class="section-head">
+            <h2>单条回答的状态顺序</h2>
+            <span class="muted">编号表示回答内的先后顺序</span>
+          </div>
+          <div id="trajectory"></div>
+        </section>
+        <section data-panel="risk" class="workspace-panel" hidden>
+          <div class="section-head">
+            <h2>输出分布与 Teacher 的距离</h2>
+            <button id="download-risk" class="quiet">SVG ↓</button>
+          </div>
+          <div class="control-row">
+            <label
+              >固定回答
+              <select id="risk-bank">
+                <option value="public_initial">Initial</option>
+                <option value="public_teacher">Teacher</option>
+              </select></label
+            >
+            <label
+              >评估域
+              <select id="risk-domain">
+                <option value="math">Math · 128 题</option>
+                <option value="code">Code · 64 题</option>
+                <option value="if">IF · 64 题</option>
+                <option value="all">三域等权</option>
+              </select></label
+            >
+            <label
+              >纵轴
+              <select id="risk-scale">
+                <option value="log">RKL · 对数</option>
+                <option value="linear">RKL · 线性</option>
+                <option value="remaining">剩余比例</option>
+              </select></label
+            >
+            <label><input type="checkbox" id="risk-compare" />比较三组</label>
+          </div>
+          <div class="chart-box">
+            <svg id="risk-chart" role="img" aria-label="Held-out reverse KL" viewBox="0 0 1040 300"></svg>
+            <div id="risk-tip" class="chart-tip" hidden></div>
+          </div>
+          <div id="risk-legend" class="legend"></div>
+          <p id="risk-caption" class="caption"></p>
+          <details>
+            <summary>数值表</summary>
+            <div class="table-wrap"><table id="risk-table"></table></div>
+          </details>
+        </section>
+        <details class="support-details" id="experiment-details">
+          <summary>实验设置与测量说明</summary>
+          <div id="settings" class="settings-grid"></div>
+          <p>
+            固定 teacher 编码；训练回答按完整 prompt 留出约 40% 作状态测试。Initial / Teacher 各 128 条 Math
+            回答只作查询。簇对照使用各来源全部测试状态，样本数不同；几何指标另按相同回答数抽样。
+          </p>
+          <p>
+            训练阶段的题目不同，末段是更新前 rollout 的汇总。簇占用差值描述访问分布；RKL
+            衡量固定回答上的输出匹配，均不等同于任务正确率。
+          </p>
+          <div id="budget" class="settings-grid"></div>
+          <div class="table-wrap"><table id="source-table"></table></div>
+          <details>
+            <summary>执行与来源</summary>
+            <div id="infra"></div>
+            <pre id="provenance"></pre>
+          </details>
+        </details>
+      </section>
+      <footer>
+        <a href="README.md#已保存-rollout-的状态对照">研究正文 ↗</a
+        ><a href="latent-state-pooled.html">旧 pooled 结果 ↗</a>
+      </footer>
+    </main>
+    <!--DATA--><!--SCRIPT-->
+  </body>
+</html>

@@ -1,0 +1,87 @@
+"""Probe the first response token: teacher, base student and distilled student next-token distributions at the
+prompt's last token (the state every rollout starts from).
+
+Question: the teacher opens every rollout with <think> (entropy ~0.002 nats) while the distilled student never
+does. Is that because a reverse-KL gradient on a token's logit scales with the student's own probability of it?
+For each model we report p(<think>), the top tokens, full-vocabulary reverse and forward KL to the teacher, and
+the per-logit gradients of both divergences at <think>:
+  d KL(p_S||p_T) / d z_v = p_S(v) * (log p_S(v) - log p_T(v) - KL(p_S||p_T))
+  d KL(p_T||p_S) / d z_v = p_S(v) - p_T(v)
+CPU only (bf16 forward, float32 softmax); one forward per prompt and model.
+"""
+import argparse
+import json
+import time
+
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+THINK = 151667
+
+
+def next_token_logp(model, prompt_ids):
+    """log-softmax (float32) of the next-token logits after the full prompt."""
+    with torch.no_grad():
+        logits = model(torch.tensor([prompt_ids])).logits[0, -1].float()
+    return torch.log_softmax(logits, -1)
+
+
+def summarize(logp_s, logp_t, tok, k=8):
+    """Divergences, <think> statistics and top-k tokens of a student distribution against the teacher's."""
+    p_s, p_t = logp_s.exp(), logp_t.exp()
+    rkl = float((p_s * (logp_s - logp_t)).sum())
+    fkl = float((p_t * (logp_t - logp_s)).sum())
+    v = THINK
+    top = torch.topk(logp_s, k)
+    t_rank = torch.argsort(logp_t, descending=True)
+    rank_of = {int(i): r for r, i in enumerate(t_rank[:200000].tolist())}
+    return {
+        "reverse_kl": rkl, "forward_kl": fkl, "overlap": float(torch.minimum(p_s, p_t).sum()),
+        "logp_think": float(logp_s[v]),
+        "grad_reverse_kl_think": float(p_s[v] * (logp_s[v] - logp_t[v] - rkl)),
+        "grad_forward_kl_think": float(p_s[v] - p_t[v]),
+        "top": [{"id": int(i), "text": tok.decode([int(i)]), "p": float(lp.exp()),
+                 "teacher_logp": float(logp_t[int(i)]), "teacher_rank": rank_of.get(int(i))}
+                for lp, i in zip(top.values, top.indices)],
+        "mass_on_teacher_top100_excl_think": float(p_s[t_rank[1:101]].sum()),
+    }
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--bank", required=True, help="rollouts.jsonl whose prompt_ids are used (sample 0)")
+    ap.add_argument("--teacher", required=True)
+    ap.add_argument("--student", action="append", required=True, help="NAME=path (repeatable)")
+    ap.add_argument("--n-prompts", type=int, default=16)
+    ap.add_argument("--output", required=True)
+    args = ap.parse_args()
+    rows = [json.loads(line) for line in open(args.bank)]
+    prompts = [(r["id"], r["prompt_ids"]) for r in rows if r["sample"] == 0][: args.n_prompts]
+    tok = AutoTokenizer.from_pretrained(args.teacher)
+    torch.set_num_threads(max(1, torch.get_num_threads()))
+    load = lambda p: AutoModelForCausalLM.from_pretrained(p, torch_dtype=torch.bfloat16).eval()  # noqa: E731
+    t0 = time.time()
+    teacher = load(args.teacher)
+    logp_t = {pid: next_token_logp(teacher, ids) for pid, ids in prompts}
+    del teacher
+    teacher_self = [summarize(logp_t[pid], logp_t[pid], tok) for pid, _ in prompts]
+    out = {"prompts": [pid for pid, _ in prompts], "teacher": teacher_self, "students": {}}
+    for spec in args.student:
+        name, path = spec.split("=", 1)
+        model = load(path)
+        out["students"][name] = [summarize(next_token_logp(model, ids), logp_t[pid], tok) for pid, ids in prompts]
+        del model
+        print(f"{time.time() - t0:.0f}s {name} done", flush=True)
+    keys = ["reverse_kl", "forward_kl", "overlap", "logp_think", "grad_reverse_kl_think", "grad_forward_kl_think",
+            "mass_on_teacher_top100_excl_think"]
+    out["means"] = {name: {k: sum(s[k] for s in v) / len(v) for k in keys} for name, v in out["students"].items()}
+    out["means"]["teacher"] = {k: sum(s[k] for s in teacher_self) / len(teacher_self) for k in ["logp_think"]}
+    json.dump(out, open(args.output, "w"), indent=1, ensure_ascii=False)
+    print(json.dumps(out["means"], indent=1))
+    for name, v in out["students"].items():
+        print(name, "prompt0 top:", [(t["text"], round(t["p"], 4), t["teacher_rank"]) for t in v[0]["top"]])
+    print("teacher prompt0 top:", [(t["text"], round(t["p"], 6)) for t in teacher_self[0]["top"]])
+
+
+if __name__ == "__main__":
+    main()
