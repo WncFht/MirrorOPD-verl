@@ -94,6 +94,7 @@ DEFAULT_IGNORE_DIRS = (
     "examples/mtp_trainer",
     # Research evidence and smoke harnesses have their own entry/record names.
     "examples/mirroropd/docs",
+    "examples/mirroropd/research-evidence",
     "examples/mirroropd/smoke",
     "examples/mirroropd/launchers",  # private fragments behind the public run entry
     "examples/mirroropd/outputs",  # local generated commands, not source entry points

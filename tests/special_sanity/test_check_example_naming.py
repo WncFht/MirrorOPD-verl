@@ -121,3 +121,16 @@ def test_synthetic_violation_fails(tmp_path):
         ]
     )
     assert rc == 1
+
+
+def test_local_evidence_exempt_but_active_launchers_checked(tmp_path):
+    examples = tmp_path / "examples"
+    evidence = examples / "mirroropd" / "research-evidence" / "old-run"
+    evidence.mkdir(parents=True)
+    (evidence / "command.sh").write_text("#!/bin/bash\n")
+    args = ["--root", str(examples), "--repo-root", str(tmp_path)]
+    assert main(args) == 0
+    active = examples / "grpo_trainer"
+    active.mkdir()
+    (active / "command.sh").write_text("#!/bin/bash\n")
+    assert main(args) == 1
