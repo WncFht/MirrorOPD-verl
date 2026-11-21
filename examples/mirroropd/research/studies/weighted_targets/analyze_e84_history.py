@@ -29,7 +29,7 @@ from examples.mirroropd.research.studies.weighted_targets.plot_validation_compar
 BASE = ROOT / "examples/mirroropd/docs/experiments/learning-signal"
 LOGS = ROOT.parent / "wandb-logs"
 SOURCE = LOGS / "derived/MirrorOPD-verl/offline-run-20261109_022054-x73jzh0z"
-SNAPSHOT = ROOT / "runs/wandb-e84-20261110"
+SNAPSHOT = ROOT / "examples/mirroropd/research-evidence/tracking-logs/wandb-e84-20261110"
 OUT = BASE / "figures/e84-future-kl-20261110"
 DATA = BASE / "data/e84-wandb-20261110"
 REFERENCE = BASE / "figures/e82-e83-comparison-20261107/updates.csv"

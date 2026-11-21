@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Synthesis figure for the teacher/student cross-batch report."""
 
+import argparse
 import csv
 import json
 import os
@@ -26,17 +27,22 @@ def read_rows(path):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", type=Path, default=ROOT / "runs/teacher-difference-synthesis-20261110")
+    out = parser.parse_args().out
+
     os.environ["FIGURE_VIZ_MPL"] = str(STYLE)
     fv.apply_rc("paper")
-    out = Path("runs/teacher-difference-synthesis-20261110")
+    evidence = Path("examples/mirroropd/research-evidence")
+    sources = {
+        "r1_pac": evidence / "transfer/teacher-difference-stages-20261109/analysis/r1_pac_factors.csv",
+        "crossed": evidence / "transfer/teacher-difference-crossed-20261109/update-analysis/test-summary.csv",
+        "qwen": evidence / "transfer/teacher-difference-qwen-20261109/cross-analysis/cross-batch.csv",
+    }
+    pac = read_rows(ROOT / sources["r1_pac"])
+    crossed = read_rows(ROOT / sources["crossed"])
+    qwen = [r for r in read_rows(ROOT / sources["qwen"]) if r["role"] == "all-train" and r["field"] == "live"]
     out.mkdir(parents=True, exist_ok=True)
-    pac = read_rows(Path("runs/teacher-difference-stages-20261109/analysis/r1_pac_factors.csv"))
-    crossed = read_rows(Path("runs/teacher-difference-crossed-20261109/update-analysis/test-summary.csv"))
-    qwen = [
-        r
-        for r in read_rows(Path("runs/teacher-difference-qwen-20261109/cross-analysis/cross-batch.csv"))
-        if r["role"] == "all-train" and r["field"] == "live"
-    ]
     fig, axes = plt.subplots(2, 2, figsize=(8.0, 5.8))
     fig.subplots_adjust(left=0.10, right=0.97, bottom=0.16, top=0.91, wspace=0.34, hspace=0.42)
     colors = {"justrl": fv.HUES["vteal"], "polaris": fv.HUES["vorange"]}
@@ -147,9 +153,7 @@ def main():
     (out / "sources.json").write_text(
         json.dumps(
             {
-                "r1_pac": str(Path("runs/teacher-difference-stages-20261109/analysis/r1_pac_factors.csv")),
-                "crossed": str(Path("runs/teacher-difference-crossed-20261109/update-analysis/test-summary.csv")),
-                "qwen": str(Path("runs/teacher-difference-qwen-20261109/cross-analysis/cross-batch.csv")),
+                **{key: path.as_posix() for key, path in sources.items()},
                 "audits": [fv.format_audit_lines(problems)],
             },
             indent=2,

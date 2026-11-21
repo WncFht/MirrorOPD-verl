@@ -26,7 +26,7 @@ from omegaconf import OmegaConf
 
 from examples.mirroropd.research.studies.weighted_targets.plot_e81_validation import ROOT, style
 
-RUN = ROOT / "runs/e91-mimo-rlzero-sft-20261107"
+RUN = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107"
 OUT = ROOT / "examples/mirroropd/docs/experiments/teacher-transfer/figures/e91-initial-20261107"
 
 

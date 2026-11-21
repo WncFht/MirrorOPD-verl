@@ -11,7 +11,7 @@
 # 本注释与 --overview 共用 launchers/math_experiment.py 的 preset_overview()；修改源后同步生成区。
 # 以下均为当前预设默认值；已启动实验以其 resolved config 为准。
 #
-# E94–E123：30组吸收动力学，current OPD；四卡、batch64/reuse16、40 outer。
+# E94–E123：30组吸收动力学；E124/E125：SGD；E126–E129：同 E102 配对 Muon LR 扫描。四卡、batch64/reuse16、40 outer。
 # 训练和双固定bank均cap7168，每outer只读bank RKL，不测accuracy、不重新生成current heldout。
 # 保存outer1/2/3/4/8/12/20/30/40，9份FP32新增快照；ABSORPTION_ROOT指定新题单与bank。
 # Preset  Student                        Teacher
@@ -45,6 +45,79 @@
 # E121    Llama-3.1-Tulu-3-8B-SFT        Llama-3.1-Tulu-3-8B-DPO
 # E122    Llama-3.1-Tulu-3-8B-DPO        Llama-3.1-Tulu-3-8B
 # E123    Llama-3.1-Tulu-3-8B-SFT        Llama-3.1-Tulu-3-8B
+#
+# 优化器 LR 矩阵（预设配置，运行进度见 dashboard）
+# E152–E173 为 E130–E151 的新 attempt，协议相同；旧编号保留，不能用旧编号推断正在运行。
+# 每格为 E 编号；括号内为旧 attempt。Muon 使用 match_rms_adamw，辅助 AdamW LR=1e-6。
+# 全部 WD=0、batch64/reuse16、40 outer；SGD 无动量。历史 E94–E123 AdamW LR=1e-6、WD=0.01。
+# Pair  Optimizer  3e-07       1e-06       3e-06       1e-05       3e-05       1e-02  3e-02
+# E95   Muon       —           E160(E138)  E156(E134)  E158(E136)  —           —      —
+# E95   AdamW      E161(E139)  E157(E135)  E159(E137)  —           —           —      —
+# E102  SGD        —           —           —           —           —           E124   E125
+# E102  Muon       E126        E127        E128        E129        E155(E133)  —      —
+# E102  AdamW      E154(E132)  E152(E130)  E153(E131)  —           —           —      —
+# E109  Muon       —           E166(E144)  E162(E140)  E164(E142)  —           —      —
+# E109  AdamW      E167(E145)  E163(E141)  E165(E143)  —           —           —      —
+# E117  Muon       —           E172(E150)  E168(E146)  E170(E148)  —           —      —
+# E117  AdamW      E173(E151)  E169(E147)  E171(E149)  —           —           —      —
+# 师生配对（Student ← Teacher）
+# Pair  Student                        Teacher
+# E95   DeepSeek-R1-Distill-Qwen-1.5B  JustRL-DeepSeek-1.5B
+# E102  Qwen3-1.7B                     Qwen3-4B-Instruct-2507
+# E109  DeepSeek-R1-Distill-Qwen-1.5B  Polaris-7B-Preview
+# E117  Qwen3-Base-AbsorptionProtocol  Qwen3-1.7B-SFT
+# 完整展开（可直接以 E 编号启动；辅助 LR 与 WD 分列）
+# Preset  Pair  Optimizer  LR     Aux LR  WD  Retry of
+# E124    E102  SGD        1e-02  —       0   —
+# E125    E102  SGD        3e-02  —       0   —
+# E126    E102  Muon       3e-07  1e-06   0   —
+# E127    E102  Muon       1e-06  1e-06   0   —
+# E128    E102  Muon       3e-06  1e-06   0   —
+# E129    E102  Muon       1e-05  1e-06   0   —
+# E130    E102  AdamW      1e-06  —       0   —
+# E131    E102  AdamW      3e-06  —       0   —
+# E132    E102  AdamW      3e-07  —       0   —
+# E133    E102  Muon       3e-05  1e-06   0   —
+# E134    E95   Muon       3e-06  1e-06   0   —
+# E135    E95   AdamW      1e-06  —       0   —
+# E136    E95   Muon       1e-05  1e-06   0   —
+# E137    E95   AdamW      3e-06  —       0   —
+# E138    E95   Muon       1e-06  1e-06   0   —
+# E139    E95   AdamW      3e-07  —       0   —
+# E140    E109  Muon       3e-06  1e-06   0   —
+# E141    E109  AdamW      1e-06  —       0   —
+# E142    E109  Muon       1e-05  1e-06   0   —
+# E143    E109  AdamW      3e-06  —       0   —
+# E144    E109  Muon       1e-06  1e-06   0   —
+# E145    E109  AdamW      3e-07  —       0   —
+# E146    E117  Muon       3e-06  1e-06   0   —
+# E147    E117  AdamW      1e-06  —       0   —
+# E148    E117  Muon       1e-05  1e-06   0   —
+# E149    E117  AdamW      3e-06  —       0   —
+# E150    E117  Muon       1e-06  1e-06   0   —
+# E151    E117  AdamW      3e-07  —       0   —
+# E152    E102  AdamW      1e-06  —       0   E130
+# E153    E102  AdamW      3e-06  —       0   E131
+# E154    E102  AdamW      3e-07  —       0   E132
+# E155    E102  Muon       3e-05  1e-06   0   E133
+# E156    E95   Muon       3e-06  1e-06   0   E134
+# E157    E95   AdamW      1e-06  —       0   E135
+# E158    E95   Muon       1e-05  1e-06   0   E136
+# E159    E95   AdamW      3e-06  —       0   E137
+# E160    E95   Muon       1e-06  1e-06   0   E138
+# E161    E95   AdamW      3e-07  —       0   E139
+# E162    E109  Muon       3e-06  1e-06   0   E140
+# E163    E109  AdamW      1e-06  —       0   E141
+# E164    E109  Muon       1e-05  1e-06   0   E142
+# E165    E109  AdamW      3e-06  —       0   E143
+# E166    E109  Muon       1e-06  1e-06   0   E144
+# E167    E109  AdamW      3e-07  —       0   E145
+# E168    E117  Muon       3e-06  1e-06   0   E146
+# E169    E117  AdamW      1e-06  —       0   E147
+# E170    E117  Muon       1e-05  1e-06   0   E148
+# E171    E117  AdamW      3e-06  —       0   E149
+# E172    E117  Muon       1e-06  1e-06   0   E150
+# E173    E117  AdamW      3e-07  —       0   E151
 #
 # 一、E81–E90 / E92–E93：Qwen Base 的聚合与 future reward 对照
 # 学生 Qwen3-1.7B-Base ← 教师 Qwen3-30B-A3B-Instruct-2507。
@@ -179,31 +252,38 @@
 # 六、全部编号的预算与覆盖规则
 #
 # 训练预算：Eval/Save 均按 outer step；Updates*=默认 batch==mini-batch 时的更新尝试数。
-# Presets           Reuse  Outer  Updates*  LR      Eval/Save  Initial val
-# E1-E6             4      32     128       shared  32/32      no
-# E7-E12            16     200    3200      shared  50/100     no
-# E13,E15,E23-E32   1      250    250       1e-6    20/100     yes
-# E14               1      250    250       5e-7    20/100     yes
-# E16               4      250    1000      1e-6    20/100     yes
-# E17,E33-E40,E42   16     250    4000      1e-6    20/100     yes
-# E18               64     64     4096      1e-6    8/16       no
-# E19               32     128    4096      1e-6    16/32      no
-# E20               16     256    4096      1e-6    32/64      no
-# E41,E54           16     100    1600      1e-6    10/50      no
-# E43               16     100    1600      1e-6    10/50      yes
-# E44-E47,E50-E53   16     256    4096      1e-6    32/128     no
-# E48-E49           16     256    4096      1e-6    32/64      yes
-# E55-E62           16     100    1600      1e-6    10/-1      no
-# E63-E68,E94-E123  16     40     640       1e-6    -1/-1      yes
-# E71               32     25     800       1e-6    -1/-1      yes
-# E72-E73,E91       16     20     320       1e-6    -1/-1      yes
-# E74-E77           32     50     1600      1e-6    -1/-1      yes
-# E78-E80           16     100    1600      1e-6    -1/-1      yes
-# E81               16     25     400       1e-6    5/-1       no
-# E82               16     100    1600      1e-6    5/-1       no
-# E83               16     100    1600      1e-6    5/25       no
-# E84               16     100    1600      1e-6    20/25      no
-# E85-E90,E92-E93   16     100    1600      1e-6    20/-1      no
+# Presets                                                                     Reuse  Outer  Updates*  LR      Eval/Save  Initial val
+# E1-E6                                                                       4      32     128       shared  32/32      no
+# E7-E12                                                                      16     200    3200      shared  50/100     no
+# E13,E15,E23-E32                                                             1      250    250       1e-6    20/100     yes
+# E14                                                                         1      250    250       5e-7    20/100     yes
+# E16                                                                         4      250    1000      1e-6    20/100     yes
+# E17,E33-E40,E42                                                             16     250    4000      1e-6    20/100     yes
+# E18                                                                         64     64     4096      1e-6    8/16       no
+# E19                                                                         32     128    4096      1e-6    16/32      no
+# E20                                                                         16     256    4096      1e-6    32/64      no
+# E41,E54                                                                     16     100    1600      1e-6    10/50      no
+# E43                                                                         16     100    1600      1e-6    10/50      yes
+# E44-E47,E50-E53                                                             16     256    4096      1e-6    32/128     no
+# E48-E49                                                                     16     256    4096      1e-6    32/64      yes
+# E55-E62                                                                     16     100    1600      1e-6    10/-1      no
+# E63-E68,E94-E123                                                            16     40     640       1e-6    -1/-1      yes
+# E71                                                                         32     25     800       1e-6    -1/-1      yes
+# E72-E73,E91                                                                 16     20     320       1e-6    -1/-1      yes
+# E74-E77                                                                     32     50     1600      1e-6    -1/-1      yes
+# E78-E80                                                                     16     100    1600      1e-6    -1/-1      yes
+# E81                                                                         16     25     400       1e-6    5/-1       no
+# E82                                                                         16     100    1600      1e-6    5/-1       no
+# E83                                                                         16     100    1600      1e-6    5/25       no
+# E84                                                                         16     100    1600      1e-6    20/25      no
+# E85-E90,E92-E93                                                             16     100    1600      1e-6    20/-1      no
+# E124                                                                        16     40     640       0.01    -1/-1      yes
+# E125                                                                        16     40     640       0.03    -1/-1      yes
+# E126,E132,E139,E145,E151,E154,E161,E167,E173                                16     40     640       3e-07   -1/-1      yes
+# E127,E130,E135,E138,E141,E144,E147,E150,E152,E157,E160,E163,E166,E169,E172  16     40     640       1e-06   -1/-1      yes
+# E128,E131,E134,E137,E140,E143,E146,E149,E153,E156,E159,E162,E165,E168,E171  16     40     640       3e-06   -1/-1      yes
+# E129,E136,E142,E148,E158,E164,E170                                          16     40     640       1e-05   -1/-1      yes
+# E133,E155                                                                   16     40     640       3e-05   -1/-1      yes
 # Eval=-1 关闭常规验证；原生 evaluation 协议的 bank/bench 仍按各组独立日程执行。
 # Save=-1 关闭周期 checkpoint；原生协议的最终 HF 导出见各组说明。
 #

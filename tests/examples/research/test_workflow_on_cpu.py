@@ -85,7 +85,15 @@ def test_workers_import_frozen_shared_code(tmp_path):
     rewards = original / "examples/mirroropd/rewards"
     rewards.mkdir()
     (rewards / "reward.py").write_text("def reward_func(): return 42\n")
+    tools = original / "examples/mirroropd/tools"
+    tools.mkdir()
+    (tools / "sgd_campaign.py").write_text("VALUE = 'frozen controller'\n")
+    launcher = original / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh"
+    launcher.write_text("#!/bin/bash\nexit 0\n")
     snapshot = freeze(original, tmp_path / "source")
+    (tools / "sgd_campaign.py").write_text("VALUE = 'changed controller'\n")
+    assert (snapshot / "examples/mirroropd/tools/sgd_campaign.py").read_text() == "VALUE = 'frozen controller'\n"
+    assert (snapshot / "examples/mirroropd/run_math_opd_ablation_fsdp2.sh").read_text() == "#!/bin/bash\nexit 0\n"
     (rewards / "reward.py").unlink()
     assert (snapshot / "examples/mirroropd/rewards/reward.py").read_text() == "def reward_func(): return 42\n"
     (original / "verl/__init__.py").write_text("VALUE = 'changed'\n")

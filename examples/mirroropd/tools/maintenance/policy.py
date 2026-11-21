@@ -2,11 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 """Shared scope for formatting and checking, adapted from agent-maintenance."""
 
+from os import walk
 from pathlib import Path
 
 COMPONENT = Path("examples/mirroropd")
 EXCLUDED = {
     "archive",
+    "research-evidence",
     "history",
     "archived",
     "data",
@@ -32,6 +34,8 @@ def owned(path, component):
     if path.is_symlink() or not path.is_file() or path.suffix != ".md":
         return False
     relative = path.relative_to(component)
+    if relative == Path("research-evidence/README.md"):
+        return True
     if relative.is_relative_to("docs/infra/numerics/full-vocab/reference"):
         return False
     return not EXCLUDED.intersection(relative.parts)
@@ -51,7 +55,14 @@ def markdown_files(repo, explicit=()):
                 raise ValueError(f"Not an editable project Markdown file: {value}")
             result.append(path)
     else:
-        result = [path for path in component.rglob("*.md") if owned(path, component)]
+        index = component / "research-evidence/README.md"
+        result = [index] if owned(index, component) else []
+        for directory, children, files in walk(component):
+            children[:] = [name for name in children if name not in EXCLUDED]
+            for name in files:
+                path = Path(directory) / name
+                if name.endswith(".md") and owned(path, component):
+                    result.append(path)
     if not result:
         raise ValueError("No maintained Markdown inputs; refusing an empty check")
     return sorted(set(result))

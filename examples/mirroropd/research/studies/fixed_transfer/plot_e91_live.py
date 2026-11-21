@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[5]
-RUN = ROOT / "runs/e91-mimo-rlzero-sft-20261107"
+RUN = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107"
 METRICS = RUN / "formal/E91/metrics.jsonl"
 EVENTS = RUN / "formal/E91/evaluation/events"
 OUTPUT = ROOT / "examples/mirroropd/docs/experiments/teacher-transfer/figures/e91-live-20261108"

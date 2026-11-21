@@ -129,7 +129,7 @@ def accuracy(evidence, paths, *, endpoints=ENDPOINTS, comparisons=None):
 
 
 def collect(root, out):
-    repo = root.parents[1]
+    repo = Path(__file__).resolve().parents[5]
     evidence = Evidence(repo)
     recovery = root / "recovery-20261101"
     manifest = evidence.read(recovery / "manifest.json")
@@ -248,7 +248,9 @@ def collect(root, out):
         )
         paths[arm] = run / "science/outer-040/accuracy"
     result["accuracy"], result["paired_accuracy"], prompts = accuracy(evidence, paths)
-    baseline = evidence.read(repo / "runs/token-fusion-tuning-20261031/summary.json")
+    baseline = evidence.read(
+        repo / "examples/mirroropd/research-evidence/qwen-prefix-six/token-fusion-tuning-20261031/summary.json"
+    )
     result["rollout_pilots"] = [
         dict(
             name=r["name"],

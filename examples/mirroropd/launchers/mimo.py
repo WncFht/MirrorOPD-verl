@@ -23,10 +23,25 @@ def questions(path, *, required, setting="MIMO_QUESTIONS"):
     document = json.loads(manifest.read_text())
     if document.get("status") != "complete" or document.get("kind") != "question_sets":
         raise ValueError(f"{setting} must contain a complete question_sets manifest")
+
+    # The artifact receipt records relative file names alongside its original absolute paths.
+    def artifact_path(value):
+        parts = Path(value).parts
+        relative = Path(*parts[-2:])
+        if relative.as_posix() in document.get("files", {}):
+            return str(manifest.parent.resolve() / relative)
+        return value
+
     metadata = document["metadata"]
+    metadata["paths"] = {
+        domain: {kind: artifact_path(value) for kind, value in paths.items()}
+        for domain, paths in metadata["paths"].items()
+    }
     if metadata["split_reports"]["math"]["training"] < required:
         raise ValueError("Stage-chain training pool cannot cover the budget without repeating questions")
-    datasets = [{**entry, "protocol": entry["domain"]} for entry in metadata["datasets"]]
+    datasets = [
+        {**entry, "path": artifact_path(entry["path"]), "protocol": entry["domain"]} for entry in metadata["datasets"]
+    ]
     if {entry["domain"] for entry in datasets} != set(PUBLIC_LENGTHS):
         raise ValueError("Stage-chain comparison requires all four public evaluation domains")
     for domain in PUBLIC_LENGTHS:
@@ -55,7 +70,10 @@ def options(
         if not env.get(key):
             env[key] = str(value)
 
-    default(questions_key, root / "runs/unified-evaluation-20261031/questions-v2")
+    default(
+        questions_key,
+        root / "examples/mirroropd/research-evidence/evaluation-inputs" / "unified-evaluation-20261031/questions-v2",
+    )
     default(bootstrap_key, root / "runs" / run_namespace / name / "bootstrap")
     world = int(env["STUDENT_GPUS"])
     batch = int(env["TRAIN_BATCH_SIZE"])

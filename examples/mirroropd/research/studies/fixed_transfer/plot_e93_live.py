@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[5]
-RUN = ROOT / "runs/e93-mimo-rl-sft-20261108"
+RUN = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108"
 QUEUE = RUN / "queue-state.json"
 TRAIN_LOG = RUN / "logs/E93-train.log"
 METRICS = RUN / "formal/E93/metrics.jsonl"
@@ -19,13 +19,19 @@ OUTPUT = ROOT / "examples/mirroropd/docs/experiments/teacher-transfer/figures/e9
 
 def snapshot():
     queue = json.loads(QUEUE.read_text())
-    metric_rows = [json.loads(line) for line in METRICS.read_text().splitlines() if line.strip()] if METRICS.exists() else []
+    metric_rows = (
+        [json.loads(line) for line in METRICS.read_text().splitlines() if line.strip()] if METRICS.exists() else []
+    )
     updates = [r for r in metric_rows if r.get("data", {}).get("optim/actor/update_applied") == 1.0]
     try:
-        gpu_lines = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=index,utilization.gpu,memory.used,memory.total", "--format=csv,noheader"],
-            text=True,
-        ).strip().splitlines()
+        gpu_lines = (
+            subprocess.check_output(
+                ["nvidia-smi", "--query-gpu=index,utilization.gpu,memory.used,memory.total", "--format=csv,noheader"],
+                text=True,
+            )
+            .strip()
+            .splitlines()
+        )
     except (OSError, subprocess.CalledProcessError):
         gpu_lines = []
     gpus = []
@@ -49,6 +55,7 @@ def render(data):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
     from examples.mirroropd.research.core.plotting import load_style, save_figure
 
     style = load_style()
@@ -59,9 +66,21 @@ def render(data):
 
     ax = axes[0]
     ax.barh([50], [data["optimizer_updates"]], color=colors[0], height=20, label="completed")
-    ax.barh([50], [data["planned_updates"] - data["optimizer_updates"]], left=[data["optimizer_updates"]], color=style.NEUTRALS["vmist"], height=20, label="remaining")
+    ax.barh(
+        [50],
+        [data["planned_updates"] - data["optimizer_updates"]],
+        left=[data["optimizer_updates"]],
+        color=style.NEUTRALS["vmist"],
+        height=20,
+        label="remaining",
+    )
     ax.set_xlim(0, data["planned_updates"])
-    ax.set(xlabel="Updates", ylabel="Progress", ylim=(0, 100), title=f'{data["optimizer_updates"]}/{data["planned_updates"]} completed')
+    ax.set(
+        xlabel="Updates",
+        ylabel="Progress",
+        ylim=(0, 100),
+        title=f"{data['optimizer_updates']}/{data['planned_updates']} completed",
+    )
     ax.set_yticks([])
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.grid(axis="x", alpha=0.18)
@@ -70,20 +89,30 @@ def render(data):
     ax = axes[1]
     gpu_ids = [r["gpu"] for r in data["gpus"]]
     usage = [float(r["utilization"].split()[0]) for r in data["gpus"]]
-    bars = ax.bar([str(g) for g in gpu_ids], usage, color=[colors[1] if g in {1, 2, 3, 4} else colors[2] for g in gpu_ids])
+    bars = ax.bar(
+        [str(g) for g in gpu_ids], usage, color=[colors[1] if g in {1, 2, 3, 4} else colors[2] for g in gpu_ids]
+    )
     ax.set(xlabel="Physical GPU", ylabel="Utilization (%)", ylim=(0, 100))
     ax.grid(axis="y", alpha=0.18)
     ax.spines[["top", "right"]].set_visible(False)
-    for bar, value in zip(bars, usage):
+    for bar, value in zip(bars, usage, strict=False):
         ax.text(bar.get_x() + bar.get_width() / 2, value + 3, f"{value:.0f}", ha="center", fontsize=8)
-    caption = f'E93 MiMo-7B-RL → MiMo-7B-SFT · {data["snapshot"]} · phase={data["phase"]}'
+    caption = f"E93 MiMo-7B-RL → MiMo-7B-SFT · {data['snapshot']} · phase={data['phase']}"
     save_figure(fig, OUTPUT / "e93-live-progress", caption)
 
 
 def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     data = snapshot()
-    fields = ["snapshot", "phase", "queue_status", "completed_stages", "optimizer_updates", "planned_updates", "train_log_bytes"]
+    fields = [
+        "snapshot",
+        "phase",
+        "queue_status",
+        "completed_stages",
+        "optimizer_updates",
+        "planned_updates",
+        "train_log_bytes",
+    ]
     with (OUTPUT / "status.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields)
         writer.writeheader()
@@ -94,7 +123,9 @@ def main():
         "sources": {
             str(QUEUE.relative_to(ROOT)): hashlib.sha256(QUEUE.read_bytes()).hexdigest(),
             str(TRAIN_LOG.relative_to(ROOT)): hashlib.sha256(TRAIN_LOG.read_bytes()).hexdigest(),
-            str(METRICS.relative_to(ROOT)): hashlib.sha256(METRICS.read_bytes()).hexdigest() if METRICS.exists() else None,
+            str(METRICS.relative_to(ROOT)): hashlib.sha256(METRICS.read_bytes()).hexdigest()
+            if METRICS.exists()
+            else None,
         },
         "data": data,
     }

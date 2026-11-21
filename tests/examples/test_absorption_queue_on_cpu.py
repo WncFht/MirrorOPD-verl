@@ -4,9 +4,10 @@
 
 import json
 import os
+import sys
 from pathlib import Path
 
-from examples.mirroropd.research.studies.absorption_dynamics import queue
+from examples.mirroropd.tools import absorption_queue as queue
 
 
 def test_prepare_selection_excludes_completed_pairs_and_rejects_duplicate_ids():
@@ -15,7 +16,7 @@ def test_prepare_selection_excludes_completed_pairs_and_rejects_duplicate_ids():
     rows = queue.selected_pairs([f"E{n}" for n in range(105, 124)])
     assert [row[0] for row in rows] == list(range(105, 124))
     assert len(queue.selected_pairs()) == 30
-    for names in ([], ["E105", "E105"], ["E124"]):
+    for names in ([], ["E105", "E105"], ["E174"]):
         with pytest.raises(ValueError, match="unique registered"):
             queue.selected_pairs(names)
 
@@ -31,6 +32,7 @@ def test_queue_defers_runtime_interpolation_and_uses_legacy_guard(monkeypatch, t
     config.write_text(
         "actor_rollout_ref:\n  model: {path: initial}\n  rollout: {}\n"
         "trainer:\n  evaluation: {protocols: {}, datasets: []}\n"
+        f"ray_kwargs:\n  ray_init:\n    runtime_env:\n      py_executable: {sys.executable}\n"
         "runtime: ${oc.env:ABSORPTION_UNSET_RUNTIME_TEST}\n"
     )
     monkeypatch.delenv("ABSORPTION_UNSET_RUNTIME_TEST", raising=False)
@@ -58,6 +60,8 @@ def test_queue_defers_runtime_interpolation_and_uses_legacy_guard(monkeypatch, t
 
         def __init__(self, args, **kwargs):
             calls.append(args)
+            assert args[0] == sys.executable
+            assert args[args.index("--") + 1] == sys.executable
             assert "--source" not in args
             assert args[args.index("--") + 2] == "-c"
             assert args[args.index("--") + 4] == str(source)
@@ -81,6 +85,7 @@ def test_queue_defers_runtime_interpolation_and_uses_legacy_guard(monkeypatch, t
             return {"metadata": metadata}
 
     monkeypatch.setattr(queue.subprocess, "Popen", Process)
+    monkeypatch.setattr(queue, "sys", type("ControllerPython", (), {"executable": "/different/controller/python"}))
     monkeypatch.setattr(artifacts, "ArtifactStore", Store)
     queue.run(study, broker)
     assert len(calls) == 4
@@ -109,7 +114,7 @@ def test_partition_accepts_historical_extended_and_partial_manifests():
     assert len(front) == len(back) == 15
     assert 103 in front and 104 in back
     with pytest.raises(ValueError, match="unregistered"):
-        queue.partition_numbers(["E124"])
+        queue.partition_numbers(["E174"])
 
 
 def test_cpu_admission_rejects_domain_overlap_and_prefix_mismatch():
@@ -149,3 +154,82 @@ def test_cpu_admission_rejects_domain_overlap_and_prefix_mismatch():
 
     with pytest.raises(ValueError, match="Shared-prefix"):
         check_questions(student, OtherTokenizer(), Contract(), tables, {})
+
+
+def test_optimizer_branches_require_calibration_and_preserve_historical_output(tmp_path):
+    import pytest
+
+    from examples.mirroropd.launchers.absorption import options
+
+    (tmp_path / "questions").mkdir()
+    (tmp_path / "questions/datasets.json").write_text("[]")
+    for kind in ("sgd", "muon"):
+        with pytest.raises(ValueError, match="calibrated"):
+            options({"ABSORPTION_ROOT": str(tmp_path), "ABSORPTION_OPTIMIZER": kind}, "E94", tmp_path)
+    for number in range(94, 115):
+        env = {"ABSORPTION_ROOT": str(tmp_path), "ABSORPTION_OPTIMIZER": "sgd", "ABSORPTION_OPTIMIZER_LR": "0.01"}
+        overrides = options(env, f"E{number}", tmp_path)
+        assert env["RUN_DIR"] == str(tmp_path / "training-sgd" / f"E{number}")
+        assert "actor_rollout_ref.actor.optim.optimizer=SGD" in overrides
+        assert env["LEARNING_RATE"] == "0.01"
+        assert "actor_rollout_ref.actor.checkpoint.save_contents=[model,optimizer,extra,hf_model]" in overrides
+    env = {
+        "ABSORPTION_ROOT": str(tmp_path),
+        "ABSORPTION_OPTIMIZER": "muon",
+        "ABSORPTION_OPTIMIZER_LR": "1e-6",
+        "ABSORPTION_AUX_LR": "1e-6",
+    }
+    overrides = options(env, "E99", tmp_path)
+    assert "actor_rollout_ref.actor.optim.optimizer=MuonAdamW" in overrides
+    assert env["RUN_DIR"] == str(tmp_path / "training-muon/E99")
+
+
+def test_failed_reservation_is_released_before_process_attach(tmp_path):
+    import pytest
+
+    study = tmp_path / "study"
+    study.mkdir()
+    (study / "prepared.json").write_text(
+        json.dumps(
+            dict(
+                repo=str(tmp_path),
+                source=str(tmp_path),
+                devices=[0],
+                code={},
+                environment={},
+                configs={},
+                experiments={},
+                teacher_configs={},
+            )
+        )
+    )
+    marker = tmp_path / "released"
+    broker = tmp_path / "broker.py"
+    broker.write_text(
+        "from pathlib import Path\n"
+        "entry = {'desired': 'released', 'owner': None}\n"
+        "def registry(): return {'gpus': {'0': entry}}\n"
+        "def reserve(gpu, owner):\n"
+        "    entry.update(desired='reserved', owner=owner)\n"
+        "    raise RuntimeError('guardian identity mismatch')\n"
+        "def release(gpu, owner, reason):\n"
+        "    assert entry['owner'] == owner\n"
+        f"    Path({str(marker)!r}).write_text(reason)\n"
+    )
+    with pytest.raises(RuntimeError, match="guardian identity"):
+        queue.run(study, broker)
+    assert "before attaching" in marker.read_text()
+    assert json.loads((study / "status.json").read_text())["allocation_cleanup_errors"] == []
+
+
+def test_numbered_sgd_lr_presets(tmp_path):
+    from examples.mirroropd.launchers.absorption import options
+
+    (tmp_path / "questions").mkdir()
+    (tmp_path / "questions/datasets.json").write_text("[]")
+    for name, lr in (("E124", "0.01"), ("E125", "0.03")):
+        env = {"ABSORPTION_ROOT": str(tmp_path)}
+        overrides = options(env, name, tmp_path)
+        assert "actor_rollout_ref.actor.optim.optimizer=SGD" in overrides
+        assert env["LEARNING_RATE"] == lr
+        assert env["RUN_DIR"] == str(tmp_path / "training-sgd" / name)

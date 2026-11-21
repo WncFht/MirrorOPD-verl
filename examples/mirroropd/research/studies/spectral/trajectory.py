@@ -260,10 +260,14 @@ def resume_records(manifest, output, sources):
     return set(reused)
 
 
-def run(manifest, output, devices=("cpu",), workers=1, *, driver=None, resume_from=()):
+def run(manifest, output, devices=("cpu",), workers=1, *, driver=None, resume_from=(), task_order=None):
     """Bounded dynamic dispatch; STOP drains active matrices, then preserves a receipt."""
     if not manifest.get("tasks") or workers < 1:
         raise ValueError("Require nonempty tasks and positive workers")
+    if task_order is None:
+        task_order = list(range(len(manifest["tasks"])))
+    if any(type(i) is not int for i in task_order) or sorted(task_order) != list(range(len(manifest["tasks"]))):
+        raise ValueError("Task order must be a permutation of all original task indices")
     devices = tuple(devices)
     if not devices or len(set(devices)) != len(devices):
         raise ValueError("Provide unique devices")
@@ -274,10 +278,11 @@ def run(manifest, output, devices=("cpu",), workers=1, *, driver=None, resume_fr
     atomic_json(output / "protocol.json", manifest)
     atomic_json(output / "process.json", dict(pid=os.getpid(), identity=identity(os.getpid()), started_at=time.time()))
     atomic_json(output / "execution.json", dict(engine="trajectory-v2", driver=driver, devices=devices))
+    atomic_json(output / "task-order.json", task_order)
     started = time.monotonic()
     reused = resume_records(manifest, output, resume_from)
     done, failed = len(reused), 0
-    tasks = iter((i, task) for i, task in enumerate(manifest["tasks"]) if i not in reused)
+    tasks = iter((i, manifest["tasks"][i]) for i in task_order if i not in reused)
     pools = [ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context("spawn")) for _ in devices]
     pending = {}
 

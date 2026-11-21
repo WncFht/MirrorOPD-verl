@@ -46,15 +46,16 @@ def banks(repo, study, student, teacher):
 
     from .assets import verify_model_assets
 
-    legacy = repo / "runs/qwen-prefix-six-20261031"
+    legacy = repo / "examples/mirroropd/research-evidence/qwen-prefix-six"
     assets = read(legacy / "assets/complete.json")
     tokenizer = AutoTokenizer.from_pretrained(student, local_files_only=True)
     primary = {r["id"]: r for r in read(legacy / "prepared-03/heldout-questions.json") if r["primary"]}
     target_identity = model_identity(teacher)
     for source, model in (("S0", student), ("Q", teacher)):
-        verify_model_assets(assets["models"][source])
-        if Path(assets["models"][source]["source"]).resolve() != Path(model).resolve():
+        asset = assets["models"][source]
+        if Path(asset["source"]).resolve() != Path(model).resolve():
             raise ValueError("Bank assets and active model paths differ")
+        verify_model_assets({**asset, "directory": model})
         directory = legacy / "banks" / source
         receipt = read(directory / "complete.json")
         if file_sha256(directory / "bank.json") != receipt["bank_sha256"]:
@@ -171,7 +172,7 @@ def prepare(repo, source, study, python):
     base.update(TRAIN_BATCH_SIZE="64", TOTAL_TRAINING_STEPS="40", PPO_EPOCHS="16", PREFIX_RAY_CPUS="48")
     # Canonical registered storage gives active model/asset identities a stable binding.
     base["MODEL_ROOT"] = str(repo.parent / "model")
-    prepare_questions(repo / "runs/qwen-prefix-six-20261031/prepared-03", study / "questions")
+    prepare_questions(repo / "examples/mirroropd/research-evidence/qwen-prefix-six/prepared-03", study / "questions")
     paths = []
     formal_configs = []
     for experiment in EXPERIMENTS:

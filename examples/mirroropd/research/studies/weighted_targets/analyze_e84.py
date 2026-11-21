@@ -29,7 +29,7 @@ from examples.mirroropd.research.studies.weighted_targets.plot_validation_compar
 BASE = ROOT / "examples/mirroropd/docs/experiments/learning-signal"
 DATA = BASE / "data/e84-20261110"
 OUT = BASE / "figures/e82-e84-20261110"
-RAW = ROOT / "runs/e84-results-20261110/train-console.txt"
+RAW = ROOT / "examples/mirroropd/research-evidence/tracking-logs/e84-results-20261110/train-console.txt"
 REFERENCE = BASE / "figures/validation-comparison-20261106/validation.csv"
 BENCHMARKS = tuple(SLUGS)
 

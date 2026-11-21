@@ -382,3 +382,13 @@ def test_absorption_panel_disables_generation_readouts_and_keeps_long_banks(tmp_
     assert result.environment["STUDENT_GPUS"] == "4"
     assert "trainer.total_training_steps=40" in result.arguments
     assert result.environment["PPO_EPOCHS"] == "16"
+
+
+def test_optimizer_matrix_is_read_only_and_maps_retry_ids(monkeypatch, capsys):
+    monkeypatch.setattr(planner.os, "execvpe", lambda *args: pytest.fail("matrix must not launch"))
+    planner.main(["--optimizer-matrix"])
+    text = capsys.readouterr().out
+    assert "E156(E134)" in text
+    assert "E158(E136)" in text
+    assert "E152(E130)" in text
+    assert "3e-06" in text and "AdamW" in text and "Muon" in text

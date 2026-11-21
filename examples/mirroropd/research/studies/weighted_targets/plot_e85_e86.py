@@ -27,7 +27,7 @@ from examples.mirroropd.research.studies.weighted_targets.plot_e81_validation im
 )
 from examples.mirroropd.research.studies.weighted_targets.plot_validation_comparison import save
 
-SNAPSHOT = ROOT / "runs/wandb-e85-e86-20261109"
+SNAPSHOT = ROOT / "examples/mirroropd/research-evidence/tracking-logs/wandb-e85-e86-20261109"
 OUT = ROOT / "examples/mirroropd/docs/experiments/learning-signal/figures/e85-e86-comparison-20261109"
 RUNS = {"E85": "sjdbuh0p", "E86": "sh3mrf3r"}
 BENCHMARKS = ("math500", "amc23", "aime24", "aime25", "aime26")

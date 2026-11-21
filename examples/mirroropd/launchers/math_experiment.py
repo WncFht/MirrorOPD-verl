@@ -365,11 +365,24 @@ def preset_catalog() -> dict[str, Preset]:
                 for value in preset.overrides
             ),
         )
-    from examples.mirroropd.launchers.absorption import PAIRS
+    from examples.mirroropd.launchers.absorption import MUON_LR_PRESETS, OPTIMIZER_PROBES, PAIRS, SGD_LR_PRESETS
 
     for number, student, teacher, family, sequences, thinking in PAIRS:
         presets[f"E{number}"] = Preset(
-            Budget(40, 16, -1, -1, initial_validation=True, align_seeds=True, original_data=True, lr="1e-6"),
+            Budget(
+                40,
+                16,
+                -1,
+                -1,
+                initial_validation=True,
+                align_seeds=True,
+                original_data=True,
+                lr=str(
+                    (SGD_LR_PRESETS | MUON_LR_PRESETS | {n: v[2] for n, v in OPTIMIZER_PROBES.items()}).get(
+                        number, "1e-6"
+                    )
+                ),
+            ),
             method="full_kl",
             pair=ModelPair(
                 student=student,
@@ -402,6 +415,9 @@ def parser() -> argparse.ArgumentParser:
     )
     result.add_argument("preset", nargs="?", help=f"E1–E{max(int(k[1:]) for k in PRESETS)} or custom")
     result.add_argument("--list-presets", action="store_true", help="list every preset without launching")
+    result.add_argument(
+        "--optimizer-matrix", action="store_true", help="Show pair/optimizer/LR/E-ID matrix without launching"
+    )
     result.add_argument("--overview", action="store_true", help="show grouped comparison tables without launching")
     result.add_argument(
         "--precision",
@@ -697,6 +713,69 @@ def _preset_ranges(numbers):
     return ",".join(f"E{g[0]}" if len(g) == 1 else f"E{g[0]}-E{g[-1]}" for g in groups)
 
 
+def optimizer_overview() -> str:
+    """Display pair × optimizer × LR cells from the executable catalog."""
+    from examples.mirroropd.launchers.absorption import PAIRS, optimizer_matrix
+
+    rows = optimizer_matrix()
+    pairs = {row[0]: row for row in PAIRS}
+    lrs = sorted({row["lr"] for row in rows})
+    lines = [
+        "优化器 LR 矩阵（预设配置，运行进度见 dashboard）",
+        "E152–E173 为 E130–E151 的新 attempt，协议相同；旧编号保留，不能用旧编号推断正在运行。",
+        "每格为 E 编号；括号内为旧 attempt。Muon 使用 match_rms_adamw，辅助 AdamW LR=1e-6。",
+        "全部 WD=0、batch64/reuse16、40 outer；SGD 无动量。历史 E94–E123 AdamW LR=1e-6、WD=0.01。",
+    ]
+    matrix = []
+    for pair in sorted({row["pair"] for row in rows}):
+        for optimizer in ("SGD", "Muon", "AdamW"):
+            arms = [row for row in rows if row["pair"] == pair and row["optimizer"] == optimizer]
+            if not arms:
+                continue
+            cells = []
+            for lr in lrs:
+                matches = [row for row in arms if row["lr"] == lr]
+                if not matches:
+                    cells.append("—")
+                    continue
+                ids = {row["number"] for row in matches}
+                cells.append(
+                    ",".join(
+                        f"E{row['number']}" + (f"(E{row['retry_of']})" if row["retry_of"] else "")
+                        for row in matches
+                        if row["number"] + 22 not in ids or row["number"] >= 152
+                    )
+                )
+            matrix.append((f"E{pair}", optimizer, *cells))
+    lines.append(_aligned_table(("Pair", "Optimizer", *(f"{lr:.0e}" for lr in lrs)), matrix))
+    lines.append("师生配对（Student ← Teacher）")
+    lines.append(
+        _aligned_table(
+            ("Pair", "Student", "Teacher"),
+            [(f"E{pair}", pairs[pair][1], pairs[pair][2]) for pair in sorted({row["pair"] for row in rows})],
+        )
+    )
+    lines.append("完整展开（可直接以 E 编号启动；辅助 LR 与 WD 分列）")
+    lines.append(
+        _aligned_table(
+            ("Preset", "Pair", "Optimizer", "LR", "Aux LR", "WD", "Retry of"),
+            [
+                (
+                    f"E{row['number']}",
+                    f"E{row['pair']}",
+                    row["optimizer"],
+                    f"{row['lr']:.0e}",
+                    f"{row['aux_lr']:.0e}" if row["aux_lr"] else "—",
+                    row["wd"],
+                    f"E{row['retry_of']}" if row["retry_of"] else "—",
+                )
+                for row in rows
+            ],
+        )
+    )
+    return "\n".join(lines)
+
+
 def preset_overview() -> str:
     from examples.mirroropd.launchers.absorption import PAIRS
 
@@ -779,13 +858,15 @@ def preset_overview() -> str:
             "DRY_RUN=1 仅打印最终命令；-- 后的参数原样传给 Hydra。custom 使用公共默认值，不加载编号预算。\n"
             "本注释与 --overview 共用 launchers/math_experiment.py 的 preset_overview()；修改源后同步生成区。\n"
             "以下均为当前预设默认值；已启动实验以其 resolved config 为准。",
-            "E94–E123：30组吸收动力学，current OPD；四卡、batch64/reuse16、40 outer。\n"
+            "E94–E123：30组吸收动力学；E124/E125：SGD；E126–E129：同 E102 配对 Muon LR 扫描。"
+            "四卡、batch64/reuse16、40 outer。\n"
             "训练和双固定bank均cap7168，每outer只读bank RKL，不测accuracy、不重新生成current heldout。\n"
             "保存outer1/2/3/4/8/12/20/30/40，9份FP32新增快照；ABSORPTION_ROOT指定新题单与bank。\n"
             + _aligned_table(
                 ("Preset", "Student", "Teacher"),
-                [(f"E{number}", student, teacher) for number, student, teacher, *_ in PAIRS],
+                [(f"E{number}", student, teacher) for number, student, teacher, *_ in PAIRS if number <= 123],
             ),
+            optimizer_overview(),
             "一、E81–E90 / E92–E93：Qwen Base 的聚合与 future reward 对照\n"
             "学生 Qwen3-1.7B-Base ← 教师 Qwen3-30B-A3B-Instruct-2507。\n"
             "共同训练：full-vocab MDPO kappa=1/eta=0.1，LR=1e-6；shared_sync。\n"
@@ -935,6 +1016,9 @@ def main(argv=None):
     end = argv.index("--") if "--" in argv else len(argv)
     args, hydra = cli.parse_known_args(argv[:end])
     hydra += argv[end + 1 :] if end < len(argv) else []
+    if args.optimizer_matrix:
+        print(optimizer_overview())
+        return
     if args.overview:
         print(preset_overview())
         return

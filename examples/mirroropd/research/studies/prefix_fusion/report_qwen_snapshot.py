@@ -62,7 +62,7 @@ class Snapshot:
 
 
 def collect(root, out):
-    evidence = Snapshot(root.parents[1])
+    evidence = Snapshot(Path(__file__).resolve().parents[5])
     started = datetime.now().astimezone().isoformat(timespec="seconds")
     recovery = root / "recovery-20261101"
     manifest = evidence.read(recovery / "manifest.json")

@@ -38,7 +38,7 @@ from examples.mirroropd.research.studies.weighted_targets.plot_e81_validation im
 
 BASE = ROOT / "examples/mirroropd/docs/experiments/learning-signal"
 DEFAULT_OUT = BASE / "figures/validation-comparison-20261106"
-RUNS = ROOT / "runs/topd-large-batch-20261105/formal"
+RUNS = ROOT / "examples/mirroropd/research-evidence/topd-large-batch-20261105/formal"
 LOCAL = ("E55", "E56", "E57", "E81", "E82", "E83")
 REFERENCE = ("Base reference", "Qwen3-30B teacher")
 ACCURACY_RUNS = (*LOCAL, *REFERENCE)
@@ -126,7 +126,11 @@ def external_source(path):
 
 
 def extract_live(run, sources):
-    root = RUNS / run if run != "E83" else ROOT / "runs/topd-learning-signal-20261106/formal/E83"
+    root = (
+        RUNS / run
+        if run != "E83"
+        else ROOT / "examples/mirroropd/research-evidence/topd-learning-signal-20261106/formal/E83"
+    )
     path = root / "metrics.jsonl"
     original = path.read_bytes()
     raw, exclusions = trusted_metrics(path, original)

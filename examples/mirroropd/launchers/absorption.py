@@ -3,6 +3,7 @@
 """One thirty-pair protocol: native current OPD and full-response fixed-bank RKL."""
 
 import json
+import math
 from pathlib import Path
 
 from .qwen_prefix import hydra_value
@@ -47,12 +48,120 @@ PAIRS = (
     (121, "Llama-3.1-Tulu-3-8B-SFT", "Llama-3.1-Tulu-3-8B-DPO", "default", 32, False),
     (122, "Llama-3.1-Tulu-3-8B-DPO", "Llama-3.1-Tulu-3-8B", "default", 32, False),
     (123, "Llama-3.1-Tulu-3-8B-SFT", "Llama-3.1-Tulu-3-8B", "default", 32, False),
+    (124, "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", "qwen3", 64, False),
+    (125, "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", "qwen3", 64, False),
+    (126, "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", "qwen3", 64, False),
+    (127, "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", "qwen3", 64, False),
+    (128, "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", "qwen3", 64, False),
+    (129, "Qwen3-1.7B", "Qwen3-4B-Instruct-2507", "qwen3", 64, False),
 )
+# E124/E125 are explicit full-budget SGD LR probes of the E102 pair.
+SGD_LR_PRESETS = {124: 0.01, 125: 0.03}
+MUON_LR_PRESETS = {126: 3e-7, 127: 1e-6, 128: 3e-6, 129: 1e-5}
+
+# Matched WD=0 optimizer probes; explicit IDs also drive the public launcher.
+OPTIMIZER_PROBES = {
+    130: (102, "adamw", 1e-6),
+    131: (102, "adamw", 3e-6),
+    132: (102, "adamw", 3e-7),
+    133: (102, "muon", 3e-5),
+}
+for _pair, _start in ((95, 134), (109, 140), (117, 146)):
+    for _offset, (_kind, _lr) in enumerate(
+        (("muon", 3e-6), ("adamw", 1e-6), ("muon", 1e-5), ("adamw", 3e-6), ("muon", 1e-6), ("adamw", 3e-7))
+    ):
+        OPTIMIZER_PROBES[_start + _offset] = (_pair, _kind, _lr)
+_PAIR_BY_ID = {row[0]: row for row in PAIRS}
+# Fresh attempts after the E134 local-Ray startup failure; original IDs stay immutable.
+OPTIMIZER_PROBES.update({number + 22: probe for number, probe in list(OPTIMIZER_PROBES.items())})
+PAIRS += tuple((number, *_PAIR_BY_ID[pair][1:]) for number, (pair, _, _) in OPTIMIZER_PROBES.items())
+
 # Completed E94–E104 retain their protocol. Future MiMo/Base runs declare
 # both terminators without coarsening the full-vocabulary KL distribution.
 # Frozen attempts and their banks remain identified by their original contracts.
 STOP_TOKEN_IDS = {number: (151643, 151645) for number in (105, 106, 107, 115, 116, 117, 118)}
 SNAPSHOTS = (1, 2, 3, 4, 8, 12, 20, 30, 40)
+
+
+def optimizer_matrix():
+    """One display row per optimizer arm; retry IDs retain their original protocol identity."""
+    rows = []
+    for number, lr in SGD_LR_PRESETS.items():
+        rows.append(dict(number=number, pair=102, optimizer="SGD", lr=lr, aux_lr=None, wd=0, retry_of=None))
+    for number, lr in MUON_LR_PRESETS.items():
+        rows.append(dict(number=number, pair=102, optimizer="Muon", lr=lr, aux_lr=1e-6, wd=0, retry_of=None))
+    for number, (pair, kind, lr) in OPTIMIZER_PROBES.items():
+        rows.append(
+            dict(
+                number=number,
+                pair=pair,
+                optimizer="Muon" if kind == "muon" else "AdamW",
+                lr=lr,
+                aux_lr=1e-6 if kind == "muon" else None,
+                wd=0,
+                retry_of=number - 22 if 152 <= number <= 173 else None,
+            )
+        )
+    return rows
+
+
+def optimizer_options(env):
+    """Explicit optimizer branches; historical AdamW defaults stay untouched."""
+    kind = env.get("ABSORPTION_OPTIMIZER", "adamw").lower()
+    if kind == "adamw":
+        value = env.get("ABSORPTION_OPTIMIZER_LR")
+        if value is None:
+            return []
+        if not math.isfinite(float(value)) or float(value) <= 0:
+            raise ValueError("Set a positive ABSORPTION_OPTIMIZER_LR")
+        return [
+            "actor_rollout_ref.actor.optim.lr=" + value,
+            "actor_rollout_ref.actor.optim.weight_decay=0",
+        ]
+    if kind not in ("sgd", "muon"):
+        raise ValueError("ABSORPTION_OPTIMIZER must be adamw, sgd or muon")
+    value = env.get("ABSORPTION_OPTIMIZER_LR")
+    if value is None or not math.isfinite(float(value)) or float(value) <= 0:
+        raise ValueError("Set a calibrated positive ABSORPTION_OPTIMIZER_LR")
+    env["LEARNING_RATE"] = value
+    result = [
+        "actor_rollout_ref.actor.optim.lr=" + value,
+        "actor_rollout_ref.actor.optim.weight_decay=0",
+        "actor_rollout_ref.actor.optim.lr_scheduler_type=constant",
+        "actor_rollout_ref.actor.optim.lr_warmup_steps=0",
+        "actor_rollout_ref.actor.optim.lr_warmup_steps_ratio=0.0",
+        "actor_rollout_ref.actor.checkpoint.save_contents=[model,optimizer,extra,hf_model]",
+        "actor_rollout_ref.actor.checkpoint.load_contents=[model,optimizer,extra]",
+        "trainer.save_freq=5",
+        "trainer.max_actor_ckpt_to_keep=2",
+    ]
+    if kind == "sgd":
+        return result + [
+            "actor_rollout_ref.actor.optim.optimizer=SGD",
+            "actor_rollout_ref.actor.optim.optimizer_impl=torch.optim",
+            "actor_rollout_ref.actor.optim.override_optimizer_config={momentum:0.0}",
+        ]
+    aux = env.get("ABSORPTION_AUX_LR")
+    if aux is None or not math.isfinite(float(aux)) or float(aux) <= 0:
+        raise ValueError("Muon requires a calibrated positive ABSORPTION_AUX_LR")
+    distributed_mode = env.get("ABSORPTION_MUON_DISTRIBUTED_MODE", "owner")
+    if distributed_mode not in ("owner", "replicated"):
+        raise ValueError("ABSORPTION_MUON_DISTRIBUTED_MODE must be owner or replicated")
+    return result + [
+        "actor_rollout_ref.actor.optim.optimizer=MuonAdamW",
+        "actor_rollout_ref.actor.optim.optimizer_impl=verl.utils.fsdp_optimizers",
+        "actor_rollout_ref.actor.optim.override_optimizer_config="
+        + hydra_value(
+            dict(
+                aux_lr=float(aux),
+                momentum=0.95,
+                nesterov=True,
+                ns_steps=5,
+                adjust_lr_fn="match_rms_adamw",
+                distributed_mode=distributed_mode,
+            )
+        ),
+    ]
 
 
 def template_kwargs(pair):
@@ -71,13 +180,33 @@ def options(env, name, root):
         if not env.get(key):
             env[key] = str(value)
 
+    number = int(name.removeprefix("E"))
+    if number in OPTIMIZER_PROBES:
+        _, kind, lr = OPTIMIZER_PROBES[number]
+        default("ABSORPTION_OPTIMIZER", kind)
+        default("ABSORPTION_OPTIMIZER_LR", lr)
+        if kind == "muon":
+            default("ABSORPTION_AUX_LR", 1e-6)
+    if number in SGD_LR_PRESETS:
+        default("ABSORPTION_OPTIMIZER", "sgd")
+        default("ABSORPTION_OPTIMIZER_LR", SGD_LR_PRESETS[number])
+    if number in MUON_LR_PRESETS:
+        default("ABSORPTION_OPTIMIZER", "muon")
+        default("ABSORPTION_OPTIMIZER_LR", MUON_LR_PRESETS[number])
+        default("ABSORPTION_AUX_LR", 1e-6)
     default("ABSORPTION_ROOT", root / "runs/absorption-long-20261112")
     study = Path(env["ABSORPTION_ROOT"]).resolve()
     dataset_path = study / "questions/datasets.json"
     if not dataset_path.is_file():
-        raise ValueError("Prepare the absorption question tables before resolving E94–E123")
+        raise ValueError("Prepare the absorption question tables before resolving absorption presets")
     datasets = json.loads(dataset_path.read_text())
-    default("RUN_DIR", study / "training" / name)
+    branch = env.get("ABSORPTION_OPTIMIZER", "adamw").lower()
+    branch_options = optimizer_options(env)
+    if branch != "adamw":
+        if env.get("RUN_DIR") and Path(env["RUN_DIR"]).resolve() == (study / "training" / name).resolve():
+            raise ValueError("Optimizer ablations must not overwrite the historical training directory")
+        default("EXPERIMENT_NAME", f"math-opd-{name}-{branch}")
+    default("RUN_DIR", study / ("training" if branch == "adamw" else f"training-{branch}") / name)
     default("CHECKPOINT_DIR", Path(env["RUN_DIR"]) / "runtime")
     default("TRAIN_FILE", study / "questions/train.parquet")
     for key, value in {
@@ -168,6 +297,7 @@ def options(env, name, root):
         "actor_rollout_ref.rollout.agent.num_workers=16",
         "reward.num_workers=8",
         "transfer_queue.backend.SimpleStorage.num_data_storage_units=8",
+        *branch_options,
         "++trainer.evaluation=" + hydra_value(spec),
         f"++ray_kwargs.ray_init.num_gpus={world}",
         "++ray_kwargs.ray_init.num_cpus=64",

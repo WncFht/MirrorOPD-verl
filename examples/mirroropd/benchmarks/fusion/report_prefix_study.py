@@ -38,7 +38,11 @@ PROBABILITY_STUDY_COMMIT = None
 def completion_matches(audit, pair, arm, exit_code, source_hashes):
     """Require a successful formal audit of the exact metrics/config being exported."""
     expected_commit = PROBABILITY_STUDY_COMMIT if arm == "PM" else STUDY_COMMIT
-    witnesses = {item["path"]: item["sha256"] for item in audit.get("witnesses", [])}
+    witnesses = {
+        Path(item["path"]).parts[-2:]: item["sha256"]
+        for item in audit.get("witnesses", [])
+        if Path(item["path"]).name in {"metrics.jsonl", "resolved_config.yaml"}
+    }
     return (
         exit_code == 0
         and audit.get("controller_exit_code") == 0
@@ -51,7 +55,7 @@ def completion_matches(audit, pair, arm, exit_code, source_hashes):
         and audit.get("applied_updates") == 640
         and audit.get("errors") == []
         and len(source_hashes) == 2
-        and all(witnesses.get(path) == digest for path, digest in source_hashes.items())
+        and all(witnesses.get(Path(path).parts[-2:]) == digest for path, digest in source_hashes.items())
     )
 
 
@@ -114,17 +118,16 @@ def load_snapshot(directory):
     return rows, summary
 
 
-def snapshot(workspace, out):
+def snapshot(evidence, out):
     out.mkdir(parents=True, exist_ok=False)
     rows, states, sources = [], [], []
-    root = workspace / "runs/vllm-fusion-20261029"
+    root = evidence / "control"
     retired = all((root / f"old-{pair}-queue-retired-after-S0.json").exists() for pair in ("J", "P"))
     for pair in ("J", "P"):
         control = root / f"formal-prefix-study-{pair}-01"
         for arm in ARMS:
-            repo = workspace / ("MirrorOPD-verl-rollout" if arm == "PM" else "MirrorOPD-verl-vllm-fusion")
             name = f"prefix-formal-{pair}-{arm}-study40x16-v1"
-            run = repo / "outputs" / name
+            run = evidence / "observations" / name
             path = run / "metrics.jsonl"
             observations = []
             source_hashes = {}
@@ -221,9 +224,9 @@ def snapshot(workspace, out):
             exit_record = json.loads(exit_file.read_text()) if exit_file.exists() else {}
             exit_code = exit_record.get("exit_code")
             audit = json.loads(audit_file.read_text()) if audit_file.exists() else None
-            for evidence in (exit_file, audit_file):
-                if evidence.exists():
-                    sources.append({"path": str(evidence), "sha256": hashlib.sha256(evidence.read_bytes()).hexdigest()})
+            for receipt in (exit_file, audit_file):
+                if receipt.exists():
+                    sources.append({"path": str(receipt), "sha256": hashlib.sha256(receipt.read_bytes()).hexdigest()})
             audited = (
                 completion_matches(audit, pair, arm, exit_code, source_hashes)
                 and exit_record.get("run") == name
@@ -409,13 +412,13 @@ def render(rows, summary, directory, style_dir):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("--workspace", type=Path)
+    source.add_argument("--evidence", type=Path, help="Study directory containing observations and control receipts")
     source.add_argument("--replot", action="store_true", help="Read --snapshot without consulting live runs")
     parser.add_argument("--snapshot", type=Path, required=True)
     parser.add_argument("--figures", type=Path, required=True)
     parser.add_argument("--style-dir", type=Path, default=os.environ.get("FIGURE_VIZ_MPL"))
     args = parser.parse_args()
-    rows, summary = load_snapshot(args.snapshot) if args.replot else snapshot(args.workspace.resolve(), args.snapshot)
+    rows, summary = load_snapshot(args.snapshot) if args.replot else snapshot(args.evidence.resolve(), args.snapshot)
     if rows and args.style_dir is None:
         parser.error("Set --style-dir or FIGURE_VIZ_MPL to render actual observations")
     outputs = render(rows, summary, args.figures, args.style_dir) if rows else []

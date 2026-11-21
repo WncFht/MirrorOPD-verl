@@ -28,8 +28,8 @@ DATA = DOCS / "data/mimo-stage-20261104-final"
 E91 = DOCS / "figures/e91-live-20261108"
 INITIAL = DOCS / "figures/e91-initial-20261107/initial-readout.csv"
 OUTPUT = DOCS / "figures/mimo-stage-20261104-final/e91-comparison"
-RUN = ROOT / "runs/e91-mimo-rlzero-sft-20261107"
-E93_RUN = ROOT / "runs/e93-mimo-rl-sft-20261108"
+RUN = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/e91-mimo-rlzero-sft-20261107"
+E93_RUN = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/e93-mimo-rl-sft-20261108"
 ARMS = ("E71", "E72", "E73", "E91", "E93")
 LABELS = {
     "E71": "E71 SFT+RL → Base student",

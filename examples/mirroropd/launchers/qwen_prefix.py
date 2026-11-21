@@ -111,7 +111,9 @@ def options(env, arm, root):
         raise ValueError("Qwen prefix study requires 1/2/4/8 local GPUs and a divisible global batch")
     default(
         "QWEN_EVAL_ROOT",
-        root / "runs" / ("qwen-source-b128-v1" if protocol == SOURCE_PROTOCOL else "qwen-prefix-native"),
+        root / "examples/mirroropd/research-evidence/qwen-prefix-six/qwen-source-b128-v1"
+        if protocol == SOURCE_PROTOCOL
+        else root / "examples/mirroropd/research-evidence/qwen-prefix-six/qwen-prefix-native",
     )
     study = Path(env["QWEN_EVAL_ROOT"]).expanduser().resolve()
     default("TRAIN_FILE", study / "questions/train.parquet")

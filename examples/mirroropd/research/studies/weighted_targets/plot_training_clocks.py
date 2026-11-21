@@ -22,8 +22,8 @@ from examples.mirroropd.research.studies.weighted_targets.metrics import trusted
 
 REPO = next(parent for parent in Path(__file__).resolve().parents if (parent / ".git").exists())
 HERE = REPO / "examples/mirroropd/docs/experiments/learning-signal/figures/training-clocks-20261107"
-RUN_DIR = REPO / "runs" / "topd-large-batch-20261105"
-E57_DATA = REPO / "runs" / "e55-e57-refresh-20261102-0900" / "data.json"
+RUN_DIR = REPO / "examples/mirroropd/research-evidence" / "topd-large-batch-20261105"
+E57_DATA = REPO / "examples/mirroropd/research-evidence" / "e55-e57-refresh-20261102-0900" / "data.json"
 E81_METRICS = RUN_DIR / "formal" / "E81" / "metrics.jsonl"
 E82_METRICS = RUN_DIR / "formal" / "E82" / "metrics.jsonl"
 DATA_CSV = HERE / "training-clocks.csv"
@@ -211,7 +211,14 @@ def plot(series: dict[str, list[dict[str, float | str]]], x_key: str, x_label: s
 
 def main() -> None:
     HERE.mkdir(parents=True, exist_ok=True)
-    series, _ = archive_data()
+    if "--refresh" in sys.argv or not DATA_CSV.exists():
+        series, _ = archive_data()
+    else:
+        series = {run: [] for run in ("E57", "E81", "E82")}
+        with DATA_CSV.open(newline="") as stream:
+            for row in csv.DictReader(stream):
+                point = {key: float(value) for key, value in row.items() if key != "run"}
+                series[row["run"]].append({"run": row["run"], **point})
     plot(series, "outer", "Outer step", "reward-by-outer")
     plot(series, "optimizer_update", "Optimizer update", "reward-by-optimizer-update")
     plot(

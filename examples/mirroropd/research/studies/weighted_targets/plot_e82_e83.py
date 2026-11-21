@@ -31,8 +31,8 @@ from examples.mirroropd.research.studies.weighted_targets.plot_validation_compar
 
 OUT = ROOT / "examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-comparison-20261107"
 RUNS = {
-    "E82": ROOT / "runs/topd-large-batch-20261105/formal/E82",
-    "E83": ROOT / "runs/topd-learning-signal-20261106/formal/E83",
+    "E82": ROOT / "examples/mirroropd/research-evidence/topd-large-batch-20261105/formal/E82",
+    "E83": ROOT / "examples/mirroropd/research-evidence/topd-learning-signal-20261106/formal/E83",
 }
 UPDATE_KEYS = {
     "actor_loss": "optim/actor/loss",
@@ -60,7 +60,11 @@ def refresh(out):
         path = Path(__file__).with_name(name)
         sources.append(source(path, path.read_bytes()))
     for name in ("output.py", "losses.py"):
-        path = ROOT / "runs/topd-large-batch-20261105/source/verl/trainer/distillation" / name
+        path = (
+            ROOT
+            / "examples/mirroropd/research-evidence/topd-large-batch-20261105/source/verl/trainer/distillation"
+            / name
+        )
         sources.append(source(path, path.read_bytes()))
     valid, updates, outers, audits = [], [], [], {}
     for run, root in RUNS.items():

@@ -64,7 +64,7 @@ def prepare(args):
     tokenizer = AutoTokenizer.from_pretrained(base, local_files_only=True)
     expert_tokenizer = AutoTokenizer.from_pretrained(expert, local_files_only=True)
     rng = random.Random(20261108)
-    source = repo / "runs/unified-evaluation-20261031/questions-v2"
+    source = repo / "examples/mirroropd/research-evidence/evaluation-inputs/unified-evaluation-20261031/questions-v2"
     sources = {}
     excluded = []
     seen = set()

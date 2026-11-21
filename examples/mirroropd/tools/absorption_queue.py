@@ -18,7 +18,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from examples.mirroropd.launchers.absorption import PAIRS, SNAPSHOTS
+from examples.mirroropd.launchers.absorption import MUON_LR_PRESETS, OPTIMIZER_PROBES, PAIRS, SGD_LR_PRESETS, SNAPSHOTS
 from examples.mirroropd.research.core.io import dump, read
 from examples.mirroropd.research.runtime.processes import identity as process_identity
 from examples.mirroropd.research.runtime.source import freeze
@@ -27,26 +27,42 @@ from examples.mirroropd.research.runtime.source import freeze
 def selected_pairs(names=None):
     """Select explicit unique IDs without changing the append-only pair catalog."""
     if names is None:
-        return PAIRS
+        return tuple(row for row in PAIRS if row[0] not in SGD_LR_PRESETS | MUON_LR_PRESETS | OPTIMIZER_PROBES)
     catalog = {f"E{row[0]}": row for row in PAIRS}
     if not names or len(names) != len(set(names)) or set(names) - catalog.keys():
         raise ValueError("Prepare requires unique registered experiment IDs")
     return tuple(catalog[name] for name in names)
 
 
-def prepare(repo, study, names=None):
+def prepare(repo, study, names=None, *, optimizer="adamw", calibration=None):
     import pyarrow as pa
     import pyarrow.parquet as pq
     import yaml
 
-    from examples.mirroropd.research.studies.prefix_fusion.native_source_queue import config_only, environment
+    from examples.mirroropd.research.runtime.native_config import config_only, environment
     from verl.trainer.evaluation.artifacts import file_sha256
 
     pairs = selected_pairs(names)
+    if optimizer not in ("adamw", "sgd", "muon"):
+        raise ValueError("Unsupported optimizer branch")
+    if optimizer != "adamw":
+        if calibration is None or any(f"E{row[0]}" not in calibration for row in pairs):
+            raise ValueError("A calibration record is required for every selected pair")
+        from examples.mirroropd.launchers.absorption import optimizer_options
+
+        for row in pairs:
+            record = calibration[f"E{row[0]}"]
+            optimizer_options(
+                {
+                    "ABSORPTION_OPTIMIZER": optimizer,
+                    "ABSORPTION_OPTIMIZER_LR": str(record["lr"]),
+                    **({"ABSORPTION_AUX_LR": str(record["aux_lr"])} if optimizer == "muon" else {}),
+                }
+            )
     study.mkdir(parents=True, exist_ok=False)
     qroot = study / "questions"
     qroot.mkdir()
-    original = repo / "runs/qwen-prefix-six-20261031/prepared-03"
+    original = repo / "examples/mirroropd/research-evidence/qwen-prefix-six/prepared-03"
     candidates = read(original / "heldout-questions.json")
     datasets = []
     for domain, count, verifier in (("math", 128, "math"), ("code", 64, "lcb"), ("if", 64, "ifeval")):
@@ -98,13 +114,6 @@ def prepare(repo, study, names=None):
         ),
     )
     source = freeze(repo, study / "source")
-    shutil.copytree(
-        repo / "examples/mirroropd/launchers",
-        source / "examples/mirroropd/launchers",
-        ignore=shutil.ignore_patterns("__pycache__"),
-    )
-    for path in (repo / "examples/mirroropd").glob("*.sh"):
-        shutil.copy2(path, source / "examples/mirroropd" / path.name)
     env = environment(repo, source, study, Path(sys.executable), devices=(0, 1, 2, 3))
     env.update(
         ABSORPTION_ROOT=str(study),
@@ -126,7 +135,13 @@ def prepare(repo, study, names=None):
     def prepare_pair(row):
         number = row[0]
         name = f"E{number}"
-        config, path = config_only(source, study, Path(sys.executable), env, name, study / "training" / name)
+        pair_env = dict(env)
+        if optimizer != "adamw":
+            pair_env.update(ABSORPTION_OPTIMIZER=optimizer, ABSORPTION_OPTIMIZER_LR=str(calibration[name]["lr"]))
+            if optimizer == "muon":
+                pair_env["ABSORPTION_AUX_LR"] = str(calibration[name]["aux_lr"])
+        folder = "training" if optimizer == "adamw" else f"training-{optimizer}"
+        config, path = config_only(source, study, Path(sys.executable), pair_env, name, study / folder / name)
         if config["trainer"]["evaluation"]["accuracy_enabled"]:
             raise ValueError("Accuracy must be disabled")
         # Full native bank references: no imported short bank and no hidden H1024 slicing.
@@ -167,7 +182,7 @@ def prepare(repo, study, names=None):
                 [
                     sys.executable,
                     "-m",
-                    "examples.mirroropd.research.studies.absorption_dynamics.queue",
+                    "examples.mirroropd.tools.absorption_queue",
                     "preflight",
                     "--study",
                     str(study),
@@ -197,6 +212,8 @@ def prepare(repo, study, names=None):
             environment=env,
             configs={p: file_sha256(p) for p in (*configs.values(), *teacher_configs.values())},
             code={str(p.relative_to(source)): file_sha256(p) for p in source.rglob("*.py")},
+            optimizer=optimizer,
+            calibration=calibration,
             settings=dict(outer=40, reuse=16, batch=64, cap=7168, accuracy=False, snapshots=SNAPSHOTS),
         ),
     )
@@ -234,12 +251,6 @@ def partition(origin, study):
     study.mkdir(parents=True, exist_ok=False)
     source = study / "source"
     shutil.copytree(Path(original["source"]), source)
-    runner = Path(__file__).resolve()
-    shutil.copy2(runner, source / "examples/mirroropd/research/studies/absorption_dynamics/queue.py")
-    shutil.copy2(
-        Path(original["repo"]) / "examples/mirroropd/launchers/absorption.py",
-        source / "examples/mirroropd/launchers/absorption.py",
-    )
     groups = []
     for label, numbers, devices in (("front4", front, [0, 1, 2, 3]), ("back4", back, [4, 5, 6, 7])):
         lane = study / f"absorption-{label}"
@@ -249,7 +260,7 @@ def partition(origin, study):
         names = [f"E{number}" for number in numbers]
         manifest["experiments"] = {n: manifest["experiments"][n] for n in names}
         manifest["teacher_configs"] = {n: manifest["teacher_configs"][n] for n in names}
-        # Scientific modules are copied unchanged; the new snapshot includes the queue fix.
+        # All stages use the exact same frozen source as configuration admission.
         manifest["source"] = str(source)
         manifest["environment"]["PYTHONPATH"] = str(source)
         manifest["environment"]["CUDA_VISIBLE_DEVICES"] = ",".join(map(str, devices))
@@ -320,6 +331,9 @@ def preflight(path):
     get_custom_reward_fn(config)
     preflight_pair(config)
     options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
+    from verl.trainer.evaluation.checkpoint import validate_checkpoint_policy
+
+    validate_checkpoint_policy(config, final_export=options.final_export)
     from verl.utils.tokenizer.continuous_token_wiring import resolve_continuous_token_model_family
 
     resolve_continuous_token_model_family(
@@ -452,6 +466,9 @@ def verify_reused_bootstrap(config, digest):
     from verl.trainer.ppo.readout_callback import readout_options
 
     options = EvaluationConfig.parse(readout_options(config, EvaluationCoordinator))
+    from verl.trainer.evaluation.checkpoint import validate_checkpoint_policy
+
+    validate_checkpoint_policy(config, final_export=options.final_export)
     root = ArtifactStore(options.bootstrap)
     if file_sha256(root.manifest_path) != digest:
         raise ValueError("Reusable bootstrap manifest changed")
@@ -482,7 +499,8 @@ def run(study, broker_path):
     broker = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(broker)
     devices = manifest["devices"]
-    acquired = []
+    acquired, requested, attached = [], [], set()
+    stage_python = sys.executable
     state = dict(state="waiting_for_gpus", pid=os.getpid(), identity=process_identity(os.getpid()), stages=[])
     dump(study / "process.json", state)
 
@@ -506,7 +524,7 @@ def run(study, broker_path):
             VERL_ROLLOUT_IPC_NAMESPACE=f"ad-{os.getpid()}-{len(state['stages'])}",
         )
         args = [
-            sys.executable,
+            stage_python,
             str(broker_path.parent / "runtime/resource_guard.py"),
             "run",
             "--repo",
@@ -514,7 +532,7 @@ def run(study, broker_path):
             "--gpus",
             ",".join(map(str, devices)),
             "--",
-            sys.executable,
+            stage_python,
             "-c",
             'import runpy,sys;sys.path.insert(0,sys.argv.pop(1));runpy.run_module(sys.argv.pop(1),run_name="__main__")',
             str(source),
@@ -560,16 +578,28 @@ def run(study, broker_path):
             publish(state="waiting_for_gpus", blockers=blockers)
             time.sleep(15)
         for gpu in devices:
+            requested.append(gpu)
             broker.reserve(gpu, owner)
             acquired.append(gpu)
             broker.attach(
                 gpu, owner, os.getpid(), source_record=study / "process.json", exit_receipt=study / "exit.json"
             )
+            attached.add(gpu)
         initial_banks = {}
         for name, path in manifest["experiments"].items():
             from omegaconf import OmegaConf
 
             resolved = OmegaConf.to_container(OmegaConf.load(path), resolve=False)
+            # Ray's driver and runtime workers must use the same environment.
+            # Different Ray versions can crash GCS before any model update.
+            stage_python = (
+                resolved.get("ray_kwargs", {})
+                .get("ray_init", {})
+                .get("runtime_env", {})
+                .get("py_executable", sys.executable)
+            )
+            if not Path(stage_python).is_file():
+                raise ValueError(f"Missing configured Ray Python: {stage_python}")
             bank_key = json.dumps(
                 {
                     "student": resolved["actor_rollout_ref"]["model"]["path"],
@@ -602,22 +632,33 @@ def run(study, broker_path):
                 f"{name}-train",
                 ["-m", "verl.trainer.main_ppo", "--config-path", Path(path).parent, "--config-name", name],
             )
-            root = ArtifactStore(study / "training" / name / "evaluation")
+            evaluation_output = resolved.get("trainer", {}).get("evaluation", {}).get("output")
+            root = ArtifactStore(evaluation_output or study / "training" / name / "evaluation")
             root.manifest(complete=True)
-            for outer in range(41):
+            if resolved["trainer"].get("update_budget") is not None:
+                from examples.mirroropd.tools.reuse_ablation import verify_run
+
+                dump(study / f"{name}-complete.json", verify_run(root, resolved))
+                continue
+            budget = manifest.get("settings", {})
+            outer_budget, reuse = budget.get("outer", 40), budget.get("reuse", 16)
+            for outer in range(outer_budget + 1):
                 event = ArtifactStore(root.root / f"events/outer-{outer:03d}").manifest(complete=True)
                 if not event["metadata"]["coverage"]["scientific_complete"]:
                     raise ValueError("Incomplete bank scoring coverage")
-                if event["metadata"]["optimizer_steps"] != outer * 16:
+                if event["metadata"]["optimizer_steps"] != outer * reuse:
                     raise ValueError("Optimizer update budget differs")
                 if any(k.startswith("eval/accuracy/") for k in event["metadata"]["metrics"]):
                     raise ValueError("Unexpected accuracy")
-            for outer in SNAPSHOTS:
-                location = root.root / ("final-model" if outer == 40 else f"snapshots/outer-{outer:03d}")
+            for outer in budget.get("snapshots", SNAPSHOTS):
+                location = root.root / ("final-model" if outer == outer_budget else f"snapshots/outer-{outer:03d}")
                 audit = ArtifactStore(location / "export-audit").manifest(complete=True)
                 if audit["metadata"]["native_reload_rkl"] != "passed":
                     raise ValueError("Snapshot native reload failed")
-            dump(study / f"{name}-complete.json", dict(outer=40, updates=640, bank_cap=7168, accuracy=False))
+            dump(
+                study / f"{name}-complete.json",
+                dict(outer=outer_budget, updates=outer_budget * reuse, bank_cap=7168, accuracy=False),
+            )
         publish(state="complete", current=None)
         dump(study / "exit.json", dict(returncode=0, finished_at=time.time()))
     except BaseException as error:
@@ -627,23 +668,47 @@ def run(study, broker_path):
     finally:
         # Attached PID leases are released automatically only after this process
         # exits and the guard's CUDA contexts are gone. Never release other owners.
-        publish(acquired=acquired, restoration="broker_auto_release_on_supervisor_exit")
+        cleanup_errors = []
+        for gpu in requested:
+            if gpu in attached:
+                continue
+            try:
+                # reserve can update ownership and then fail before attach. Only
+                # undo our own unattached reservation; leave competing owners alone.
+                entry = broker.registry()["gpus"].get(str(gpu), {})
+                if entry.get("owner") == owner:
+                    broker.release(gpu, owner, "Queue failed before attaching a process lease")
+            except Exception as error:
+                cleanup_errors.append(dict(gpu=gpu, error=repr(error)))
+        publish(
+            acquired=acquired,
+            restoration="broker_auto_release_on_supervisor_exit",
+            allocation_cleanup_errors=cleanup_errors,
+        )
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=("prepare", "run", "preflight", "partition", "retry"))
-    parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[5])
+    parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[3])
     parser.add_argument("--study", type=Path, required=True)
     parser.add_argument("--broker", type=Path)
     parser.add_argument("--config", type=Path)
     parser.add_argument("--from-study", type=Path)
     parser.add_argument("--pairs", nargs="+")
     parser.add_argument("--reuse-from", type=Path)
+    parser.add_argument("--optimizer", choices=("adamw", "sgd", "muon"), default="adamw")
+    parser.add_argument("--calibration", type=Path, help="JSON mapping E IDs to selected lr (and Muon aux_lr)")
     args = parser.parse_args()
     study = args.study.resolve()
     if args.action == "prepare":
-        prepare(args.repo.resolve(), study, args.pairs)
+        prepare(
+            args.repo.resolve(),
+            study,
+            args.pairs,
+            optimizer=args.optimizer,
+            calibration=read(args.calibration) if args.calibration else None,
+        )
     elif args.action == "partition":
         partition(args.from_study.resolve(), study)
     elif args.action == "retry":

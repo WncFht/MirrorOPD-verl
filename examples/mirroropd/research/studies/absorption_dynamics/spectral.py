@@ -21,6 +21,23 @@ def read(path):
     return json.loads(Path(path).read_text())
 
 
+def snapshot_compatibility(base, snapshot):
+    """Permit omitted MiMo auxiliary MTP tensors, outside the decoder scope."""
+    try:
+        base.compatible(snapshot)
+        return []
+    except ValueError:
+        omitted = sorted(base.shapes.keys() - snapshot.shapes.keys())
+        if (
+            not omitted
+            or any(not key.startswith("model.mtp_layers.") for key in omitted)
+            or base.tied != snapshot.tied
+            or {key: shape for key, shape in base.shapes.items() if key not in omitted} != snapshot.shapes
+        ):
+            raise
+        return omitted
+
+
 def prepare(root, pairs, teacher_geometry=()):
     """Require explicit same-coordinate teacher selection, never infer ancestry from width."""
     root = Path(root).resolve()
@@ -95,7 +112,7 @@ def prepare(root, pairs, teacher_geometry=()):
                     metrics={k: v for k, v in m["metrics"].items() if k.startswith("eval/rkl/")},
                 )
             )
-        points, audits = [], []
+        points, audits, omitted_auxiliary = [], [], []
         for outer in OUTERS:
             location = evroot / ("final-model" if outer == 40 else f"snapshots/outer-{outer:03d}")
             audit = read(location / "export-audit/manifest.json")
@@ -110,7 +127,9 @@ def prepare(root, pairs, teacher_geometry=()):
             path = location / "huggingface"
             if any(not (path / name).is_file() for name in meta["hf_files"]):
                 raise ValueError(f"Snapshot file missing: {pair}/{outer}")
-            base.compatible(TensorCheckpoint(path))
+            omitted = snapshot_compatibility(base, TensorCheckpoint(path))
+            if omitted:
+                omitted_auxiliary.append(dict(outer=outer, tensors=omitted))
             points.append([outer * 16, str(path)])
             audits.append(audit)
         if pair in teacher_geometry:
@@ -122,6 +141,7 @@ def prepare(root, pairs, teacher_geometry=()):
             teacher_parameter_comparison=pair in teacher_geometry,
             risks=risks,
             export_audits=audits,
+            omitted_snapshot_auxiliary_tensors=omitted_auxiliary,
         )
         result["tasks"].extend(
             dict(
@@ -153,6 +173,9 @@ def main():
     execute.add_argument("--workers", type=int, default=1)
     execute.add_argument("--driver", choices=["gesvd", "gesvdj"])
     execute.add_argument("--resume-from", type=Path, action="append", default=[])
+    execute.add_argument(
+        "--task-order", type=Path, help="JSON permutation of original task indices; changes scheduling only"
+    )
     args = parser.parse_args()
     if args.action == "prepare":
         if args.manifest.exists():
@@ -162,7 +185,15 @@ def main():
         manifest = read(args.manifest)
         if manifest["schema"] != "absorption-geometry-plan-v1":
             raise ValueError("Unknown geometry protocol")
-        run(manifest, args.output, args.devices, args.workers, driver=args.driver, resume_from=args.resume_from)
+        run(
+            manifest,
+            args.output,
+            args.devices,
+            args.workers,
+            driver=args.driver,
+            resume_from=args.resume_from,
+            task_order=read(args.task_order) if args.task_order else None,
+        )
 
 
 if __name__ == "__main__":

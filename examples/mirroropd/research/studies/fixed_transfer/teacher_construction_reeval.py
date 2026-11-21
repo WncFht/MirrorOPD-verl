@@ -92,7 +92,11 @@ def prepare(root, original):
         raise FileExistsError("Use the existing plan or a fresh output directory")
     root.mkdir(parents=True, exist_ok=True)
     repo = Path(__file__).resolve().parents[5]
-    source = repo / "runs/unified-evaluation-20261031/questions-v2/public"
+    source = (
+        repo
+        / "examples/mirroropd/research-evidence/evaluation-inputs"
+        / "unified-evaluation-20261031/questions-v2/public"
+    )
     base = Path(read(original / "protocol.json")["base"])
     tokenizer = AutoTokenizer.from_pretrained(base, local_files_only=True)
     old_math = records(original / "prepared/benchmark.jsonl")
@@ -431,7 +435,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=["prepare", "run", "worker"])
     parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--original", type=Path, default=Path("runs/teacher-construction-20261108/llm-v1"))
+    parser.add_argument(
+        "--original",
+        type=Path,
+        default=Path("examples/mirroropd/research-evidence/teacher-construction/teacher-construction-20261108/llm-v1"),
+    )
     parser.add_argument("--index", type=int, default=0)
     args = parser.parse_args()
     root = args.root.resolve()

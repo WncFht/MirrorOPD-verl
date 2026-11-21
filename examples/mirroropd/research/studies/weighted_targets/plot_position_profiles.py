@@ -47,9 +47,9 @@ RUNS = {
     "E55": ROOT.parent / "wandb-logs/derived/MirrorOPD-verl/offline-run-20261030_094536-j5uaal3j/history.jsonl",
     "E56": ROOT.parent / "wandb-logs/derived/MirrorOPD-verl/offline-run-20261029_234048-zsnhqzts/history.jsonl",
     "E57": ROOT.parent / "wandb-logs/derived/MirrorOPD-verl/offline-run-20261030_015214-6j5knkmk/history.jsonl",
-    "E81": ROOT / "runs/topd-large-batch-20261105/formal/E81/metrics.jsonl",
-    "E82": ROOT / "runs/topd-large-batch-20261105/formal/E82/metrics.jsonl",
-    "E83": ROOT / "runs/topd-learning-signal-20261106/formal/E83/metrics.jsonl",
+    "E81": ROOT / "examples/mirroropd/research-evidence/topd-large-batch-20261105/formal/E81/metrics.jsonl",
+    "E82": ROOT / "examples/mirroropd/research-evidence/topd-large-batch-20261105/formal/E82/metrics.jsonl",
+    "E83": ROOT / "examples/mirroropd/research-evidence/topd-learning-signal-20261106/formal/E83/metrics.jsonl",
 }
 TEACHERS = {
     **dict.fromkeys(RUNS, "Qwen3-30B-A3B-Instruct-2507"),
@@ -169,8 +169,9 @@ def freeze():
     spec.loader.exec_module(cases)
     qwen, e35, paths = cases.collect()
     groups = qwen | e35
+    mimo = ROOT / "examples/mirroropd/research-evidence/mimo-stage-transfer/mimo-stage-transfer-20261101/formal"
     for experiment, reuse, count in (("E71", 32, 25), ("E72", 16, 20), ("E73", 16, 20)):
-        path = ROOT / f"runs/mimo-stage-transfer-20261101/formal/{experiment}/metrics.jsonl"
+        path = mimo / experiment / "metrics.jsonl"
         paths.append(path)
         groups[experiment] = cases.from_history(path, True, reuse, count)
     for experiment, path in (
@@ -207,10 +208,8 @@ def freeze():
                 }
             )
     sources.extend(stamp(path) for path in paths)
-    sources.extend(
-        stamp(ROOT / f"runs/topd-large-batch-20261105/source/verl/trainer/distillation/{name}.py")
-        for name in ("output", "objectives")
-    )
+    topd_source = ROOT / "examples/mirroropd/research-evidence/topd-large-batch-20261105/source"
+    sources.extend(stamp(topd_source / "verl/trainer/distillation" / f"{name}.py") for name in ("output", "objectives"))
     OUT.mkdir(parents=True, exist_ok=True)
     write_csv(OUT / "endpoints.csv", endpoints)
     write_csv(OUT / "profiles.csv", profiles)
@@ -428,12 +427,8 @@ def documents(endpoints, profiles, summary, manifest):
         ),
         "",
         (
-            "[冻结运行的 objective 实现](../../../../../runs/topd"
-            "-large-batch-20261105/source/verl/trainer/dis"
-            "tillation/objectives.py)与[输出缩放、分桶实现](../../.."
-            "/../../runs/topd-large-batch-20261105/source/"
-            "verl/trainer/distillation/output.py)说明上述关系。每次"
-            "有效更新均核对全局 `objective=(target_kl-target_log_z)"
+            "冻结运行的 objective 实现（原始资料缺失）与输出缩放、分桶实现（原始资料缺失）"
+            "说明上述关系。每次有效更新均核对全局 `objective=(target_kl-target_log_z)"
             "/0.1`，并按桶内 token 数加权复算 position 均值；误差见[来源核验]("
             "figures/mdpo-position-20261107/provenance.jso"
             "n)。"

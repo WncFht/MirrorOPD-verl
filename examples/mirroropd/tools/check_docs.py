@@ -125,6 +125,11 @@ def check_pages(pages, root=None):
                 continue
             counts["local_links"] += 1
             path = (page.parent / unquote(parsed.path)).resolve() if parsed.path else page.resolve()
+            if page.is_relative_to(root / DOCS) and any(
+                path.is_relative_to(base / "runs") for base in (root, root.parent)
+            ):
+                errors.append(f"{page}:{line}: 研究文档请引用专题数据或 research-evidence：{target}")
+                continue
             outside = tuple(root.parent / name for name in ("wandb-logs", "MirrorOPD", "model", "models", "runs"))
 
             def unavailable(destination, allowed=outside):
@@ -144,6 +149,7 @@ def check_pages(pages, root=None):
                 }
                 local_artifact = relative is not None and (
                     relative.parts[0] in {"outputs", "runs"}
+                    or relative.is_relative_to("examples/mirroropd/research-evidence")
                     or (
                         artifact
                         and (

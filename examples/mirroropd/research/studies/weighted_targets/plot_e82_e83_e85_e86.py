@@ -28,7 +28,7 @@ from examples.mirroropd.research.studies.weighted_targets.plot_validation_compar
 OLD = ROOT / "examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-comparison-20261107"
 NEW = ROOT / "examples/mirroropd/docs/experiments/learning-signal/figures/e85-e86-comparison-20261109"
 OUT = ROOT / "examples/mirroropd/docs/experiments/learning-signal/figures/e82-e83-e85-e86-comparison-20261109"
-SNAPSHOT = ROOT / "runs/wandb-e85-e86-20261109"
+SNAPSHOT = ROOT / "examples/mirroropd/research-evidence/tracking-logs/wandb-e85-e86-20261109"
 RUNS = {
     "E82": {"label": "E82 | token-mean | 4 GPU", "color": 0, "marker": "D"},
     "E83": {"label": "E83 | seq-mean-token-mean | 4 GPU", "color": 1, "marker": "P"},
@@ -191,11 +191,11 @@ def refresh():
                     "last_validation_update": max(int(r["optimizer_update"]) for r in valid_old if r["run"] == "E83"),
                 },
                 "E85": {
-                    "source": "runs/wandb-e85-e86-20261109/sjdbuh0p/history.jsonl",
+                    "source": str((SNAPSHOT / "sjdbuh0p/history.jsonl").relative_to(ROOT)),
                     "last_validation_update": max(int(r["optimizer_update"]) for r in valid_new if r["run"] == "E85"),
                 },
                 "E86": {
-                    "source": "runs/wandb-e85-e86-20261109/sh3mrf3r/history.jsonl",
+                    "source": str((SNAPSHOT / "sh3mrf3r/history.jsonl").relative_to(ROOT)),
                     "last_validation_update": max(int(r["optimizer_update"]) for r in valid_new if r["run"] == "E86"),
                 },
             },

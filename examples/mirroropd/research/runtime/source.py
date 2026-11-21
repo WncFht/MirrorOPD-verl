@@ -19,10 +19,12 @@ def freeze(repo, destination):
         source = repo / relative
         if source.exists():
             shutil.copy2(source, destination / relative)
-    shutil.copytree(repo / "examples/mirroropd/research", target / "research", ignore=ignore)
-    shutil.copytree(repo / "examples/mirroropd/assets", target / "assets", ignore=ignore)
-    if (repo / "examples/mirroropd/rewards").exists():
-        shutil.copytree(repo / "examples/mirroropd/rewards", target / "rewards", ignore=ignore)
+    for directory in ("research", "assets", "rewards", "launchers", "tools"):
+        origin = repo / "examples/mirroropd" / directory
+        if origin.exists():
+            shutil.copytree(origin, target / directory, ignore=ignore)
+    for script in (repo / "examples/mirroropd").glob("*.sh"):
+        shutil.copy2(script, target / script.name)
     return destination
 
 

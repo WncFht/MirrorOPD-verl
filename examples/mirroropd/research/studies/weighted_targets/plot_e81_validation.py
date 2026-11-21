@@ -26,7 +26,7 @@ from pathlib import Path
 
 ROOT = next(p for p in Path(__file__).resolve().parents if (p / ".git").exists())
 HERE = ROOT / "examples/mirroropd/docs/experiments/learning-signal/figures/e81-valid-20261105"
-RUN = ROOT / "runs/topd-large-batch-20261105/formal/E81"
+RUN = ROOT / "examples/mirroropd/research-evidence/topd-large-batch-20261105/formal/E81"
 E57 = ROOT / "examples/mirroropd/docs/experiments/learning-signal/data/e55-e57-20261103/summary.json"
 BENCHMARKS = {"MATH-500": 500, "AMC23": 40, "AIME24": 30, "AIME25": 30, "AIME26": 30}
 SLUGS = {"MATH-500": "math500", "AMC23": "amc23", "AIME24": "aime24", "AIME25": "aime25", "AIME26": "aime26"}
